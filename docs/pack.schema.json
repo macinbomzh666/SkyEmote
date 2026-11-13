@@ -1,0 +1,147 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SkyEmote pack",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "id", "name", "categories"],
+  "properties": {
+    "schema": { "const": 1 },
+    "id": { "$ref": "#/$defs/id" },
+    "name": { "$ref": "#/$defs/name" },
+    "aliases": {
+      "type": "object",
+      "propertyNames": { "$ref": "#/$defs/id" },
+      "additionalProperties": { "$ref": "#/$defs/id" }
+    },
+    "required_files": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "graph": {
+      "type": "object", "additionalProperties": false,
+      "required": ["variable", "minimum"],
+      "properties": {
+        "variable": { "type": "string", "minLength": 1, "not": { "pattern": "[^A-Za-z0-9_]" } },
+        "minimum": { "type": "integer", "minimum": 0, "maximum": 2147483647 }
+      }
+    },
+    "categories": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/category" }
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z]",
+      "not": { "pattern": "[^a-z0-9._-]" }
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S",
+      "not": { "pattern": "[\\u0000-\\u001f\\u007f]" }
+    },
+    "category": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "sections"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "name": { "$ref": "#/$defs/name" },
+        "sections": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/section" }
+        }
+      }
+    },
+    "section": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "emotes"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "name": { "$ref": "#/$defs/name" },
+        "emotes": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/emote" }
+        }
+      }
+    },
+    "step": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["event", "seconds"],
+      "properties": {
+        "event": { "type": "string", "minLength": 1, "not": { "pattern": "[^A-Za-z0-9_]" } },
+        "seconds": { "type": "number", "exclusiveMinimum": 0 },
+        "state_after": { "$ref": "#/$defs/name" }
+      }
+    },
+    "emote": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name"],
+      "oneOf": [
+        { "required": ["event", "mode"], "not": { "required": ["action"] } },
+        { "required": ["action"], "propertyNames": { "enum": ["id", "name", "action"] } }
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "name": { "$ref": "#/$defs/name" },
+        "event": {
+          "type": "string",
+          "minLength": 1,
+          "not": { "pattern": "[^A-Za-z0-9_]" }
+        },
+        "mode": { "enum": ["once", "loop"] },
+        "idle_form": {
+          "type": "string",
+          "pattern": "^[^|\\\\/:\\u0000-\\u001f\\u007f]+\\|(?:[0-9A-Fa-f]{6}|00[0-9A-Fa-f]{6})$",
+          "not": { "anyOf": [
+            { "pattern": "\\|(?:000000|00000000)$" },
+            { "pattern": "[\\u0000-\\u001f\\u007f]" }
+          ] }
+        },
+        "action": { "enum": ["stop"] },
+        "variant_of": { "$ref": "#/$defs/id" },
+        "allow_movement": { "type": "boolean" },
+        "hidden": { "type": "boolean" },
+        "duration_seconds": { "type": "number", "exclusiveMinimum": 0 },
+        "repeat_interval_seconds": { "type": "number", "exclusiveMinimum": 0 },
+        "state": { "$ref": "#/$defs/name" },
+        "requires_state": { "$ref": "#/$defs/name" },
+        "entry_seconds": { "type": "number", "exclusiveMinimum": 0 },
+        "state_only": { "type": "boolean" },
+        "setup": { "type": "array", "items": { "$ref": "#/$defs/step" } }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "mode": { "const": "once" } } },
+          "then": { "not": { "required": ["repeat_interval_seconds"] } }
+        },
+        {
+          "if": { "properties": { "mode": { "const": "loop" } } },
+          "then": { "not": { "required": ["duration_seconds"] } }
+        },
+        {
+          "if": { "required": ["state"] },
+          "then": { "properties": { "mode": { "const": "loop" } } }
+        },
+        {
+          "if": { "required": ["entry_seconds"] },
+          "then": { "required": ["state"] }
+        },
+        {
+          "if": { "required": ["state_only"], "properties": { "state_only": { "const": true } } },
+          "then": { "required": ["state"] }
+        },
+        {
+          "if": { "required": ["requires_state"], "not": { "required": ["state"] } },
+          "then": { "properties": { "mode": { "const": "once" } } }
+        }
+      ]
+    }
+  }
+}

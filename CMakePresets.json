@@ -1,0 +1,80 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "linux",
+      "displayName": "Linux (MSVC through Wine)",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/linux",
+      "toolchainFile": "${sourceDir}/cmake/msvc-wine.cmake",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_PREFIX_PATH": "${sourceDir}/build/prefix",
+        "COMMONLIB_ENABLE_IPO": false
+      }
+    },
+    {
+      "name": "dependencies",
+      "inherits": "linux",
+      "displayName": "Pinned Windows x64 dependencies",
+      "binaryDir": "${sourceDir}/build/dependencies",
+      "cacheVariables": {
+        "SKYEMOTE_DEPENDENCIES_ONLY": true,
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/prefix"
+      }
+    },
+    {
+      "name": "checks",
+      "inherits": "linux",
+      "displayName": "Local functional checks",
+      "cacheVariables": {
+        "SKYEMOTE_BUILD_TESTS": true
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "linux",
+      "configurePreset": "linux",
+      "targets": [
+        "package"
+      ],
+      "jobs": 4
+    },
+    {
+      "name": "dependencies",
+      "configurePreset": "dependencies",
+      "targets": [
+        "install"
+      ],
+      "jobs": 4
+    },
+    {
+      "name": "checks",
+      "configurePreset": "checks",
+      "targets": [
+        "SkyEmotePackTests",
+        "SkyEmotePackFilesTests",
+        "SkyEmoteStateSequenceTests",
+        "SkyEmoteFavoritesTests",
+        "SkyEmotePackDiagnosticsTests",
+        "SkyEmoteStartupTests",
+        "SkyEmoteMenuSelectionTests",
+        "SkyEmoteInputPolicyTests"
+      ],
+      "jobs": 4
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "checks",
+      "configurePreset": "checks",
+      "output": {
+        "outputOnFailure": true
+      },
+      "execution": {
+        "noTestsAction": "error"
+      }
+    }
+  ]
+}

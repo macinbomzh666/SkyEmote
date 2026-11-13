@@ -1,0 +1,1201 @@
+{
+  "schema": 1,
+  "id": "vanilla",
+  "name": "Vanilla",
+  "categories": [
+    {
+      "id": "social",
+      "name": "Social",
+      "sections": [
+        {
+          "id": "greetings",
+          "name": "Greetings",
+          "emotes": [
+            {
+              "id": "idlewave",
+              "name": "Wave",
+              "event": "IdleWave",
+              "mode": "once",
+              "duration_seconds": 12
+            },
+            {
+              "id": "idleco2ceremony1welcome",
+              "name": "Welcome",
+              "event": "IdleCO2Ceremony1Welcome",
+              "mode": "once",
+              "duration_seconds": 12
+            },
+            {
+              "id": "idledialoguewelcomehandgesture",
+              "name": "Welcoming gesture",
+              "event": "IdleDialogueWelcomeHandGesture",
+              "mode": "once",
+              "duration_seconds": 5.966667
+            },
+            {
+              "id": "idlesilentbow",
+              "name": "Bow",
+              "event": "IdleSilentBow",
+              "mode": "once",
+              "duration_seconds": 12
+            },
+            {
+              "id": "idlesalute",
+              "name": "Salute",
+              "event": "IdleSalute",
+              "mode": "once",
+              "duration_seconds": 1.433333
+            },
+            {
+              "id": "idleco2ceremony3chest",
+              "name": "Chest salute",
+              "event": "IdleCO2Ceremony3Chest",
+              "mode": "once",
+              "duration_seconds": 5.3
+            }
+          ]
+        },
+        {
+          "id": "directions",
+          "name": "Pointing and beckoning",
+          "emotes": [
+            {
+              "id": "idlegetattention",
+              "name": "Over here",
+              "event": "IdleGetAttention",
+              "mode": "once",
+              "duration_seconds": 12
+            },
+            {
+              "id": "idlecomethisway",
+              "name": "Beckon",
+              "event": "IdleComeThisWay",
+              "mode": "once",
+              "duration_seconds": 12
+            },
+            {
+              "id": "idlepointclose",
+              "name": "Point nearby",
+              "event": "IdlePointClose",
+              "mode": "once",
+              "duration_seconds": 2.466667
+            },
+            {
+              "id": "idlepointfar_01",
+              "name": "Point - I",
+              "event": "IdlePointFar_01",
+              "mode": "once",
+              "duration_seconds": 12
+            },
+            {
+              "id": "idlepointfar_02",
+              "name": "Point - II",
+              "event": "IdlePointFar_02",
+              "mode": "once",
+              "duration_seconds": 12
+            }
+          ]
+        },
+        {
+          "id": "applause",
+          "name": "Applause and cheering",
+          "emotes": [
+            {
+              "id": "idleapplaud2",
+              "name": "Applaud - I",
+              "event": "IdleApplaud2",
+              "mode": "once",
+              "duration_seconds": 12
+            },
+            {
+              "id": "idleapplaud3",
+              "name": "Applaud - II",
+              "event": "IdleApplaud3",
+              "mode": "once",
+              "duration_seconds": 12
+            },
+            {
+              "id": "idleapplaud4",
+              "name": "Applaud - III",
+              "event": "IdleApplaud4",
+              "mode": "once",
+              "duration_seconds": 12
+            },
+            {
+              "id": "idleapplaud5",
+              "name": "Applaud - IV",
+              "event": "IdleApplaud5",
+              "mode": "once",
+              "duration_seconds": 12
+            },
+            {
+              "id": "idleapplaudsarcastic",
+              "name": "Slow clap",
+              "event": "IdleApplaudSarcastic",
+              "mode": "once",
+              "duration_seconds": 12
+            },
+            {
+              "id": "idlecivilwarcheer",
+              "name": "Cheer",
+              "event": "IdleCivilWarCheer",
+              "mode": "once",
+              "duration_seconds": 12
+            }
+          ]
+        },
+        {
+          "id": "emotions",
+          "name": "Emotions",
+          "emotes": [
+            {
+              "id": "idlelaugh",
+              "name": "Laugh",
+              "event": "IdleLaugh",
+              "mode": "once",
+              "duration_seconds": 12
+            },
+            {
+              "id": "idlecicerohappy",
+              "name": "Happy gesture",
+              "event": "IdleCiceroHappy",
+              "mode": "once",
+              "duration_seconds": 2.58
+            },
+            {
+              "id": "idleciceroagitated",
+              "name": "Frustrated",
+              "event": "IdleCiceroAgitated",
+              "mode": "once",
+              "duration_seconds": 12
+            },
+            {
+              "id": "idlenervous",
+              "name": "Nervous",
+              "event": "IdleNervous",
+              "mode": "loop",
+              "state": "Nervous"
+            },
+            {
+              "id": "idledisbelief01start",
+              "name": "Disbelief - I",
+              "event": "idleDisbelief01Start",
+              "mode": "loop",
+              "state": "Disbelief - I"
+            },
+            {
+              "id": "idledisbelief02start",
+              "name": "Disbelief - II",
+              "event": "idleDisbelief02Start",
+              "mode": "loop",
+              "state": "Disbelief - II"
+            },
+            {
+              "id": "idlefreareactionstart",
+              "name": "Disbelief - Frea I",
+              "event": "idleFreaReactionStart",
+              "mode": "loop",
+              "state": "Disbelief - Frea I"
+            },
+            {
+              "id": "idlefreareaction2start",
+              "name": "Disbelief - Frea II",
+              "event": "IdleFreaReaction2Start",
+              "mode": "loop",
+              "state": "Disbelief - Frea II"
+            },
+            {
+              "id": "idlechildcryingstart",
+              "name": "Cry",
+              "event": "IdleChildCryingStart",
+              "mode": "loop",
+              "state": "Cry",
+              "entry_seconds": 1.05
+            },
+            {
+              "id": "idlefreasorrowloopenter",
+              "name": "Sorrow",
+              "event": "idleFreaSorrowLoopEnter",
+              "mode": "loop",
+              "state": "Sorrow",
+              "entry_seconds": 1.383333
+            }
+          ]
+        },
+        {
+          "id": "responses",
+          "name": "Defensive gestures",
+          "emotes": [
+            {
+              "id": "idledialoguedefensivehandgesture",
+              "name": "Calm down",
+              "event": "IdleDialogueDefensiveHandGesture",
+              "mode": "once",
+              "duration_seconds": 4.08
+            },
+            {
+              "id": "idlecoweringloose",
+              "name": "Cower",
+              "event": "IdleCowering",
+              "mode": "loop",
+              "state": "Cower",
+              "entry_seconds": 2
+            },
+            {
+              "id": "idlesurrender",
+              "name": "Surrender",
+              "event": "IdleSurrender",
+              "mode": "once",
+              "duration_seconds": 4.1
+            }
+          ]
+        },
+        {
+          "id": "gestures",
+          "name": "Conversation gestures",
+          "emotes": [
+            {
+              "id": "idlegive",
+              "name": "Give",
+              "event": "IdleGive",
+              "mode": "once",
+              "duration_seconds": 2.633333
+            },
+            {
+              "id": "idletake",
+              "name": "Take",
+              "event": "IdleTake",
+              "mode": "once",
+              "duration_seconds": 2.633333
+            },
+            {
+              "id": "idledialoguehandonchingesture",
+              "name": "Hand on chin",
+              "event": "IdleDialogueHandOnChinGesture",
+              "mode": "once",
+              "duration_seconds": 4.3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "world",
+      "name": "World",
+      "sections": [
+        {
+          "id": "interactions",
+          "name": "Interacting and searching",
+          "emotes": [
+            {
+              "id": "idlestudy",
+              "name": "Browse wares",
+              "event": "IdleStudy",
+              "mode": "loop",
+              "state": "Browse wares",
+              "entry_seconds": 2
+            },
+            {
+              "id": "idlemt_doorbang",
+              "name": "Bang on door",
+              "event": "IdleMT_DoorBang",
+              "mode": "loop",
+              "state": "Bang on door",
+              "entry_seconds": 2
+            },
+            {
+              "id": "idlesearchingchest",
+              "name": "Search chest",
+              "event": "IdleSearchingChest",
+              "mode": "loop",
+              "state": "Search chest",
+              "entry_seconds": 2
+            },
+            {
+              "id": "idlesearchingtable",
+              "name": "Search surface",
+              "event": "IdleSearchingTable",
+              "mode": "loop",
+              "state": "Search surface",
+              "entry_seconds": 2
+            },
+            {
+              "id": "idlepickup_ground",
+              "name": "Pick up from ground",
+              "event": "IdlePickup_Ground",
+              "mode": "once",
+              "duration_seconds": 3.1
+            }
+          ]
+        },
+        {
+          "id": "observing",
+          "name": "Looking and examining",
+          "emotes": [
+            {
+              "id": "idlelookfar",
+              "name": "Look into the distance",
+              "event": "IdleLookFar",
+              "mode": "once",
+              "duration_seconds": 12
+            },
+            {
+              "id": "idleexamine",
+              "name": "Examine",
+              "event": "IdleExamine",
+              "mode": "once",
+              "duration_seconds": 12
+            }
+          ]
+        },
+        {
+          "id": "warmth",
+          "name": "Keeping warm",
+          "emotes": [
+            {
+              "id": "idlewarmarms",
+              "name": "Warm arms",
+              "event": "IdleWarmArms",
+              "mode": "loop",
+              "state": "Warm arms",
+              "repeat_interval_seconds": 3.2466667461395264
+            },
+            {
+              "id": "idlewarmhands",
+              "name": "Warm hands",
+              "event": "IdleWarmHands",
+              "mode": "loop"
+            },
+            {
+              "id": "idlewarmhandscrouched",
+              "name": "Warm hands - crouching",
+              "event": "IdleWarmHandsCrouched",
+              "mode": "loop",
+              "state": "Warm hands - crouching",
+              "entry_seconds": 2.216667
+            }
+          ]
+        },
+        {
+          "id": "health",
+          "name": "Injuries and illness",
+          "emotes": [
+            {
+              "id": "idleuncontrollablecough",
+              "name": "Coughing fit",
+              "event": "IdleUncontrollableCough",
+              "mode": "loop",
+              "state": "Coughing fit",
+              "entry_seconds": 2
+            },
+            {
+              "id": "idlebracedpain",
+              "name": "Bend forward",
+              "event": "IdleBracedPain",
+              "mode": "loop",
+              "state": "Bend forward"
+            },
+            {
+              "id": "idleinjured",
+              "name": "Injured stance",
+              "event": "IdleWounded_01",
+              "mode": "loop",
+              "state": "Injured stance",
+              "entry_seconds": 2
+            },
+            {
+              "id": "idlewounded_02",
+              "name": "Wounded - II",
+              "event": "IdleWounded_02",
+              "mode": "loop",
+              "state": "Wounded - II"
+            },
+            {
+              "id": "idlewounded_03",
+              "name": "Wounded - III",
+              "event": "IdleWounded_03",
+              "mode": "loop",
+              "state": "Wounded - III"
+            }
+          ]
+        },
+        {
+          "id": "fatigue",
+          "name": "Fatigue",
+          "emotes": [
+            {
+              "id": "idlewipebrow",
+              "name": "Wipe brow",
+              "event": "IdleWipeBrow",
+              "mode": "once",
+              "duration_seconds": 12
+            },
+            {
+              "id": "idlesleepnod",
+              "name": "Nod off",
+              "event": "IdleSleepNod",
+              "mode": "once",
+              "duration_seconds": 4.3
+            }
+          ]
+        },
+        {
+          "id": "harkon",
+          "name": "Harkon",
+          "emotes": [
+            {
+              "id": "idledialoguemovingtalka",
+              "name": "Walk and explain - A",
+              "event": "IdleDialogueMovingTalkA",
+              "mode": "once",
+              "duration_seconds": 8.1,
+              "allow_movement": true
+            },
+            {
+              "id": "idledialoguemovingtalkb",
+              "name": "Walk and explain - B",
+              "event": "IdleDialogueMovingTalkB",
+              "mode": "once",
+              "duration_seconds": 5.43333,
+              "allow_movement": true
+            },
+            {
+              "id": "idledialoguemovingtalkc",
+              "name": "Walk and explain - C",
+              "event": "IdleDialogueMovingTalkC",
+              "mode": "once",
+              "duration_seconds": 12.1,
+              "allow_movement": true
+            },
+            {
+              "id": "idledialoguemovingtalkd",
+              "name": "Walk and explain - D",
+              "event": "IdleDialogueMovingTalkD",
+              "mode": "once",
+              "duration_seconds": 10.76667,
+              "allow_movement": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "perform",
+      "name": "Perform",
+      "sections": [
+        {
+          "id": "dance",
+          "name": "Dances",
+          "emotes": [
+            {
+              "id": "idlecicerodance1",
+              "name": "Dance - Cicero I",
+              "event": "IdleCiceroDance1",
+              "mode": "loop",
+              "repeat_interval_seconds": 6.746666507720947
+            },
+            {
+              "id": "idlecicerodance2",
+              "name": "Dance - Cicero II",
+              "event": "IdleCiceroDance2",
+              "mode": "loop",
+              "state": "Dance 2",
+              "repeat_interval_seconds": 6.08
+            },
+            {
+              "id": "idlecicerodance3",
+              "name": "Dance - Cicero III",
+              "event": "IdleCiceroDance3",
+              "mode": "loop",
+              "state": "Dance 3",
+              "repeat_interval_seconds": 2.4133332538604737
+            }
+          ]
+        },
+        {
+          "id": "music",
+          "name": "Instruments",
+          "emotes": [
+            {
+              "id": "idledrumstart",
+              "name": "Play drum",
+              "event": "IdleDrumStart",
+              "mode": "loop",
+              "state": "Play drum",
+              "entry_seconds": 2
+            },
+            {
+              "id": "idleflutestart",
+              "name": "Play flute",
+              "event": "IdleFluteStart",
+              "mode": "loop",
+              "state": "Play flute",
+              "entry_seconds": 2
+            },
+            {
+              "id": "idlelutestart",
+              "name": "Play lute",
+              "event": "IdleLuteStart",
+              "mode": "loop",
+              "state": "Play lute",
+              "entry_seconds": 2
+            },
+            {
+              "id": "idleblowhornimperial",
+              "name": "Blow war horn - Imperial",
+              "event": "IdleBlowHornImperial",
+              "mode": "once",
+              "duration_seconds": 5.3
+            },
+            {
+              "id": "idleblowhornstormcloak",
+              "name": "Blow war horn - Stormcloak",
+              "event": "IdleBlowHornStormcloak",
+              "mode": "once",
+              "duration_seconds": 5.3
+            }
+          ]
+        },
+        {
+          "id": "rituals",
+          "name": "Magic and rituals",
+          "emotes": [
+            {
+              "id": "idleco2ceremony2blessing",
+              "name": "Blessing",
+              "event": "IdleCO2Ceremony2Blessing",
+              "mode": "once",
+              "duration_seconds": 4.3
+            },
+            {
+              "id": "idlegreybeardwordteach",
+              "name": "Teach a word",
+              "event": "IdleGreybeardWordTeach",
+              "mode": "once",
+              "duration_seconds": 2.833333
+            },
+            {
+              "id": "idleritualskull1",
+              "name": "Praise (ritual)",
+              "event": "IdleRitualSkull1",
+              "mode": "once",
+              "duration_seconds": 3.3
+            },
+            {
+              "id": "idleritualskull2",
+              "name": "Ritual gesture - II",
+              "event": "IdleRitualSkull2",
+              "mode": "once",
+              "duration_seconds": 5.3
+            },
+            {
+              "id": "idleritualskull3",
+              "name": "Yell at the sky (ritual)",
+              "event": "IdleRitualSkull3",
+              "mode": "once",
+              "duration_seconds": 6.3
+            },
+            {
+              "id": "idlehandcut",
+              "name": "Cut palm",
+              "event": "IdleHandCut",
+              "mode": "once",
+              "duration_seconds": 7.633333
+            }
+          ]
+        },
+        {
+          "id": "float",
+          "name": "Nocturnal (buggy)",
+          "emotes": [
+            {
+              "id": "idlenocturnalenter",
+              "name": "Start floating",
+              "event": "IdleNocturnalEnter",
+              "mode": "loop",
+              "state": "Floating",
+              "entry_seconds": 5.2,
+              "state_only": true
+            },
+            {
+              "id": "idlenocturnal_rise",
+              "name": "Rise",
+              "event": "IdleNocturnal_Rise",
+              "mode": "loop",
+              "state": "Floating (raised)",
+              "entry_seconds": 5.2,
+              "requires_state": "Floating",
+              "setup": [
+                {
+                  "event": "IdleNocturnalEnter",
+                  "seconds": 5.2,
+                  "state_after": "Floating"
+                }
+              ],
+              "state_only": true
+            },
+            {
+              "id": "idlenocturnal_idlea",
+              "name": "Float idle - A",
+              "event": "IdleNocturnal_IdleA",
+              "mode": "loop",
+              "state": "Floating (raised)",
+              "entry_seconds": 3,
+              "requires_state": "Floating (raised)",
+              "setup": [
+                {
+                  "event": "IdleNocturnalEnter",
+                  "seconds": 5.2,
+                  "state_after": "Floating"
+                },
+                {
+                  "event": "IdleNocturnal_Rise",
+                  "seconds": 5.2,
+                  "state_after": "Floating (raised)"
+                }
+              ]
+            },
+            {
+              "id": "idlenocturnal_idleb",
+              "name": "Float idle - B",
+              "event": "IdleNocturnal_IdleB",
+              "mode": "loop",
+              "state": "Floating (raised)",
+              "entry_seconds": 3,
+              "requires_state": "Floating (raised)",
+              "setup": [
+                {
+                  "event": "IdleNocturnalEnter",
+                  "seconds": 5.2,
+                  "state_after": "Floating"
+                },
+                {
+                  "event": "IdleNocturnal_Rise",
+                  "seconds": 5.2,
+                  "state_after": "Floating (raised)"
+                }
+              ]
+            },
+            {
+              "id": "idlenocturnal_lookleft",
+              "name": "Look left",
+              "event": "IdleNocturnal_LookLeft",
+              "mode": "loop",
+              "state": "Floating (raised)",
+              "entry_seconds": 3,
+              "requires_state": "Floating (raised)",
+              "setup": [
+                {
+                  "event": "IdleNocturnalEnter",
+                  "seconds": 5.2,
+                  "state_after": "Floating"
+                },
+                {
+                  "event": "IdleNocturnal_Rise",
+                  "seconds": 5.2,
+                  "state_after": "Floating (raised)"
+                }
+              ]
+            },
+            {
+              "id": "idlenocturnal_lookright",
+              "name": "Look right",
+              "event": "IdleNocturnal_LookRight",
+              "mode": "loop",
+              "state": "Floating (raised)",
+              "entry_seconds": 3,
+              "requires_state": "Floating (raised)",
+              "setup": [
+                {
+                  "event": "IdleNocturnalEnter",
+                  "seconds": 5.2,
+                  "state_after": "Floating"
+                },
+                {
+                  "event": "IdleNocturnal_Rise",
+                  "seconds": 5.2,
+                  "state_after": "Floating (raised)"
+                }
+              ]
+            },
+            {
+              "id": "idlenocturnal_exit",
+              "name": "Unrise",
+              "event": "IdleNocturnal_Exit",
+              "mode": "loop",
+              "requires_state": "Floating (raised)",
+              "state": "Floating (lowered)",
+              "entry_seconds": 5.2,
+              "state_only": true
+            }
+          ]
+        },
+        {
+          "id": "dark_actions",
+          "name": "Violent gestures",
+          "emotes": [
+            {
+              "id": "idleprisonerbeat",
+              "name": "Strike downward",
+              "event": "IdlePrisonerBeat",
+              "mode": "once",
+              "duration_seconds": 1.433333
+            },
+            {
+              "id": "idlecannibalfeedcrouching",
+              "name": "Feast - crouching",
+              "event": "IdleCannibalFeedCrouching",
+              "mode": "once",
+              "duration_seconds": 4.8
+            },
+            {
+              "id": "idlecannibalfeedstanding",
+              "name": "Feast - standing",
+              "event": "IdleCannibalFeedStanding",
+              "mode": "once",
+              "duration_seconds": 4.633333
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "props",
+      "name": "Props",
+      "sections": [
+        {
+          "id": "food",
+          "name": "Food",
+          "emotes": [
+            {
+              "id": "idleeatingstandingstart",
+              "name": "Eat bread",
+              "event": "idleEatingStandingStart",
+              "mode": "loop",
+              "state": "Eat bread",
+              "entry_seconds": 6.983333
+            },
+            {
+              "id": "idleoffsetcarrypotserve",
+              "name": "Serve from pot (partial)",
+              "event": "IdleOffsetCarryPotServe",
+              "mode": "once",
+              "duration_seconds": 11.3
+            }
+          ]
+        },
+        {
+          "id": "drink",
+          "name": "Drinks",
+          "emotes": [
+            {
+              "id": "idledrink",
+              "name": "Drink",
+              "event": "IdleDrink",
+              "mode": "once",
+              "duration_seconds": 12
+            },
+            {
+              "id": "idledrinkpotion",
+              "name": "Drink potion",
+              "event": "IdleDrinkPotion",
+              "mode": "once",
+              "duration_seconds": 5.966667
+            },
+            {
+              "id": "idledrinkingstandingstart",
+              "name": "Drink standing",
+              "event": "idleDrinkingStandingStart",
+              "mode": "loop",
+              "state": "Drink standing",
+              "entry_seconds": 2
+            },
+            {
+              "id": "idlebardrinkingstart",
+              "name": "Drink at bar",
+              "event": "idleBarDrinkingStart",
+              "mode": "loop",
+              "state": "Drink at bar",
+              "entry_seconds": 2
+            },
+            {
+              "id": "idlemq201drink",
+              "name": "Hold drink",
+              "event": "IdleMQ201Drink",
+              "mode": "loop",
+              "state": "Drinking",
+              "entry_seconds": 5.0,
+              "state_only": true
+            },
+            {
+              "id": "idlemq201toaststart",
+              "name": "Raise a glass",
+              "event": "IdleMQ201ToastStart",
+              "mode": "loop",
+              "state": "Drinking",
+              "entry_seconds": 4,
+              "requires_state": "Drinking",
+              "setup": [
+                {
+                  "event": "IdleMQ201Drink",
+                  "seconds": 5.0,
+                  "state_after": "Drinking"
+                }
+              ]
+            },
+            {
+              "id": "idlemq201holdingdrinktray",
+              "name": "Hold drinks tray",
+              "event": "IdleMQ201HoldingDrinkTray",
+              "mode": "loop",
+              "state": "Hold drinks tray",
+              "entry_seconds": 2
+            }
+          ]
+        },
+        {
+          "id": "reading",
+          "name": "Books and writing",
+          "emotes": [
+            {
+              "id": "idlenoteread",
+              "name": "Read note",
+              "event": "IdleNoteRead",
+              "mode": "loop",
+              "state": "Read note",
+              "entry_seconds": 2
+            },
+            {
+              "id": "idlebook_reading",
+              "name": "Read book",
+              "event": "IdleBook_Read",
+              "mode": "loop",
+              "state": "Reading",
+              "entry_seconds": 2,
+              "state_only": true
+            },
+            {
+              "id": "idlebook_turnonepage",
+              "name": "Turn one page",
+              "event": "IdleBook_OnePage",
+              "mode": "loop",
+              "state": "Reading",
+              "entry_seconds": 3.5,
+              "requires_state": "Reading",
+              "setup": [
+                {
+                  "event": "IdleBook_Read",
+                  "seconds": 2,
+                  "state_after": "Reading"
+                }
+              ]
+            },
+            {
+              "id": "idlebook_turnmanypages",
+              "name": "Turn pages",
+              "event": "IdleBook_PageTurn",
+              "mode": "loop",
+              "state": "Reading",
+              "entry_seconds": 3.5,
+              "requires_state": "Reading",
+              "setup": [
+                {
+                  "event": "IdleBook_Read",
+                  "seconds": 2,
+                  "state_after": "Reading"
+                }
+              ]
+            },
+            {
+              "id": "idlewriteledgerenter",
+              "name": "Write in ledger",
+              "event": "IdleWriteLedgerWrite",
+              "mode": "loop",
+              "state": "Write in ledger",
+              "entry_seconds": 2,
+              "setup": [
+                {
+                  "event": "IdleWriteLedgerEnter",
+                  "seconds": 2
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "scrolls",
+          "name": "Elder Scrolls",
+          "emotes": [
+            {
+              "id": "idlemq206felldirshowscroll",
+              "name": "Hold Elder Scroll",
+              "event": "IdleMQ206FelldirShowScroll",
+              "mode": "loop",
+              "state": "Hold Elder Scroll",
+              "entry_seconds": 1.6,
+              "state_only": true
+            },
+            {
+              "id": "idlereadelderscroll",
+              "name": "Read Elder Scroll",
+              "event": "IdleReadElderScroll3rdP",
+              "mode": "loop",
+              "state": "Read Elder Scroll",
+              "state_only": true,
+              "entry_seconds": 3.383333,
+              "idle_form": "Dawnguard.esm|00014727"
+            },
+            {
+              "id": "idlereadelderscrollend",
+              "name": "End reading Elder Scroll",
+              "event": "IdleReadElderScrollEnd",
+              "mode": "once",
+              "requires_state": "Read Elder Scroll",
+              "duration_seconds": 1.233333
+            }
+          ]
+        },
+        {
+          "id": "work",
+          "name": "Work and chores",
+          "emotes": [
+            {
+              "id": "idleloosesweepingstart",
+              "name": "Sweep",
+              "event": "idleLooseSweepingStart",
+              "mode": "loop",
+              "state": "Sweep",
+              "entry_seconds": 2
+            },
+            {
+              "id": "idlehoe",
+              "name": "Hoe",
+              "event": "IdleHoe",
+              "mode": "loop",
+              "state": "Hoe",
+              "entry_seconds": 2
+            },
+            {
+              "id": "idlehammerwallenter",
+              "name": "Hammer wall",
+              "event": "IdleHammerWallEnter",
+              "mode": "loop",
+              "state": "Hammer wall",
+              "entry_seconds": 2
+            },
+            {
+              "id": "idledwemerextractor",
+              "name": "Use extractor",
+              "event": "IdleDwemerExtractorEnter",
+              "mode": "loop",
+              "state": "Use extractor",
+              "entry_seconds": 2
+            },
+            {
+              "id": "idlesell",
+              "name": "Sell potions",
+              "event": "IdleSell",
+              "mode": "loop",
+              "state": "Sell potions",
+              "entry_seconds": 2
+            },
+            {
+              "id": "idlefeedchicken",
+              "name": "Scatter feed (partial)",
+              "event": "IdleFeedChicken",
+              "mode": "once",
+              "duration_seconds": 6.266667
+            },
+            {
+              "id": "idlecarrybucketpourenter",
+              "name": "Pour bucket (partial)",
+              "event": "IdleCarryBucketPourEnter",
+              "mode": "once",
+              "duration_seconds": 5.3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "positions",
+      "name": "Positions",
+      "sections": [
+        {
+          "id": "sitting",
+          "name": "Sitting",
+          "emotes": [
+            {
+              "id": "idlesitcrossleggedenter",
+              "name": "Sit cross-legged",
+              "event": "IdleSitCrossLeggedEnter",
+              "mode": "loop",
+              "state": "Sit cross-legged",
+              "entry_seconds": 2
+            },
+            {
+              "id": "idlesitledgeenter",
+              "name": "Sit on ledge",
+              "event": "IdleSitLedgeEnter",
+              "mode": "loop",
+              "state": "Sit on ledge",
+              "entry_seconds": 2
+            }
+          ]
+        },
+        {
+          "id": "lying",
+          "name": "Lying down",
+          "emotes": [
+            {
+              "id": "idlelaydownenter",
+              "name": "Lie down",
+              "event": "IdleLayDownEnter",
+              "mode": "loop",
+              "state": "Lie down",
+              "entry_seconds": 2
+            },
+            {
+              "id": "idleastridenter",
+              "name": "Lie splayed (Astrid)",
+              "event": "IdleAstridEnter",
+              "mode": "loop",
+              "state": "Lie splayed (Astrid)"
+            }
+          ]
+        },
+        {
+          "id": "kneeling",
+          "name": "Kneeling",
+          "emotes": [
+            {
+              "id": "idlekneelingenter",
+              "name": "Kneel",
+              "event": "IdleKneelingEnter",
+              "mode": "loop",
+              "state": "Kneel",
+              "entry_seconds": 2
+            },
+            {
+              "id": "idleboundkneesstart",
+              "name": "Kneel with hands bound",
+              "event": "IdleBoundKneesStart",
+              "mode": "loop",
+              "state": "Kneel with hands bound",
+              "entry_seconds": 2.216667
+            }
+          ]
+        },
+        {
+          "id": "standing",
+          "name": "Standing poses",
+          "emotes": [
+            {
+              "id": "idlesoldierwallenter",
+              "name": "Stand proud",
+              "event": "IdleWallSoldierEnterInstant",
+              "mode": "loop",
+              "state": "Stand proud",
+              "state_only": true
+            },
+            {
+              "id": "idlesnaptoattention",
+              "name": "Attention",
+              "event": "IdleSnapToAttention",
+              "mode": "once",
+              "duration_seconds": 12
+            },
+            {
+              "id": "idlehandsbehindback",
+              "name": "Hands behind back",
+              "event": "IdleHandsBehindBack",
+              "mode": "loop",
+              "state": "Hands behind back",
+              "entry_seconds": 0.766667
+            },
+            {
+              "id": "idlegrave_01",
+              "name": "Grave - hands in front",
+              "event": "IdleGrave_01",
+              "mode": "loop",
+              "state": "Grave - hands in front"
+            },
+            {
+              "id": "idlegrave_02",
+              "name": "Grave - hands behind",
+              "event": "IdleGrave_02",
+              "mode": "loop",
+              "state": "Grave - hands behind"
+            }
+          ]
+        },
+        {
+          "id": "leaning",
+          "name": "Leaning and lounging",
+          "emotes": [
+            {
+              "id": "idleleantableenter",
+              "name": "Lean on surface",
+              "event": "IdleLeanTableEnter",
+              "mode": "loop",
+              "state": "Lean on surface",
+              "entry_seconds": 2
+            },
+            {
+              "id": "idlebarcounterenter",
+              "name": "Lean on bar counter",
+              "event": "IdleBarCounterEnter",
+              "mode": "loop",
+              "state": "Lean on bar counter",
+              "entry_seconds": 1.383333
+            },
+            {
+              "id": "idlerailleanenter",
+              "name": "Lean on railing",
+              "event": "IdleRailLeanEnterInstant",
+              "mode": "loop",
+              "state": "Lean on railing"
+            },
+            {
+              "id": "idlelounge",
+              "name": "Lounge",
+              "event": "IdleLounge",
+              "mode": "loop",
+              "state": "Lounge"
+            }
+          ]
+        },
+        {
+          "id": "prayer",
+          "name": "Prayer and meditation",
+          "emotes": [
+            {
+              "id": "idlepray",
+              "name": "Pray standing",
+              "event": "IdlePray",
+              "mode": "loop",
+              "state": "Pray standing",
+              "entry_seconds": 0.2
+            },
+            {
+              "id": "idlecrouchedprayenter",
+              "name": "Pray",
+              "event": "IdlePrayCrouchedEnter",
+              "mode": "loop",
+              "state": "Pray",
+              "entry_seconds": 2
+            },
+            {
+              "id": "idlegreybeardmeditateenter",
+              "name": "Meditate",
+              "event": "IdleGreybeardMeditateEnter",
+              "mode": "loop",
+              "state": "Meditate",
+              "entry_seconds": 1.516667
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
