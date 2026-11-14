@@ -96,6 +96,20 @@ removed. Its actions use the same state/setup and Stop behavior as other emotes.
 Reading and drinking retain their tested state handling. Addon state labels in
 the menu resolve to emote names while internal state IDs remain unchanged.
 
+## Search
+
+The search bar stays above the tabs. Typing deselects all browsing tabs and
+shows matching emotes below the tab bar. Results come from every loaded pack,
+category and section. Only emote names match, ignoring ASCII letter case.
+Results use the same labels as Favorites: `Emote (Pack -> Category)`.
+Pack, category and section names do not affect matching. Results keep their
+play, variant and favorite controls.
+
+Click Settings, Favorites or a pack tab to open its full page while keeping
+the query. Editing the query returns to results with all tabs unselected.
+Clearing it restores the last browsing page. The query and current view survive
+closing and reopening the menu. Search has no separate tab.
+
 ## Favorites
 
 Use `+` to save an emote and `-` to remove it. The Favorites tab lists saved

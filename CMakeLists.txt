@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.25)
-project(SkyEmote VERSION 1.2.4 LANGUAGES CXX)
+project(SkyEmote VERSION 1.2.5 LANGUAGES CXX)
 
 if(NOT WIN32 OR NOT MSVC OR NOT CMAKE_SIZEOF_VOID_P EQUAL 8)
     message(FATAL_ERROR "SkyEmote targets Windows x64 using the MSVC toolchain.")

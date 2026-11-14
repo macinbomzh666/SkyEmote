@@ -21,8 +21,8 @@ namespace SkyEmote
 {
     namespace
     {
-        // Start on Favorites once. ImGui retains subsequent tab selections across menu closes.
-        bool select_initial_favorites = true;
+        // Explicit navigation can show results without selecting any browsing tab.
+        MenuNavigation navigation;
         // Loaded before the menu can open. After startup only the render thread edits favorites.
         Favorites favorites;
         std::set<EmoteKey> favorite_keys;
@@ -59,8 +59,11 @@ namespace SkyEmote
 
         std::string search;
         std::string folded_search;
+        // Catalogue entries load once. Rebuild search rows when the query, variant
+        // choice or held pose changes, rather than scanning every pack each frame.
+        bool search_dirty = true;
         // Picker choices survive tab switches but never change a variant's saved ID.
-        std::map<EmoteKey, std::string> selected_variants;
+        VariantChoices selected_variants;
         // Binding targets are edited on the render thread.
         std::optional<EmoteKey> binding_favorite;
         std::string hotkey_notice;
@@ -131,7 +134,7 @@ namespace SkyEmote
         }
 
         void DrawRow(const Pack& pack, const Category& category, const MenuRow& row,
-            const EmoteKey* saved_key = nullptr)
+            const EmoteKey* saved_key = nullptr, bool show_source = false)
         {
             const auto& primary = *row.primary;
             const auto* chosen = row.chosen;
@@ -166,7 +169,7 @@ namespace SkyEmote
             ImGui::SetCursorPosX(indicator_x + ImGui::CalcTextSize("L").x + ImGui::GetStyle().ItemSpacing.x);
             const auto picker_width = favorite && saved_key ? FavoriteHotkeyWidth(*saved_key) : ImGui::GetFrameHeight();
             const auto button_width = ImGui::GetContentRegionAvail().x - picker_width - ImGui::GetStyle().ItemSpacing.x;
-            const auto label = favorite ? chosen->name + " (" + pack.name + " -> " + category.name + ")" : variant_label(*chosen);
+            const auto label = favorite || show_source ? chosen->name + " (" + pack.name + " -> " + category.name + ")" : variant_label(*chosen);
             if (PlayButton(label, button_width)) ActivateEmote(*chosen);
             if (ImGui::IsItemHovered()) {
                 ImGui::BeginTooltip();
@@ -184,6 +187,7 @@ namespace SkyEmote
                         const auto variant_name = variant_label(*item);
                         if (PlayButton(variant_name, std::max(250.0F, ImGui::CalcTextSize(variant_name.c_str()).x + 24.0F))) {
                             selected_variants[family_key] = item->id;
+                            search_dirty = true;
                             ActivateEmote(*item);
                             ImGui::CloseCurrentPopup();
                         }
@@ -208,14 +212,13 @@ namespace SkyEmote
                 const auto found = FindEmote(GetPacks(), key);
                 if (found) {
                     const auto row = ResolveMenuRow(*found.pack, *found.section,
-                        *found.emote, {}, folded_search, status, true);
+                        *found.emote, {}, {}, status, true);
                     if (!row.matches) continue;
                     ImGui::TableNextColumn();
                     ImGui::PushID(key.emote.c_str());
                     DrawRow(*found.pack, *found.category, row, &key);
                     ImGui::PopID();
                 } else {
-                    if (!search.empty() && FoldMenuSearch(key.pack + " " + key.emote).find(folded_search) == std::string::npos) continue;
                     ImGui::TableNextColumn();
                     ImGui::PushID(key.pack.c_str());
                     ImGui::PushID(key.emote.c_str());
@@ -236,33 +239,11 @@ namespace SkyEmote
                 visible = true;
             }
             ImGui::EndTable();
-            if (!visible) ImGui::TextUnformatted(saved.empty() ? "Use + beside an emote to add a favorite." : "No matching favorites.");
+            if (!visible) ImGui::TextUnformatted("Use + beside an emote to add a favorite.");
         }
 
-        void DrawCategory(const Pack& pack, const Category& category, const PlaybackStatus& status)
+        void DrawGroups(const std::vector<MenuGroup>& groups)
         {
-            struct Group
-            {
-                const Section* section;
-                std::vector<MenuRow> rows;
-            };
-            std::vector<Group> groups;
-            for (const auto& section : category.sections) {
-                Group group{&section, {}};
-                for (const auto& emote : section.emotes) {
-                    if (emote.hidden || (pack.id != "vanilla" && !emote.variant_of.empty())) continue;
-                    const auto remembered = selected_variants.find({pack.id, emote.id});
-                    auto row = ResolveMenuRow(pack, section, emote,
-                        remembered == selected_variants.end() ? std::string_view{} : remembered->second,
-                        folded_search, status);
-                    if (row.matches) group.rows.push_back(std::move(row));
-                }
-                if (!group.rows.empty()) groups.push_back(group);
-            }
-            if (groups.empty()) {
-                ImGui::TextUnformatted("No matching emotes in this category.");
-                return;
-            }
             const auto columns = groups.size() > 1 && ImGui::GetContentRegionAvail().x >= ImGui::GetFontSize() * 48.0F ? 2 : 1;
             std::array<std::vector<std::size_t>, 2> stacks;
             std::array<float, 2> heights{};
@@ -282,10 +263,32 @@ namespace SkyEmote
                 for (const auto index : stacks[column]) {
                     const auto& group = groups[index];
                     ImGui::SeparatorText(DisplayLabel(group.section->name).c_str());
-                    for (const auto& row : group.rows) DrawRow(pack, category, row);
+                    for (const auto& row : group.rows) DrawRow(*group.pack, *group.category, row);
                 }
             }
             ImGui::EndTable();
+        }
+
+        void DrawSearch(const PlaybackStatus& status)
+        {
+            static std::vector<MenuGroup> groups;
+            static std::string state, scope;
+            if (std::exchange(search_dirty, false) || state != status.state || scope != status.state_scope) {
+                groups = SearchMenu(GetPacks(), folded_search, status, selected_variants);
+                state = status.state;
+                scope = status.state_scope;
+            }
+            if (groups.empty()) ImGui::TextUnformatted("No matching emotes.");
+            else {
+                const auto columns = ImGui::GetContentRegionAvail().x >= ImGui::GetFontSize() * 48.0F ? 2 : 1;
+                if (ImGui::BeginTable("Search columns", columns, ImGuiTableFlags_SizingStretchSame)) {
+                    for (const auto& group : groups) for (const auto& row : group.rows) {
+                        ImGui::TableNextColumn();
+                        DrawRow(*group.pack, *group.category, row, nullptr, true);
+                    }
+                    ImGui::EndTable();
+                }
+            }
         }
 
         void DrawSettings()
@@ -338,23 +341,26 @@ namespace SkyEmote
             }
         }
 
-        void DrawCatalogue(const PlaybackStatus& status)
+        void DrawBrowseTab(const char* label, std::string_view id, ImGuiTabItemFlags flags = 0)
         {
-            const Pack* selected_pack = nullptr;
-            const Category* selected_category = nullptr;
-            bool favorites_active = false;
-            bool settings_active = false;
-            bool focus_favorites = false;
+            const bool selected = navigation.page == id;
+            if (selected) {
+                ImGui::PushStyleColor(ImGuiCol_Tab, ImGui::GetStyleColorVec4(ImGuiCol_TabSelected));
+                ImGui::PushStyleColor(ImGuiCol_TabDimmed, ImGui::GetStyleColorVec4(ImGuiCol_TabDimmedSelected));
+            }
+            // Regular tab items always select a page. Tab buttons let the search
+            // view leave every tab unselected without touching ImGui internals.
+            const bool clicked = ImGui::TabItemButton(label, flags);
+            if (selected) ImGui::PopStyleColor(2);
+            if (clicked) navigation.SelectPage(id);
+        }
+
+        void DrawCatalogue(const PlaybackStatus& status, bool search_edited)
+        {
+            if (search_edited) navigation.EditSearch(!search.empty());
             if (ImGui::BeginTabBar("Packs", ImGuiTabBarFlags_FittingPolicyScroll)) {
-                if (ImGui::BeginTabItem("Settings###settings", nullptr, ImGuiTabItemFlags_Leading)) {
-                    settings_active = true;
-                    ImGui::EndTabItem();
-                }
-                focus_favorites = std::exchange(select_initial_favorites, false);
-                if (ImGui::BeginTabItem("Favorites###favorites", nullptr, focus_favorites ? ImGuiTabItemFlags_SetSelected : ImGuiTabItemFlags_None)) {
-                    favorites_active = true;
-                    ImGui::EndTabItem();
-                }
+                DrawBrowseTab("Settings###settings", "@settings", ImGuiTabItemFlags_Leading);
+                DrawBrowseTab("Favorites###favorites", "@favorites");
                 // Vanilla precedes addons, which retain the loader's filename order.
                 std::vector<const Pack*> ordered;
                 for (const auto& pack : GetPacks().packs) {
@@ -363,19 +369,17 @@ namespace SkyEmote
                 }
                 for (const auto* item : ordered) {
                     const auto label = DisplayLabel(item->name) + "###pack-" + item->id;
-                    if (ImGui::BeginTabItem(label.c_str())) {
-                        selected_pack = item;
-                        ImGui::EndTabItem();
-                    }
+                    DrawBrowseTab(label.c_str(), item->id);
                 }
                 ImGui::EndTabBar();
             }
-            // ImGui may defer tab focus until its next layout. Show Favorites immediately
-            // on the first opening, so Settings cannot flash as the initial content.
-            if (focus_favorites) {
-                favorites_active = true;
-                settings_active = false;
-                selected_pack = nullptr;
+            const bool search_active = navigation.page.empty();
+            const bool settings_active = navigation.page == "@settings";
+            const bool favorites_active = navigation.page == "@favorites";
+            const Pack* selected_pack = nullptr;
+            const Category* selected_category = nullptr;
+            for (const auto& pack : GetPacks().packs) {
+                if (pack.id == navigation.page) selected_pack = &pack;
             }
             if (!settings_active) {
                 CaptureMenuKey(false);
@@ -402,15 +406,21 @@ namespace SkyEmote
             }
             // Only the list scrolls. Tabs stay in the parent window, and each page keeps
             // its own scroll position through the child ID.
-            ImGui::PushID(settings_active ? "@settings" : selected_pack ? selected_pack->id.c_str() : "@favorites");
+            ImGui::PushID(search_active ? "@search" : settings_active ? "@settings" : selected_pack ? selected_pack->id.c_str() : "@favorites");
             ImGui::PushID(selected_category ? selected_category->id.c_str() : "");
             const auto footer = ImGui::GetFrameHeightWithSpacing() + ImGui::GetStyle().ItemSpacing.y * 2.0F + 1.0F;
             const auto height = std::max(1.0F, ImGui::GetContentRegionAvail().y - footer);
+            if (search_active && search_edited) ImGui::SetNextWindowScroll(ImVec2(0.0F, 0.0F));
             if (ImGui::BeginChild("Emotes", ImVec2(0.0F, height))) {
                 if (settings_active) DrawSettings();
                 else if (GetPacks().packs.empty()) ImGui::TextUnformatted("No valid packs loaded. See SkyEmote.log.");
-                if (favorites_active) DrawFavorites(status);
-                else if (selected_pack && selected_category) DrawCategory(*selected_pack, *selected_category, status);
+                if (search_active) DrawSearch(status);
+                else if (favorites_active) DrawFavorites(status);
+                else if (selected_pack && selected_category) {
+                    const auto groups = CollectMenuGroups(*selected_pack, *selected_category, {}, status, selected_variants);
+                    if (groups.empty()) ImGui::TextUnformatted("No emotes in this category.");
+                    else DrawGroups(groups);
+                }
             }
             ImGui::EndChild();
             ImGui::PopID();
@@ -540,9 +550,12 @@ namespace SkyEmote
             }
             ImGui::Separator();
             ImGui::SetNextItemWidth(-1.0F);
-            ImGui::InputTextWithHint("##search", "Search emotes, packs, categories or sections", &search);
-            folded_search = FoldMenuSearch(search);
-            DrawCatalogue(*status);
+            const bool search_edited = ImGui::InputTextWithHint("##search", "Search emotes across all packs", &search);
+            if (search_edited) {
+                folded_search = FoldMenuSearch(search);
+                search_dirty = true;
+            }
+            DrawCatalogue(*status, search_edited);
             ImGui::Separator();
             DrawFooter();
             if (binding_favorite && IsCapturingFavoriteKey()) {
