@@ -207,7 +207,7 @@ namespace SkyEmote
             for (const auto& key : saved) {
                 const auto found = FindEmote(GetPacks(), key);
                 if (found) {
-                    const auto row = ResolveMenuRow(*found.pack, *found.category, *found.section,
+                    const auto row = ResolveMenuRow(*found.pack, *found.section,
                         *found.emote, {}, folded_search, status, true);
                     if (!row.matches) continue;
                     ImGui::TableNextColumn();
@@ -252,7 +252,7 @@ namespace SkyEmote
                 for (const auto& emote : section.emotes) {
                     if (emote.hidden || (pack.id != "vanilla" && !emote.variant_of.empty())) continue;
                     const auto remembered = selected_variants.find({pack.id, emote.id});
-                    auto row = ResolveMenuRow(pack, category, section, emote,
+                    auto row = ResolveMenuRow(pack, section, emote,
                         remembered == selected_variants.end() ? std::string_view{} : remembered->second,
                         folded_search, status);
                     if (row.matches) group.rows.push_back(std::move(row));
