@@ -589,9 +589,14 @@ namespace SkyEmote
                 SKSE::log::debug("Playback request replaced: id={} current={}", request, request_id.load());
                 return;
             }
-            const bool waiting = playback && playback->phase == Phase::WaitingForWeapon;
             auto* player = RE::PlayerCharacter::GetSingleton();
-            const bool native_idle = OwnsGraph(player) && playback->native_idle_started;
+            // Stop may only reset playback owned by this save and player model.
+            if (!OwnsGraph(player)) {
+                ForgetPlayback();
+                return;
+            }
+            const bool waiting = playback->phase == Phase::WaitingForWeapon;
+            const bool native_idle = playback->native_idle_started;
             ForgetPlayback();
             if (!player || !player->Is3DLoaded() || player->IsDead()) {
                 PublishCommandResult("Player animation graph is unavailable.", true);
