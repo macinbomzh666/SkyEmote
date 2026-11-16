@@ -10,6 +10,121 @@ namespace
     {
         if (!condition) throw std::runtime_error(message);
     }
+
+    struct Event
+    {
+        unsigned id;
+        Event* next = nullptr;
+    };
+
+    void CheckDispatch()
+    {
+        using SkyEmote::DispatchFilteredInput;
+        // Every subset exercises removal at the head, middle and tail, including
+        // all/none. Downstream receives each survivor once in its original order.
+        std::array<Event, 5> events{{{0}, {1}, {2}, {3}, {4}}};
+        for (unsigned i = 0; i + 1 < events.size(); ++i) events[i].next = &events[i + 1];
+        auto* const head = events.data();
+        for (unsigned mask = 0; mask < (1u << events.size()); ++mask) {
+            unsigned routed = 0;
+            unsigned calls = 0;
+            DispatchFilteredInput(&head, [&](Event& event) {
+                Check(event.id == routed++, "Input was routed twice or out of order");
+                return (mask & (1u << event.id)) != 0;
+            }, [&](Event* const* remaining) {
+                ++calls;
+                auto* node = *remaining;
+                for (auto& event : events) {
+                    if (mask & (1u << event.id)) continue;
+                    Check(node == &event, "A kept event was lost, copied or reordered");
+                    node = node->next;
+                }
+                Check(!node, "A consumed event reached downstream");
+            });
+            Check(calls == 1 && routed == events.size(), "Batch was not dispatched exactly once");
+            Check(head == events.data(), "The caller's head changed");
+            for (unsigned i = 0; i < events.size(); ++i) {
+                Check(events[i].next == (i + 1 < events.size() ? &events[i + 1] : nullptr),
+                    "An engine event link was not restored");
+            }
+        }
+
+        // A null argument and a non-null empty batch keep their distinct shapes.
+        unsigned calls = 0;
+        auto unexpected = [](Event&) -> bool { throw std::runtime_error("Routed an empty batch"); };
+        DispatchFilteredInput<Event>(nullptr, unexpected, [&](Event* const* remaining) {
+            ++calls;
+            Check(!remaining, "Null input became a non-null batch");
+        });
+        Event* empty = nullptr;
+        DispatchFilteredInput(&empty, unexpected, [&](Event* const* remaining) {
+            ++calls;
+            Check(remaining && !*remaining, "Empty input lost its dispatch");
+        });
+        Check(calls == 2, "Empty dispatch was skipped or duplicated");
+
+        // Another filtering hook can nest inside ours. Each restores only its
+        // own edits, so its return preserves the outer filter until dispatch ends.
+        DispatchFilteredInput(&head, [](Event& event) { return event.id == 1; }, [&](Event* const* outer) {
+            Check((*outer)->next == &events[2], "Outer filter leaked a captured event");
+            DispatchFilteredInput(outer, [](Event& event) { return event.id == 2; }, [&](Event* const* inner) {
+                Check(*inner == head && (*inner)->next == &events[3], "Nested filter did not compose");
+            });
+            Check((*outer)->next == &events[2] && events[2].next == &events[3], "Nested return damaged the outer list");
+        });
+        Check(head->next == &events[1], "Nested dispatch left the engine list filtered");
+    }
+
+    void CheckButtonOwnership()
+    {
+        using namespace SkyEmote;
+        std::unordered_set<std::uint64_t> owned;
+        // A Stop hold and release must not hide mouse motion, a movement release
+        // or an unrelated press in the same batch. A later press works normally.
+        Check(ConsumeInputButton(owned, 27, true, true), "Stop press was not captured");
+        std::array<Event, 4> events{{{27}, {1000}, {17}, {30}}};
+        for (unsigned i = 0; i + 1 < events.size(); ++i) events[i].next = &events[i + 1];
+        auto* head = events.data();
+        for (bool stop_held : {true, false}) {
+            DispatchFilteredInput(&head, [&](Event& event) {
+                if (event.id == 1000) return false;
+                return ConsumeInputButton(owned, event.id, event.id == 27 ? stop_held : event.id != 17, false);
+            }, [&](Event* const* remaining) {
+                Check(*remaining == &events[1] && events[1].next == &events[2] &&
+                    events[2].next == &events[3] && !events[3].next, "Owned Stop hid unrelated input");
+            });
+        }
+        Check(owned.empty() && !ConsumeInputButton(owned, 27, true, false), "Released Stop remained owned");
+
+        // Search Backspace stays ours through release after closing. Device IDs
+        // keep a controller button with the same code independent of the keyboard.
+        Check(ConsumeInputButton(owned, 14, true, true), "Search Backspace escaped capture");
+        Check(!ConsumeInputButton(owned, (std::uint64_t{2} << 32) | 14, true, false), "Ownership crossed devices");
+        Check(ConsumeInputButton(owned, 14, true, false) && ConsumeInputButton(owned, 14, false, false),
+            "Backspace leaked after closing the menu");
+        Check(!ConsumeInputButton(owned, 14, true, false), "Backspace did not work after release");
+
+        // Closing the menu takes effect between events. The closing press and
+        // release stay owned, while the next unrelated press passes downstream.
+        events = {{{1}, {30}, {1}, {1000}}};
+        for (unsigned i = 0; i + 1 < events.size(); ++i) events[i].next = &events[i + 1];
+        auto mode = InputMode::Menu;
+        unsigned routed = 0;
+        DispatchFilteredInput(&head, [&](Event& event) {
+            const bool capture = mode != InputMode::None;
+            if (routed++ == 0) {
+                Check(ChooseInputCommand(event.id, {}, {mode, KeyCapture::None, false, true, true}) == InputCommand::CloseMenu,
+                    "Escape did not close capture in the batch");
+                mode = InputMode::None;
+            }
+            if (event.id == 1000) return capture;
+            return ConsumeInputButton(owned, event.id, routed != 3, capture);
+        }, [&](Event* const* remaining) {
+            Check(*remaining == &events[1] && events[1].next == &events[3] && !events[3].next,
+                "Closing capture leaked Escape or hid later input");
+        });
+        Check(owned.empty(), "Closing release left a button owned");
+    }
 }
 
 int main()
@@ -120,7 +235,9 @@ int main()
         Check(CheckCapture(InputMode::Menu, state) == CaptureExit::FocusLost &&
             CheckCapture(InputMode::Quick, state) == CaptureExit::FocusLost, "Focus loss retained capture");
         Check(CheckCapture(InputMode::None, state) == CaptureExit::None, "Inactive capture requested another cleanup");
-        std::cout << "Input policy checks passed\n";
+        CheckDispatch();
+        CheckButtonOwnership();
+        std::cout << "Input policy and dispatch checks passed\n";
     } catch (const std::exception& error) {
         std::cerr << error.what() << '\n';
         return 1;

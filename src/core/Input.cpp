@@ -29,6 +29,7 @@
 #include <cmath>
 #include <chrono>
 #include <cstdint>
+#include <cstring>
 #include <cwchar>
 #include <mutex>
 #include <limits>
@@ -215,7 +216,7 @@ namespace SkyEmote
                     const auto x = motion->mouseInputX, y = motion->mouseInputY;
                     motion->mouseInputX = scaled(x, mouse_remainder_x);
                     motion->mouseInputY = scaled(y, mouse_remainder_y);
-                    // Our sink stops gameplay dispatch, so the native cursor would not see
+                    // Our filter stops gameplay dispatch, so the native cursor would not see
                     // this event. Run only its handler once, then restore the original counts.
                     menu->AsMenuEventHandler()->ProcessMouseMove(motion);
                     motion->mouseInputX = x;
@@ -268,7 +269,7 @@ namespace SkyEmote
             auto* controls = RE::ControlMap::GetSingleton();
             using Flag = RE::UserEvents::USER_EVENT_FLAG;
             if (capture) {
-                // Plugins can inspect input before this sink sees it. A non-gameplay context
+                // Plugins can inspect input before our hook. A non-gameplay context
                 // tells those plugins that another menu owns keys, including search typing.
                 controls->PushInputContext(RE::UserEvents::INPUT_CONTEXT_ID::kCursor);
                 captured_controls = controls;
@@ -510,7 +511,7 @@ namespace SkyEmote
             if (!button.IsDown() || !CanUseGameplayBindings() || (camera && camera->IsInFreeCameraMode())) return;
             std::string_view action = button.GetUserEvent().c_str();
             const auto device = button.GetDevice();
-            // Skyrim may not have named this event before our sink. Resolve remapped keys.
+            // Skyrim may not have named this event before our hook. Resolve remapped keys.
             if (const auto* map = RE::ControlMap::GetSingleton(); action.empty() && map &&
                 (device == RE::INPUT_DEVICE::kKeyboard || device == RE::INPUT_DEVICE::kMouse || device == RE::INPUT_DEVICE::kGamepad)) {
                 action = map->GetUserEventName(button.GetIDCode(), device);
@@ -543,72 +544,71 @@ namespace SkyEmote
             }
         }
 
-        class InputSink final : public RE::BSTEventSink<RE::InputEvent*>
+        bool ConsumeEvent(RE::InputEvent& event, bool& rebound)
         {
-            RE::BSEventNotifyControl ProcessEvent(RE::InputEvent* const* events,
-                RE::BSTEventSource<RE::InputEvent*>*) override
+            // Capture can end between events, including on a Quick favorite.
+            if (capture_mode.load() == InputMode::Quick) UpdateInput();
+            bool consume = capture_mode.load() != InputMode::None;
+            if (auto* button = event.AsButtonEvent()) {
+                const auto code = button->GetIDCode();
+                const bool keyboard = button->GetDevice() == RE::INPUT_DEVICE::kKeyboard;
+                const bool mouse = button->GetDevice() == RE::INPUT_DEVICE::kMouse;
+                bool binding_press = false;
+                if (keyboard && button->IsDown()) {
+                    static bool first_keyboard = true;
+                    if (first_keyboard) SKSE::log::info("Input hook received a keyboard press");
+                    first_keyboard = false;
+                    if (code == menu_key.load()) {
+                        auto* player = RE::PlayerCharacter::GetSingleton();
+                        auto* ui = RE::UI::GetSingleton();
+                        SKSE::log::info("Menu key received: scan={} open={} canOpen={} session={} readySession={} renderer={} focus={} player={} loaded3D={} dead={} ui={} paused={} applicationMenu={} textInput={} keyCapture={}",
+                            code, IsMenuOpen(), CanOpen(), input_session_id.load(), ready_session_id.load(),
+                            renderer_available.load(), HasFocus(), player != nullptr, player && player->Is3DLoaded(),
+                            player && player->IsDead(), ui != nullptr, ui && ui->GameIsPaused(),
+                            ui && ui->IsApplicationMenuOpen(), text_input.load(), static_cast<unsigned>(key_capture.load()));
+                    }
+                    const auto handled = HandleKeyPress(code, rebound);
+                    consume |= handled.consumed;
+                    binding_press = handled.binding_press;
+                }
+                // Wheel ticks have no matching release event.
+                if (!mouse || code < 5) {
+                    const auto identity = (std::uint64_t(button->GetDevice()) << 32) | code;
+                    consume = ConsumeInputButton(owned_buttons, identity, button->IsPressed(), consume);
+                }
+                if (!consume) HandleGameplayAction(*button);
+                if (!binding_press) QueueMenuButton(*button);
+            } else if (event.GetEventType() == RE::INPUT_EVENT_TYPE::kDeviceConnect) {
+                return false;
+            } else if (IsMenuOpen()) {
+                if (auto* motion = event.AsMouseMoveEvent()) {
+                    const auto position = MoveMenuCursor(motion);
+                    std::lock_guard lock(input_mutex);
+                    pending.push_back(position);
+                } else if (const auto* character = event.AsCharEvent(); character && !rebound && key_capture.load() == KeyCapture::None) {
+                    std::lock_guard lock(input_mutex);
+                    pending.push_back({Event::Character, character->keyCode});
+                }
+            }
+            return consume;
+        }
+
+        struct InputDispatchHook
+        {
+            static void Thunk(RE::BSTEventSource<RE::InputEvent*>* source, RE::InputEvent* const* events)
             {
                 CheckInitialGameplay();
                 static bool first_callback = true;
-                if (first_callback) SKSE::log::info("Input listener received its first callback");
+                if (first_callback) SKSE::log::info("Input dispatch hook received its first callback");
                 first_callback = false;
                 UpdateInput();
-                bool capture = capture_mode.load() != InputMode::None || !owned_buttons.empty();
                 bool rebound = false;
-                for (auto* event = events ? *events : nullptr; event; event = event->next) {
-                    // Recheck before interpreting each key. Capture can change within a batch.
-                    if (capture_mode.load() == InputMode::Quick) UpdateInput();
-                    if (auto* button = event->AsButtonEvent()) {
-                        const auto code = button->GetIDCode();
-                        const bool keyboard = button->GetDevice() == RE::INPUT_DEVICE::kKeyboard;
-                        const bool mouse = button->GetDevice() == RE::INPUT_DEVICE::kMouse;
-                        const auto identity = (std::uint64_t(button->GetDevice()) << 32) | code;
-                        bool consume = capture_mode.load() != InputMode::None || owned_buttons.contains(identity);
-                        bool binding_press = false;
-                        if (keyboard && button->IsDown()) {
-                            static bool first_keyboard = true;
-                            if (first_keyboard) SKSE::log::info("Input listener received a keyboard press");
-                            first_keyboard = false;
-                            if (code == menu_key.load()) {
-                                auto* player = RE::PlayerCharacter::GetSingleton();
-                                auto* ui = RE::UI::GetSingleton();
-                                SKSE::log::info("Menu key received: scan={} open={} canOpen={} session={} readySession={} renderer={} focus={} player={} loaded3D={} dead={} ui={} paused={} applicationMenu={} textInput={} keyCapture={}",
-                                    code, IsMenuOpen(), CanOpen(), input_session_id.load(), ready_session_id.load(),
-                                    renderer_available.load(), HasFocus(), player != nullptr, player && player->Is3DLoaded(),
-                                    player && player->IsDead(), ui != nullptr, ui && ui->GameIsPaused(),
-                                    ui && ui->IsApplicationMenuOpen(), text_input.load(), static_cast<unsigned>(key_capture.load()));
-                            }
-                            const auto handled = HandleKeyPress(code, rebound);
-                            consume |= handled.consumed;
-                            binding_press = handled.binding_press;
-                        }
-                        if (consume) {
-                            capture = true;
-                            // Wheel ticks have no matching release event.
-                            if (!mouse || code < 5) {
-                                if (button->IsPressed()) {
-                                    owned_buttons.insert(identity);
-                                } else {
-                                    owned_buttons.erase(identity);
-                                }
-                            }
-                        }
-                        if (!capture) HandleGameplayAction(*button);
-                        if (!binding_press) QueueMenuButton(*button);
-                    } else if (IsMenuOpen()) {
-                        if (auto* motion = event->AsMouseMoveEvent()) {
-                            const auto position = MoveMenuCursor(motion);
-                            std::lock_guard lock(input_mutex);
-                            pending.push_back(position);
-                        } else if (const auto* character = event->AsCharEvent(); character && !rebound && key_capture.load() == KeyCapture::None) {
-                            std::lock_guard lock(input_mutex);
-                            pending.push_back({Event::Character, character->keyCode});
-                        }
-                    }
-                }
-                return capture ? RE::BSEventNotifyControl::kStop : RE::BSEventNotifyControl::kContinue;
+                DispatchFilteredInput(events,
+                    [&](RE::InputEvent& event) { return ConsumeEvent(event, rebound); },
+                    [&](RE::InputEvent* const* filtered) { previous(source, filtered); });
             }
-        } sink;
+            static inline REL::Relocation<decltype(Thunk)> previous;
+        };
     }
 
     bool IsMenuOpen()
@@ -776,8 +776,21 @@ namespace SkyEmote
             SKSE::log::error("Skyrim input manager is unavailable");
             return false;
         }
-        input->PrependEventSink(&sink);
+        // Install once at DataLoaded, wrapping dispatch hooks installed at plugin load.
+        // Keep their current target so each receives only the unconsumed events.
+        REL::Relocation<std::uintptr_t> site{RELOCATION_ID(67315, 68617), 0x7B};
+        const auto opcode = *reinterpret_cast<const std::uint8_t*>(site.address());
+        SKSE::log::info("Input dispatch hook: site={:#x} opcode={:#x}", site.address(), opcode);
+        if (opcode != 0xE8) {
+            SKSE::log::error("Input dispatch hook refused: expected a relative call");
+            return false;
+        }
+        std::int32_t displacement{};
+        std::memcpy(&displacement, reinterpret_cast<const void*>(site.address() + 1), sizeof(displacement));
+        InputDispatchHook::previous = site.address() + 5 + displacement;
+        SKSE::GetTrampoline().write_call<5>(site.address(), InputDispatchHook::Thunk);
         installed = true;
+        SKSE::log::info("Input dispatch hook installed: previous={:#x}", InputDispatchHook::previous.address());
         SKSE::log::info("Menu input installed. MenuKey={}, StopKey={}, QuickEmoteKey={}, QuickEmoteTimeoutSeconds={}, MouseSensitivity={}",
             menu_key.load(), stop_key.load(), quick_key.load(), quick_timeout_seconds, mouse_sensitivity.load());
         return true;

@@ -260,7 +260,6 @@ namespace SkyEmote
         std::memcpy(&displacement, reinterpret_cast<const void*>(site.address() + 1), sizeof(displacement));
         // Publish the chained function before another render thread can enter our hook.
         RendererEndHook::original = site.address() + 5 + displacement;
-        SKSE::AllocTrampoline(64);
         SKSE::GetTrampoline().write_call<5>(site.address(), RendererEndHook::Thunk);
         installed = true;
         SKSE::log::info("Renderer-end hook installed: previous={:#x} TRP={}", RendererEndHook::original.address(),

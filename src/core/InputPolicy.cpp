@@ -42,6 +42,17 @@ namespace SkyEmote
         return BindingChange{keys, false};
     }
 
+    bool ConsumeInputButton(std::unordered_set<std::uint64_t>& owned, std::uint64_t identity,
+        bool pressed, bool capture)
+    {
+        const bool consume = capture || owned.contains(identity);
+        if (consume) {
+            if (pressed) owned.insert(identity);
+            else owned.erase(identity);
+        }
+        return consume;
+    }
+
     ContextPosition LocateInputContext(std::span<const std::uint32_t> captured,
         std::span<const std::uint32_t> current)
     {

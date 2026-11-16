@@ -146,8 +146,9 @@ if copying or legacy cleanup fails, but editing stays disabled. Repair the
 reported file or migration path and restart Skyrim to enable saving again.
 Legacy EmoteMenu favorites are untouched.
 
-The open menu owns a cursor input context so gameplay hotkeys from plugins
-that respect Skyrim input contexts do not activate while searching.
+The open menu owns a cursor input context and consumes input before forwarding
+it to downstream plugins. Plugins that intercept input earlier or read the
+keyboard independently can still receive those keys.
 
 ## Browsing
 

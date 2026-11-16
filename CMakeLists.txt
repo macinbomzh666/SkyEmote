@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.25)
-project(SkyEmote VERSION 1.2.5 LANGUAGES CXX)
+project(SkyEmote VERSION 1.2.6 LANGUAGES CXX)
 
 if(NOT WIN32 OR NOT MSVC OR NOT CMAKE_SIZEOF_VOID_P EQUAL 8)
     message(FATAL_ERROR "SkyEmote targets Windows x64 using the MSVC toolchain.")
@@ -19,7 +19,7 @@ set(ENABLE_SKYRIM_SE ON CACHE BOOL "" FORCE)
 set(ENABLE_SKYRIM_AE ON CACHE BOOL "" FORCE)
 set(ENABLE_SKYRIM_VR OFF CACHE BOOL "" FORCE)
 set(BUILD_TESTS OFF CACHE BOOL "" FORCE)
-# The renderer hook validates its call opcode before using the trampoline.
+# Both hooks validate their call opcodes before using the trampoline.
 set(SKSE_SUPPORT_PATCH_SAFETY OFF CACHE BOOL "" FORCE)
 set(COMMONLIB_PREBUILT OFF CACHE BOOL "" FORCE)
 set(COMMONLIB_PREBUILT_DIR "" CACHE PATH "" FORCE)

@@ -81,7 +81,7 @@ SKSE_PLUGIN_LOAD(const SKSE::LoadInterface* skse)
 
     // Keep previous launches as well as bounding this run's diagnostics. CommonLib's
     // logRotate rotates on launch but has no per-file size setting, so replace its sink.
-    SKSE::Init(skse, {.log = false});
+    SKSE::Init(skse, {.log = false, .trampoline = true, .trampolineSize = 64});
     try {
         const auto directory = SKSE::log::log_directory();
         if (!directory) throw std::runtime_error("SKSE log directory unavailable");
