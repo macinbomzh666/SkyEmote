@@ -2,6 +2,7 @@
 #pragma once
 
 #include <expected>
+#include <array>
 #include <compare>
 #include <map>
 #include <optional>
@@ -26,6 +27,33 @@ namespace SkyEmote
         std::string event;
         double seconds;
         std::string state_after;
+    };
+
+    inline constexpr std::array<std::string_view, 8> FaceMoodNames{
+        "neutral", "anger", "fear", "happy", "sad", "surprise", "puzzled", "disgusted"
+    };
+    inline constexpr std::array<std::string_view, 12> FaceModifierNames{
+        "brow_down_left", "brow_down_right", "brow_in_left", "brow_in_right",
+        "brow_up_left", "brow_up_right", "look_down", "look_left", "look_right", "look_up",
+        "squint_left", "squint_right"
+    };
+    inline constexpr std::array<std::string_view, 16> FacePhonemeNames{
+        "aah", "big_aah", "bmp", "ch_j_sh", "dst", "eee", "eh", "fv",
+        "i", "k", "n", "oh", "ooh_q", "r", "th", "w"
+    };
+
+    struct FaceMood
+    {
+        unsigned index;
+        float strength;
+    };
+
+    struct FacePose
+    {
+        std::optional<FaceMood> mood;
+        std::array<std::optional<float>, FaceModifierNames.size()> modifiers;
+        std::array<std::optional<float>, FacePhonemeNames.size()> phonemes;
+        std::array<std::optional<float>, 2> eyelids;
     };
 
     struct PlaybackOptions

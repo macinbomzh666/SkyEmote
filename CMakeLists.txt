@@ -70,7 +70,7 @@ target_compile_options(SkyEmoteCore PRIVATE /W4 /permissive- /utf-8)
 add_commonlibsse_plugin(SkyEmote
     AUTHOR Macinbomzh
     USE_ADDRESS_LIBRARY
-    SOURCES src/Plugin.cpp src/core/Playback.cpp src/core/Renderer.cpp src/core/Menu.cpp
+    SOURCES src/Plugin.cpp src/core/Playback.cpp src/core/FacePlayback.cpp src/core/Renderer.cpp src/core/Menu.cpp
         src/core/Input.cpp src/core/MenuCamera.cpp src/core/PackWarnings.cpp
 )
 target_link_libraries(SkyEmote PRIVATE SkyEmoteCore SkyEmoteImGui)
