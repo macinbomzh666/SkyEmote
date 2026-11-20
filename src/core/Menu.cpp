@@ -133,6 +133,21 @@ namespace SkyEmote
             }
         }
 
+        void DrawEmoteTooltip(const Emote& emote, const std::string& label)
+        {
+            if (!ImGui::IsItemHovered() || !ImGui::BeginTooltip()) return;
+            ImGui::PushTextWrapPos(ImGui::GetCursorPosX() + ImGui::GetFontSize() * 32.0F);
+            ImGui::TextUnformatted(label.c_str());
+            ImGui::TextDisabled("%s", emote.action == EmoteAction::Stop ? "Stop animation" :
+                emote.playback.mode == PlaybackMode::Loop ? "Looping" : "One shot");
+            if (!emote.description.empty()) {
+                ImGui::Spacing();
+                ImGui::TextUnformatted(emote.description.c_str());
+            }
+            ImGui::PopTextWrapPos();
+            ImGui::EndTooltip();
+        }
+
         void DrawRow(const Pack& pack, const Category& category, const MenuRow& row,
             const EmoteKey* saved_key = nullptr, bool show_source = false)
         {
@@ -171,13 +186,7 @@ namespace SkyEmote
             const auto button_width = ImGui::GetContentRegionAvail().x - picker_width - ImGui::GetStyle().ItemSpacing.x;
             const auto label = favorite || show_source ? chosen->name + " (" + pack.name + " -> " + category.name + ")" : variant_label(*chosen);
             if (PlayButton(label, button_width)) ActivateEmote(*chosen);
-            if (ImGui::IsItemHovered()) {
-                ImGui::BeginTooltip();
-                ImGui::TextUnformatted(label.c_str());
-                ImGui::TextUnformatted(chosen->action == EmoteAction::Stop ? "Stop animation" :
-                    chosen->playback.mode == PlaybackMode::Loop ? "Looping" : "One shot");
-                ImGui::EndTooltip();
-            }
+            DrawEmoteTooltip(*chosen, label);
             ImGui::SameLine();
             if (family.size() > 1) {
                 if (ImGui::ArrowButton("variants", ImGuiDir_Down)) ImGui::OpenPopup("Variants");
@@ -191,7 +200,7 @@ namespace SkyEmote
                             ActivateEmote(*item);
                             ImGui::CloseCurrentPopup();
                         }
-                        if (ImGui::IsItemHovered()) ImGui::SetTooltip(item->playback.mode == PlaybackMode::Loop ? "Looping" : "One shot");
+                        DrawEmoteTooltip(*item, variant_name);
                         ImGui::PopID();
                     }
                     ImGui::EndPopup();

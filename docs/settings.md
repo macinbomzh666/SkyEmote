@@ -164,7 +164,7 @@ only the emote list scrolls. Each page retains its own scroll position.
 Wide windows stack whole sections in the shorter of two columns, preserving
 section order within each column. A single section uses the full width.
 Favorites use two columns and include pack/category names.
-Hover a button for its full name and looping/one-shot classification.
+Hover a button for its full name, looping/one-shot classification, and any pack description.
 A separator marks the one-line footer for status and error/warning counts.
 Full diagnostics are written to `SkyEmote.log` alongside the other SKSE logs.
 

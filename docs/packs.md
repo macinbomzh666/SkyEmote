@@ -55,8 +55,9 @@ available when a file cannot be read or fails validation.
 
 ## Facial expressions
 
-A playable version 2 entry can include a `description` string to explain the
-motion or its facial expression. The text may contain percentages or other
+A playable version 2 entry can include a `description` string. The emote tooltip
+shows it below the name and playback mode. Use it for a short explanation of
+the motion or its facial expression. The text may contain percentages or other
 ordinary punctuation.
 
 A playable version 2 entry can include a `face` object for the local player's
