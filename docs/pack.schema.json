@@ -33,7 +33,7 @@
     "properties": {
       "categories": { "items": { "properties": {
         "sections": { "items": { "properties": {
-          "emotes": { "items": { "not": { "required": ["face"] } } }
+          "emotes": { "items": { "not": { "anyOf": [{ "required": ["face"] }, { "required": ["description"] }] } } }
         } } }
       } } }
     }
@@ -130,6 +130,7 @@
       "properties": {
         "id": { "$ref": "#/$defs/id" },
         "name": { "$ref": "#/$defs/name" },
+        "description": { "$ref": "#/$defs/name" },
         "event": {
           "type": "string",
           "minLength": 1,

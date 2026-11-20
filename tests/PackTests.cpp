@@ -73,6 +73,7 @@ int main(int argc, char** argv)
         Check(wave.id == "idlewave" && wave.name == "Wave" && wave.event == "IdleWave" &&
             wave.playback.mode == SkyEmote::PlaybackMode::Once && wave.playback.duration_seconds == 12.0,
             "Wrong Wave data");
+        Check(!wave.description.empty(), "Bundled Wave is missing its description");
         const auto& surrender = find("idlesurrender");
         Check(surrender.event == "IdleSurrender" && surrender.playback.mode == SkyEmote::PlaybackMode::Once &&
             surrender.playback.repeat_interval_seconds == 0.0, "Native Surrender must remain a one-shot");
@@ -147,6 +148,7 @@ int main(int argc, char** argv)
         fixtureEmotes = Json::array({fixtureEmotes[0]});
         fixtureEmotes[0].erase("duration_seconds");
         fixtureEmotes[0].erase("face");
+        fixtureEmotes[0].erase("description");
         const std::string ep = "/categories/0/sections/0/emotes/0";
         const auto field = [&](const std::string& path, const Json& value, bool valid) {
             auto document = base;
@@ -172,6 +174,21 @@ int main(int argc, char** argv)
         field("/schema", 3, false);
         field("/schema", true, false);
         field("/schema", 1.0, true);
+        const auto descriptionPath = ep + "/description";
+        auto described = base;
+        described[Json::json_pointer(descriptionPath)] = "Warm smile, squint 17%.";
+        Reject(described.dump(), descriptionPath, "schema 2");
+        described["schema"] = 2;
+        const auto describedPack = Accept(described.dump());
+        Check(describedPack.categories[0].sections[0].emotes[0].description == "Warm smile, squint 17%.",
+            "Emote description was not preserved");
+        described[Json::json_pointer(descriptionPath)] = " ";
+        Reject(described.dump(), descriptionPath, "visible text");
+        command["schema"] = 2;
+        command[Json::json_pointer(ep)] = {
+            {"id", "stop-pose"}, {"name", "Stop pose"}, {"action", "stop"}, {"description", "Stop."}
+        };
+        Reject(command.dump(), descriptionPath);
         const auto facePath = ep + "/face";
         auto facial = base;
         facial[Json::json_pointer(facePath)] = {

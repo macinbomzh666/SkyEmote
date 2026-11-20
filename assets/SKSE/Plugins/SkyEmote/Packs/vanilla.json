@@ -27,7 +27,8 @@
                 "phonemes": {
                   "eee": 0.22
                 }
-              }
+              },
+              "description": "Warm smile"
             },
             {
               "id": "idleco2ceremony1welcome",
@@ -45,7 +46,8 @@
                 "phonemes": {
                   "eee": 0.22
                 }
-              }
+              },
+              "description": "Warm smile"
             },
             {
               "id": "idledialoguewelcomehandgesture",
@@ -63,7 +65,8 @@
                 "phonemes": {
                   "eee": 0.22
                 }
-              }
+              },
+              "description": "Warm smile"
             },
             {
               "id": "idlesilentbow",
@@ -81,7 +84,8 @@
                 "phonemes": {
                   "eee": 0.22
                 }
-              }
+              },
+              "description": "Warm smile"
             },
             {
               "id": "idlesalute",
@@ -99,7 +103,8 @@
                 "phonemes": {
                   "eee": 0.22
                 }
-              }
+              },
+              "description": "Warm smile"
             },
             {
               "id": "idleco2ceremony3chest",
@@ -117,7 +122,8 @@
                 "phonemes": {
                   "eee": 0.22
                 }
-              }
+              },
+              "description": "Proud smile"
             }
           ]
         },
@@ -139,7 +145,8 @@
                 "phonemes": {
                   "bmp": 0.13
                 }
-              }
+              },
+              "description": "Attentive"
             },
             {
               "id": "idlecomethisway",
@@ -155,7 +162,8 @@
                 "phonemes": {
                   "bmp": 0.13
                 }
-              }
+              },
+              "description": "Attentive"
             },
             {
               "id": "idlepointclose",
@@ -171,7 +179,8 @@
                 "phonemes": {
                   "bmp": 0.13
                 }
-              }
+              },
+              "description": "Attentive"
             },
             {
               "id": "idlepointfar_01",
@@ -187,7 +196,8 @@
                 "phonemes": {
                   "bmp": 0.13
                 }
-              }
+              },
+              "description": "Attentive"
             },
             {
               "id": "idlepointfar_02",
@@ -203,7 +213,8 @@
                 "phonemes": {
                   "bmp": 0.13
                 }
-              }
+              },
+              "description": "Attentive"
             }
           ]
         },
@@ -227,7 +238,8 @@
                 "phonemes": {
                   "eee": 0.33
                 }
-              }
+              },
+              "description": "Smile"
             },
             {
               "id": "idleapplaud3",
@@ -245,7 +257,8 @@
                 "phonemes": {
                   "eee": 0.14
                 }
-              }
+              },
+              "description": "Small smile"
             },
             {
               "id": "idleapplaud4",
@@ -264,7 +277,8 @@
                   "eee": 0.3,
                   "aah": 0.19
                 }
-              }
+              },
+              "description": "Loose grin"
             },
             {
               "id": "idleapplaud5",
@@ -282,7 +296,8 @@
                 "phonemes": {
                   "big_aah": 0.48
                 }
-              }
+              },
+              "description": "Cheer"
             },
             {
               "id": "idleapplaudsarcastic",
@@ -300,7 +315,8 @@
                 "phonemes": {
                   "eee": 0.41
                 }
-              }
+              },
+              "description": "Playful grin"
             },
             {
               "id": "idlecivilwarcheer",
@@ -318,7 +334,8 @@
                 "phonemes": {
                   "big_aah": 0.48
                 }
-              }
+              },
+              "description": "Cheer"
             }
           ]
         },
@@ -345,7 +362,8 @@
                   "eee": 0.25,
                   "big_aah": 0.62
                 }
-              }
+              },
+              "description": "Open laugh"
             },
             {
               "id": "idlecicerohappy",
@@ -363,7 +381,8 @@
                 "phonemes": {
                   "eee": 0.33
                 }
-              }
+              },
+              "description": "Smile"
             },
             {
               "id": "idleciceroagitated",
@@ -383,7 +402,8 @@
                 "phonemes": {
                   "bmp": 0.44
                 }
-              }
+              },
+              "description": "Anger"
             },
             {
               "id": "idlenervous",
@@ -401,7 +421,8 @@
                 "phonemes": {
                   "eh": 0.46
                 }
-              }
+              },
+              "description": "Fear"
             },
             {
               "id": "idledisbelief01start",
@@ -419,7 +440,8 @@
                 "phonemes": {
                   "big_aah": 0.66
                 }
-              }
+              },
+              "description": "Surprise"
             },
             {
               "id": "idledisbelief02start",
@@ -437,7 +459,8 @@
                 "phonemes": {
                   "big_aah": 0.66
                 }
-              }
+              },
+              "description": "Surprise"
             },
             {
               "id": "idlefreareactionstart",
@@ -455,7 +478,8 @@
                 "phonemes": {
                   "big_aah": 0.66
                 }
-              }
+              },
+              "description": "Surprise"
             },
             {
               "id": "idlefreareaction2start",
@@ -473,7 +497,8 @@
                 "phonemes": {
                   "big_aah": 0.66
                 }
-              }
+              },
+              "description": "Surprise"
             },
             {
               "id": "idlechildcryingstart",
@@ -494,7 +519,8 @@
                 "phonemes": {
                   "aah": 0.47
                 }
-              }
+              },
+              "description": "Crying"
             },
             {
               "id": "idlefreasorrowloopenter",
@@ -513,7 +539,8 @@
                 "phonemes": {
                   "bmp": 0.23
                 }
-              }
+              },
+              "description": "Sadness"
             }
           ]
         },
@@ -537,7 +564,8 @@
                 "phonemes": {
                   "eh": 0.46
                 }
-              }
+              },
+              "description": "Fear"
             },
             {
               "id": "idlecoweringloose",
@@ -556,7 +584,8 @@
                 "phonemes": {
                   "eh": 0.46
                 }
-              }
+              },
+              "description": "Fear"
             },
             {
               "id": "idlesurrender",
@@ -574,7 +603,8 @@
                 "phonemes": {
                   "eh": 0.46
                 }
-              }
+              },
+              "description": "Fear"
             }
           ]
         },
@@ -596,7 +626,8 @@
                 "phonemes": {
                   "bmp": 0.13
                 }
-              }
+              },
+              "description": "Attentive"
             },
             {
               "id": "idletake",
@@ -612,7 +643,8 @@
                 "phonemes": {
                   "bmp": 0.13
                 }
-              }
+              },
+              "description": "Attentive"
             },
             {
               "id": "idledialoguehandonchingesture",
@@ -628,7 +660,8 @@
                 "phonemes": {
                   "bmp": 0.13
                 }
-              }
+              },
+              "description": "Attentive"
             }
           ]
         }
@@ -659,7 +692,8 @@
                 "phonemes": {
                   "bmp": 0.2
                 }
-              }
+              },
+              "description": "Concentration"
             },
             {
               "id": "idlemt_doorbang",
@@ -680,7 +714,8 @@
                 "phonemes": {
                   "bmp": 0.44
                 }
-              }
+              },
+              "description": "Anger"
             },
             {
               "id": "idlesearchingchest",
@@ -699,7 +734,8 @@
                 "phonemes": {
                   "bmp": 0.2
                 }
-              }
+              },
+              "description": "Concentration"
             },
             {
               "id": "idlesearchingtable",
@@ -718,7 +754,8 @@
                 "phonemes": {
                   "bmp": 0.2
                 }
-              }
+              },
+              "description": "Concentration"
             },
             {
               "id": "idlepickup_ground",
@@ -736,7 +773,8 @@
                 "phonemes": {
                   "bmp": 0.2
                 }
-              }
+              },
+              "description": "Concentration"
             }
           ]
         },
@@ -760,7 +798,8 @@
                 "phonemes": {
                   "bmp": 0.2
                 }
-              }
+              },
+              "description": "Concentration"
             },
             {
               "id": "idleexamine",
@@ -778,7 +817,8 @@
                 "phonemes": {
                   "bmp": 0.2
                 }
-              }
+              },
+              "description": "Concentration"
             }
           ]
         },
@@ -801,7 +841,8 @@
                 "phonemes": {
                   "bmp": 0.11
                 }
-              }
+              },
+              "description": "Resting"
             },
             {
               "id": "idlewarmhands",
@@ -816,7 +857,8 @@
                 "phonemes": {
                   "bmp": 0.11
                 }
-              }
+              },
+              "description": "Resting"
             },
             {
               "id": "idlewarmhandscrouched",
@@ -833,7 +875,8 @@
                 "phonemes": {
                   "bmp": 0.11
                 }
-              }
+              },
+              "description": "Resting"
             }
           ]
         },
@@ -860,7 +903,8 @@
                 "phonemes": {
                   "eh": 0.42
                 }
-              }
+              },
+              "description": "Grimace"
             },
             {
               "id": "idlebracedpain",
@@ -880,7 +924,8 @@
                 "phonemes": {
                   "eh": 0.42
                 }
-              }
+              },
+              "description": "Grimace"
             },
             {
               "id": "idleinjured",
@@ -901,7 +946,8 @@
                 "phonemes": {
                   "eh": 0.42
                 }
-              }
+              },
+              "description": "Grimace"
             },
             {
               "id": "idlewounded_02",
@@ -921,7 +967,8 @@
                 "phonemes": {
                   "eh": 0.42
                 }
-              }
+              },
+              "description": "Grimace"
             },
             {
               "id": "idlewounded_03",
@@ -941,7 +988,8 @@
                 "phonemes": {
                   "eh": 0.42
                 }
-              }
+              },
+              "description": "Grimace"
             }
           ]
         },
@@ -965,7 +1013,8 @@
                 "phonemes": {
                   "aah": 0.3
                 }
-              }
+              },
+              "description": "Tired"
             },
             {
               "id": "idlesleepnod",
@@ -981,7 +1030,8 @@
                 "phonemes": {
                   "aah": 0.1
                 }
-              }
+              },
+              "description": "Sleepy"
             }
           ]
         },
@@ -1006,7 +1056,8 @@
                 "phonemes": {
                   "bmp": 0.27
                 }
-              }
+              },
+              "description": "Stern"
             },
             {
               "id": "idledialoguemovingtalkb",
@@ -1025,7 +1076,8 @@
                 "phonemes": {
                   "bmp": 0.27
                 }
-              }
+              },
+              "description": "Stern"
             },
             {
               "id": "idledialoguemovingtalkc",
@@ -1044,7 +1096,8 @@
                 "phonemes": {
                   "bmp": 0.27
                 }
-              }
+              },
+              "description": "Stern"
             },
             {
               "id": "idledialoguemovingtalkd",
@@ -1063,7 +1116,8 @@
                 "phonemes": {
                   "bmp": 0.27
                 }
-              }
+              },
+              "description": "Stern"
             }
           ]
         }
@@ -1093,7 +1147,8 @@
                 "phonemes": {
                   "eee": 0.41
                 }
-              }
+              },
+              "description": "Playful grin"
             },
             {
               "id": "idlecicerodance2",
@@ -1112,7 +1167,8 @@
                 "phonemes": {
                   "eee": 0.41
                 }
-              }
+              },
+              "description": "Playful grin"
             },
             {
               "id": "idlecicerodance3",
@@ -1131,7 +1187,8 @@
                 "phonemes": {
                   "eee": 0.41
                 }
-              }
+              },
+              "description": "Playful grin"
             }
           ]
         },
@@ -1156,7 +1213,8 @@
                 "phonemes": {
                   "bmp": 0.2
                 }
-              }
+              },
+              "description": "Concentration"
             },
             {
               "id": "idleflutestart",
@@ -1175,7 +1233,8 @@
                 "phonemes": {
                   "bmp": 0.2
                 }
-              }
+              },
+              "description": "Concentration"
             },
             {
               "id": "idlelutestart",
@@ -1194,7 +1253,8 @@
                 "phonemes": {
                   "bmp": 0.2
                 }
-              }
+              },
+              "description": "Concentration"
             },
             {
               "id": "idleblowhornimperial",
@@ -1212,7 +1272,8 @@
                 "phonemes": {
                   "aah": 0.37
                 }
-              }
+              },
+              "description": "Exertion"
             },
             {
               "id": "idleblowhornstormcloak",
@@ -1230,7 +1291,8 @@
                 "phonemes": {
                   "aah": 0.37
                 }
-              }
+              },
+              "description": "Exertion"
             }
           ]
         },
@@ -1254,7 +1316,8 @@
                 "phonemes": {
                   "bmp": 0.2
                 }
-              }
+              },
+              "description": "Concentration"
             },
             {
               "id": "idlegreybeardwordteach",
@@ -1272,7 +1335,8 @@
                 "phonemes": {
                   "bmp": 0.2
                 }
-              }
+              },
+              "description": "Concentration"
             },
             {
               "id": "idleritualskull1",
@@ -1290,7 +1354,8 @@
                 "phonemes": {
                   "bmp": 0.2
                 }
-              }
+              },
+              "description": "Concentration"
             },
             {
               "id": "idleritualskull2",
@@ -1308,7 +1373,8 @@
                 "phonemes": {
                   "bmp": 0.2
                 }
-              }
+              },
+              "description": "Concentration"
             },
             {
               "id": "idleritualskull3",
@@ -1326,7 +1392,8 @@
                 "phonemes": {
                   "big_aah": 0.48
                 }
-              }
+              },
+              "description": "Cheer"
             },
             {
               "id": "idlehandcut",
@@ -1346,7 +1413,8 @@
                 "phonemes": {
                   "eh": 0.42
                 }
-              }
+              },
+              "description": "Grimace"
             }
           ]
         },
@@ -1371,7 +1439,8 @@
                   "squint_left": 0.28,
                   "squint_right": 0.28
                 }
-              }
+              },
+              "description": "Suspicious"
             },
             {
               "id": "idlenocturnal_rise",
@@ -1398,7 +1467,8 @@
                   "squint_left": 0.28,
                   "squint_right": 0.28
                 }
-              }
+              },
+              "description": "Suspicious"
             },
             {
               "id": "idlenocturnal_idlea",
@@ -1429,7 +1499,8 @@
                   "squint_left": 0.28,
                   "squint_right": 0.28
                 }
-              }
+              },
+              "description": "Suspicious"
             },
             {
               "id": "idlenocturnal_idleb",
@@ -1460,7 +1531,8 @@
                   "squint_left": 0.28,
                   "squint_right": 0.28
                 }
-              }
+              },
+              "description": "Suspicious"
             },
             {
               "id": "idlenocturnal_lookleft",
@@ -1491,7 +1563,8 @@
                   "squint_left": 0.28,
                   "squint_right": 0.28
                 }
-              }
+              },
+              "description": "Suspicious"
             },
             {
               "id": "idlenocturnal_lookright",
@@ -1522,7 +1595,8 @@
                   "squint_left": 0.28,
                   "squint_right": 0.28
                 }
-              }
+              },
+              "description": "Suspicious"
             },
             {
               "id": "idlenocturnal_exit",
@@ -1542,7 +1616,8 @@
                   "squint_left": 0.28,
                   "squint_right": 0.28
                 }
-              }
+              },
+              "description": "Suspicious"
             }
           ]
         },
@@ -1568,7 +1643,8 @@
                 "phonemes": {
                   "bmp": 0.44
                 }
-              }
+              },
+              "description": "Anger"
             },
             {
               "id": "idlecannibalfeedcrouching",
@@ -1588,7 +1664,8 @@
                 "phonemes": {
                   "bmp": 0.44
                 }
-              }
+              },
+              "description": "Anger"
             },
             {
               "id": "idlecannibalfeedstanding",
@@ -1608,7 +1685,8 @@
                 "phonemes": {
                   "bmp": 0.44
                 }
-              }
+              },
+              "description": "Anger"
             }
           ]
         }
@@ -1638,7 +1716,8 @@
                   "bmp": 0.36,
                   "ooh_q": 0.15
                 }
-              }
+              },
+              "description": "Eating"
             },
             {
               "id": "idleoffsetcarrypotserve",
@@ -1656,7 +1735,8 @@
                 "phonemes": {
                   "bmp": 0.2
                 }
-              }
+              },
+              "description": "Concentration"
             }
           ]
         },
@@ -1678,7 +1758,8 @@
                 "phonemes": {
                   "ooh_q": 0.29
                 }
-              }
+              },
+              "description": "Sipping"
             },
             {
               "id": "idledrinkpotion",
@@ -1694,7 +1775,8 @@
                 "phonemes": {
                   "ooh_q": 0.29
                 }
-              }
+              },
+              "description": "Sipping"
             },
             {
               "id": "idledrinkingstandingstart",
@@ -1711,7 +1793,8 @@
                 "phonemes": {
                   "ooh_q": 0.29
                 }
-              }
+              },
+              "description": "Sipping"
             },
             {
               "id": "idlebardrinkingstart",
@@ -1730,7 +1813,8 @@
                 "phonemes": {
                   "eee": 0.33
                 }
-              }
+              },
+              "description": "Smile"
             },
             {
               "id": "idlemq201drink",
@@ -1748,7 +1832,8 @@
                 "phonemes": {
                   "bmp": 0.11
                 }
-              }
+              },
+              "description": "Resting"
             },
             {
               "id": "idlemq201toaststart",
@@ -1775,7 +1860,8 @@
                 "phonemes": {
                   "aah": 0.25
                 }
-              }
+              },
+              "description": "Relief"
             },
             {
               "id": "idlemq201holdingdrinktray",
@@ -1794,7 +1880,8 @@
                 "phonemes": {
                   "bmp": 0.2
                 }
-              }
+              },
+              "description": "Concentration"
             }
           ]
         },
@@ -1819,7 +1906,8 @@
                 "phonemes": {
                   "bmp": 0.2
                 }
-              }
+              },
+              "description": "Concentration"
             },
             {
               "id": "idlebook_reading",
@@ -1839,7 +1927,8 @@
                 "phonemes": {
                   "bmp": 0.2
                 }
-              }
+              },
+              "description": "Concentration"
             },
             {
               "id": "idlebook_turnonepage",
@@ -1866,7 +1955,8 @@
                 "phonemes": {
                   "bmp": 0.2
                 }
-              }
+              },
+              "description": "Concentration"
             },
             {
               "id": "idlebook_turnmanypages",
@@ -1893,7 +1983,8 @@
                 "phonemes": {
                   "bmp": 0.2
                 }
-              }
+              },
+              "description": "Concentration"
             },
             {
               "id": "idlewriteledgerenter",
@@ -1918,7 +2009,8 @@
                 "phonemes": {
                   "bmp": 0.2
                 }
-              }
+              },
+              "description": "Concentration"
             }
           ]
         },
@@ -1944,7 +2036,8 @@
                 "phonemes": {
                   "bmp": 0.2
                 }
-              }
+              },
+              "description": "Concentration"
             },
             {
               "id": "idlereadelderscroll",
@@ -1965,7 +2058,8 @@
                 "phonemes": {
                   "bmp": 0.2
                 }
-              }
+              },
+              "description": "Concentration"
             },
             {
               "id": "idlereadelderscrollend",
@@ -1984,7 +2078,8 @@
                 "phonemes": {
                   "aah": 0.25
                 }
-              }
+              },
+              "description": "Relief"
             }
           ]
         },
@@ -2009,7 +2104,8 @@
                 "phonemes": {
                   "aah": 0.37
                 }
-              }
+              },
+              "description": "Exertion"
             },
             {
               "id": "idlehoe",
@@ -2028,7 +2124,8 @@
                 "phonemes": {
                   "aah": 0.37
                 }
-              }
+              },
+              "description": "Exertion"
             },
             {
               "id": "idlehammerwallenter",
@@ -2047,7 +2144,8 @@
                 "phonemes": {
                   "aah": 0.37
                 }
-              }
+              },
+              "description": "Exertion"
             },
             {
               "id": "idledwemerextractor",
@@ -2066,7 +2164,8 @@
                 "phonemes": {
                   "aah": 0.37
                 }
-              }
+              },
+              "description": "Exertion"
             },
             {
               "id": "idlesell",
@@ -2083,7 +2182,8 @@
                 "phonemes": {
                   "bmp": 0.13
                 }
-              }
+              },
+              "description": "Attentive"
             },
             {
               "id": "idlefeedchicken",
@@ -2101,7 +2201,8 @@
                 "phonemes": {
                   "aah": 0.37
                 }
-              }
+              },
+              "description": "Exertion"
             },
             {
               "id": "idlecarrybucketpourenter",
@@ -2119,7 +2220,8 @@
                 "phonemes": {
                   "aah": 0.37
                 }
-              }
+              },
+              "description": "Exertion"
             }
           ]
         }
@@ -2148,7 +2250,8 @@
                 "phonemes": {
                   "bmp": 0.11
                 }
-              }
+              },
+              "description": "Resting"
             },
             {
               "id": "idlesitledgeenter",
@@ -2165,7 +2268,8 @@
                 "phonemes": {
                   "bmp": 0.11
                 }
-              }
+              },
+              "description": "Resting"
             }
           ]
         },
@@ -2188,7 +2292,8 @@
                 "phonemes": {
                   "aah": 0.1
                 }
-              }
+              },
+              "description": "Sleepy"
             },
             {
               "id": "idleastridenter",
@@ -2204,7 +2309,8 @@
                 "phonemes": {
                   "aah": 0.1
                 }
-              }
+              },
+              "description": "Sleepy"
             }
           ]
         },
@@ -2227,7 +2333,8 @@
                 "phonemes": {
                   "bmp": 0.11
                 }
-              }
+              },
+              "description": "Resting"
             },
             {
               "id": "idleboundkneesstart",
@@ -2246,7 +2353,8 @@
                 "phonemes": {
                   "eh": 0.46
                 }
-              }
+              },
+              "description": "Fear"
             }
           ]
         },
@@ -2271,7 +2379,8 @@
                 "phonemes": {
                   "eee": 0.22
                 }
-              }
+              },
+              "description": "Proud smile"
             },
             {
               "id": "idlesnaptoattention",
@@ -2289,7 +2398,8 @@
                 "phonemes": {
                   "bmp": 0.27
                 }
-              }
+              },
+              "description": "Stern"
             },
             {
               "id": "idlehandsbehindback",
@@ -2308,7 +2418,8 @@
                 "phonemes": {
                   "bmp": 0.27
                 }
-              }
+              },
+              "description": "Stern"
             },
             {
               "id": "idlegrave_01",
@@ -2326,7 +2437,8 @@
                 "phonemes": {
                   "bmp": 0.23
                 }
-              }
+              },
+              "description": "Sadness"
             },
             {
               "id": "idlegrave_02",
@@ -2344,7 +2456,8 @@
                 "phonemes": {
                   "bmp": 0.23
                 }
-              }
+              },
+              "description": "Sadness"
             }
           ]
         },
@@ -2367,7 +2480,8 @@
                 "phonemes": {
                   "bmp": 0.11
                 }
-              }
+              },
+              "description": "Resting"
             },
             {
               "id": "idlebarcounterenter",
@@ -2384,7 +2498,8 @@
                 "phonemes": {
                   "bmp": 0.11
                 }
-              }
+              },
+              "description": "Resting"
             },
             {
               "id": "idlerailleanenter",
@@ -2400,7 +2515,8 @@
                 "phonemes": {
                   "bmp": 0.11
                 }
-              }
+              },
+              "description": "Resting"
             },
             {
               "id": "idlelounge",
@@ -2416,7 +2532,8 @@
                 "phonemes": {
                   "bmp": 0.11
                 }
-              }
+              },
+              "description": "Resting"
             }
           ]
         },
@@ -2441,7 +2558,8 @@
                 "phonemes": {
                   "bmp": 0.2
                 }
-              }
+              },
+              "description": "Concentration"
             },
             {
               "id": "idlecrouchedprayenter",
@@ -2460,7 +2578,8 @@
                 "phonemes": {
                   "bmp": 0.2
                 }
-              }
+              },
+              "description": "Concentration"
             },
             {
               "id": "idlegreybeardmeditateenter",
@@ -2479,7 +2598,8 @@
                 "phonemes": {
                   "bmp": 0.2
                 }
-              }
+              },
+              "description": "Concentration"
             }
           ]
         }

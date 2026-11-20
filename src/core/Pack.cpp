@@ -256,11 +256,15 @@ namespace SkyEmote
             return options;
         }
 
-        Emote ParseEmote(const Json& emote, const std::string& path, const std::string& scope, Ids& ids, bool supportsFace)
+        Emote ParseEmote(const Json& emote, const std::string& path, const std::string& scope, Ids& ids, bool schema2)
         {
             if (emote.contains("face")) {
                 Require(!emote.contains("action"), path + "/face", "Only playable emotes can have a face");
-                Require(supportsFace, path + "/face", "Face expressions require pack schema 2");
+                Require(schema2, path + "/face", "Face expressions require pack schema 2");
+            }
+            if (emote.contains("description")) {
+                Require(!emote.contains("action"), path + "/description", "Only playable emotes can have a description");
+                Require(schema2, path + "/description", "Descriptions require pack schema 2");
             }
             if (emote.contains("action")) {
                 // Stop uses global cleanup without an animation event.
@@ -272,7 +276,8 @@ namespace SkyEmote
             }
             Fields(emote, path, {"id", "name", "event", "mode"},
                 {"duration_seconds", "repeat_interval_seconds", "state", "requires_state",
-                    "entry_seconds", "state_only", "setup", "variant_of", "allow_movement", "hidden", "idle_form", "face"});
+                    "entry_seconds", "state_only", "setup", "variant_of", "allow_movement", "hidden", "idle_form",
+                    "face", "description"});
             auto event = Text(emote["event"], path + "/event");
             Require(!event.empty() &&
                 std::all_of(event.begin(), event.end(), EventChar), path + "/event",
@@ -288,7 +293,8 @@ namespace SkyEmote
             return {Id(emote["id"], path + "/id", ids),
                 Text(emote["name"], path + "/name", true), std::move(event),
                 options, emote.contains("variant_of") ? Text(emote["variant_of"], path + "/variant_of") : "",
-                EmoteAction::Play, emote.value("hidden", false)};
+                EmoteAction::Play, emote.value("hidden", false),
+                emote.contains("description") ? Text(emote["description"], path + "/description", true) : ""};
         }
 
         void ValidateVariants(const Section& group, const std::string& path)
@@ -361,8 +367,8 @@ namespace SkyEmote
             });
 
             Fields(json, "", {"schema", "id", "name", "categories"}, {"aliases", "required_files", "graph"});
-            const bool supportsFace = json["schema"] == 2;
-            Require(json["schema"].is_number() && (json["schema"] == 1 || supportsFace), "/schema",
+            const bool schema2 = json["schema"] == 2;
+            Require(json["schema"].is_number() && (json["schema"] == 1 || schema2), "/schema",
                 "Unsupported schema version. Expected 1 or 2");
             // Category and emote IDs must be unique throughout this pack.
             // Duplicate pack IDs across different files are checked by LoadPacks.
@@ -393,7 +399,7 @@ namespace SkyEmote
                     for (std::size_t e = 0; e < emotes.size(); ++e) {
                         const auto emotePath = sectionPath + "/emotes/" + std::to_string(e);
                         const auto& emote = emotes[e];
-                        group.emotes.push_back(ParseEmote(emote, emotePath, pack.id, emoteIds, supportsFace));
+                        group.emotes.push_back(ParseEmote(emote, emotePath, pack.id, emoteIds, schema2));
                     }
                     ValidateVariants(group, sectionPath);
                     output.sections.push_back(std::move(group));

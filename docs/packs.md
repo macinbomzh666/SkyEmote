@@ -55,6 +55,10 @@ available when a file cannot be read or fails validation.
 
 ## Facial expressions
 
+A playable version 2 entry can include a `description` string to explain the
+motion or its facial expression. The text may contain percentages or other
+ordinary punctuation.
+
 A playable version 2 entry can include a `face` object for the local player's
 face. A looping emote uses this expression from the start of its first accepted
 setup or entry through the loop itself. A one-shot starts its expression with
@@ -69,6 +73,7 @@ has no supported FaceGen data, the body emote still plays.
   "name": "Chuckle",
   "event": "IdleLaugh",
   "mode": "once",
+  "description": "Open laugh with squinted eyes and an open mouth.",
   "face": {
     "mood": "happy",
     "strength": 0.65,

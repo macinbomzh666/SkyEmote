@@ -91,6 +91,7 @@ namespace SkyEmote
         EmoteAction action = EmoteAction::Play;
         // Retain stable IDs for existing favorites without offering redundant browser choices.
         bool hidden = false;
+        std::string description;
     };
 
     struct Section
