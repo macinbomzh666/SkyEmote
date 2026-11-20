@@ -43,6 +43,7 @@ namespace SkyEmote
         std::atomic<std::uint64_t> session_id{0};
         // False before/during loading, true only after a successful load or new game.
         std::atomic<bool> ready{false};
+        std::atomic<unsigned> face_playback_intensity{DefaultFacePlaybackIntensity};
         // Latest immutable message/error snapshot. The render thread can read it while tasks replace it.
         std::atomic<std::shared_ptr<const CommandResult>> billboard{
             std::make_shared<const CommandResult>()};
@@ -326,7 +327,7 @@ namespace SkyEmote
         {
             if (playback->face.Active() || !OwnsGraph(player) || DialogueOpen()) return;
             if (playback->options.face) {
-                playback->face.Start(*player, *playback->options.face);
+                playback->face.Start(*player, *playback->options.face, static_cast<float>(FacePlaybackIntensity()) / 100.0F);
             }
         }
 
@@ -403,7 +404,7 @@ namespace SkyEmote
             }
             if (playback->face.Active()) {
                 if (DialogueOpen()) playback->face.Release(player);
-                else playback->face.Update(*player);
+                else playback->face.Update(*player, static_cast<float>(FacePlaybackIntensity()) / 100.0F);
             }
             const auto now = Clock::now();
             // Bound timer advancement after a stalled frame instead of skipping whole animation phases.
@@ -537,6 +538,17 @@ namespace SkyEmote
                 }
             }
         }
+    }
+
+    unsigned FacePlaybackIntensity()
+    {
+        return face_playback_intensity.load();
+    }
+
+    void SetFacePlaybackIntensity(unsigned percent)
+    {
+        percent = std::min(percent, MaxFacePlaybackIntensity);
+        if (face_playback_intensity.exchange(percent) != percent) QueuePlaybackUpdate();
     }
 
     void QueuePlay(std::string event, std::string name, PlaybackOptions options)

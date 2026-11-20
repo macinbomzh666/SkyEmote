@@ -15,17 +15,18 @@ namespace SkyEmote
     class FacePlayback
     {
     public:
-        void Start(RE::PlayerCharacter& player, const FacePose& pose);
-        void Update(RE::PlayerCharacter& player);
+        void Start(RE::PlayerCharacter& player, const FacePose& pose, float intensity);
+        void Update(RE::PlayerCharacter& player, float intensity);
         void Release(RE::PlayerCharacter* player);
         bool Active() const { return face_ != nullptr; }
 
     private:
         RE::BSFaceGenAnimationData* GetLiveFace(RE::PlayerCharacter* player) const;
-        void Apply(RE::BSFaceGenAnimationData& data, bool clear) const;
+        void Apply(RE::BSFaceGenAnimationData& data, float intensity);
 
         const RE::NiAVObject* root_{};
         const RE::BSFaceGenAnimationData* face_{};
         FacePose pose_{};
+        float applied_intensity_ = 0.0F;
     };
 }

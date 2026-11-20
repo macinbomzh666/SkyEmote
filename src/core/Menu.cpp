@@ -303,6 +303,15 @@ namespace SkyEmote
         void DrawSettings()
         {
             const auto settings = GetInputSettings();
+            ImGui::SeparatorText("Playback");
+            auto intensity = static_cast<int>(FacePlaybackIntensity());
+            ImGui::SetNextItemWidth(std::min(400.0F, ImGui::GetContentRegionAvail().x));
+            if (ImGui::SliderInt("Facial expression intensity", &intensity, 0, MaxFacePlaybackIntensity,
+                    "%d%%", ImGuiSliderFlags_AlwaysClamp)) {
+                SetMenuFacePlaybackIntensity(static_cast<unsigned>(intensity));
+            }
+            if (ImGui::IsItemDeactivatedAfterEdit()) SaveInputSettings();
+            ImGui::Spacing();
             auto sensitivity = settings.mouse_sensitivity;
             ImGui::SeparatorText("Input");
             ImGui::SetNextItemWidth(std::min(400.0F, ImGui::GetContentRegionAvail().x));

@@ -24,6 +24,10 @@ namespace SkyEmote
 
     void QueuePlay(std::string event, std::string name = {}, PlaybackOptions options = {});
     void QueueStop();
+    inline constexpr unsigned DefaultFacePlaybackIntensity = 85;
+    inline constexpr unsigned MaxFacePlaybackIntensity = 150;
+    unsigned FacePlaybackIntensity();
+    void SetFacePlaybackIntensity(unsigned percent);
     // Input calls this on the main thread before Skyrim processes movement/jump/attack.
     void InterruptPlayback();
     void QueuePlaybackUpdate();

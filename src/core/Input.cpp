@@ -656,6 +656,12 @@ namespace SkyEmote
         }
     }
 
+    void SetMenuFacePlaybackIntensity(unsigned percent)
+    {
+        SetFacePlaybackIntensity(percent);
+        settings_dirty.store(true);
+    }
+
     void CaptureMenuKey(bool active)
     {
         CaptureKey(KeyCapture::Menu, active);
@@ -737,11 +743,15 @@ namespace SkyEmote
             const auto quick_error = saved_quick ? ERROR_SUCCESS : GetLastError();
             const bool saved_mouse = WritePrivateProfileStringW(L"Input", L"MouseSensitivity", sensitivity.c_str(), settings_file.c_str());
             const auto mouse_error = saved_mouse ? ERROR_SUCCESS : GetLastError();
+            const auto intensity = std::to_wstring(FacePlaybackIntensity());
+            const bool saved_face = WritePrivateProfileStringW(L"Playback", L"FacialExpressionIntensity",
+                intensity.c_str(), settings_file.c_str());
+            const auto face_error = saved_face ? ERROR_SUCCESS : GetLastError();
             std::string error;
-            if (!saved_key || !saved_stop || !saved_quick || !saved_mouse) {
-                error = "Cannot save input settings. Changes apply until Skyrim closes.";
-                SKSE::log::error("{} File: {}. MenuKey error={}, StopKey error={}, QuickEmoteKey error={}, MouseSensitivity error={}",
-                    error, settings_file.string(), key_error, stop_error, quick_error, mouse_error);
+            if (!saved_key || !saved_stop || !saved_quick || !saved_mouse || !saved_face) {
+                error = "Cannot save settings. Changes apply until Skyrim closes.";
+                SKSE::log::error("{} File: {}. MenuKey error={}, StopKey error={}, QuickEmoteKey error={}, MouseSensitivity error={}, FacialExpressionIntensity error={}",
+                    error, settings_file.string(), key_error, stop_error, quick_error, mouse_error, face_error);
                 settings_dirty.store(true);
             }
             std::lock_guard lock(input_mutex);
@@ -756,6 +766,20 @@ namespace SkyEmote
         }
         settings_file = ini;
         SKSE::log::info("Input configuration: path={} exists={}", ini.string(), GetFileAttributesW(ini.c_str()) != INVALID_FILE_ATTRIBUTES);
+        wchar_t face[32]{};
+        const auto length = GetPrivateProfileStringW(L"Playback", L"FacialExpressionIntensity", L"", face, 32, ini.c_str());
+        if (length == 0) {
+            SetFacePlaybackIntensity(DefaultFacePlaybackIntensity);
+        } else {
+            wchar_t* end{};
+            const auto percent = std::wcstoul(face, &end, 10);
+            if (end == face + length && length < 31 && percent <= MaxFacePlaybackIntensity) {
+                SetFacePlaybackIntensity(static_cast<unsigned>(percent));
+            } else {
+                SetFacePlaybackIntensity(DefaultFacePlaybackIntensity);
+                SKSE::log::warn("Invalid FacialExpressionIntensity in SkyEmote.ini. Using {}.", DefaultFacePlaybackIntensity);
+            }
+        }
         const auto menu = ReadInputKey(L"MenuKey", L"26");
         if (menu && ValidInputBinding(*menu, KeyCapture::Menu, {})) menu_key.store(*menu);
         else SKSE::log::warn("Invalid MenuKey in SkyEmote.ini. Using scan code 26 ([).");

@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 #include "FacePlayback.h"
 
+#include <algorithm>
+
 #include <RE/B/BSFaceGenAnimationData.h>
 #include <RE/P/PlayerCharacter.h>
 #include <SKSE/Logger.h>
@@ -28,13 +30,18 @@ namespace SkyEmote
             }
         }
 
+        float ScaleWeight(float weight, float intensity)
+        {
+            return std::min(weight * intensity, 1.0F);
+        }
+
         template <std::size_t N>
         void ApplyWeights(const std::array<std::optional<float>, N>& weights,
-            Keyframe& input, Keyframe& output, unsigned first, bool clear)
+            Keyframe& input, Keyframe& output, unsigned first, float intensity)
         {
             for (unsigned i = 0; i < weights.size(); ++i) {
                 if (!weights[i]) continue;
-                const auto value = clear ? 0.0F : *weights[i];
+                const auto value = ScaleWeight(*weights[i], intensity);
                 SetWeight(input, first + i, value);
                 SetWeight(output, first + i, value);
             }
@@ -48,7 +55,7 @@ namespace SkyEmote
         return data == face_ ? data : nullptr;
     }
 
-    void FacePlayback::Start(RE::PlayerCharacter& player, const FacePose& pose)
+    void FacePlayback::Start(RE::PlayerCharacter& player, const FacePose& pose, float intensity)
     {
         auto* data = player.GetFaceGenAnimationData();
         const auto* root = player.Get3D(false);
@@ -65,21 +72,23 @@ namespace SkyEmote
             SKSE::log::debug("FaceGen mood unavailable: expressionSlots={}", data->expressionKeyFrame.count);
             pose_.mood.reset();
         }
-        if (pose_.mood) data->ClearExpressionOverride();
-        Apply(*data, false);
-        SKSE::log::debug("FaceGen start: mood={} strength={} expressionSlots={}",
+        Apply(*data, intensity);
+        SKSE::log::debug("FaceGen start: mood={} strength={} intensity={} expressionSlots={}",
             pose_.mood ? FaceMoodNames[pose_.mood->index] : "none",
-            pose_.mood ? pose_.mood->strength : 0.0F, data->expressionKeyFrame.count);
+            pose_.mood ? pose_.mood->strength : 0.0F, intensity, data->expressionKeyFrame.count);
     }
 
-    void FacePlayback::Apply(RE::BSFaceGenAnimationData& data, bool clear) const
+    void FacePlayback::Apply(RE::BSFaceGenAnimationData& data, float intensity)
     {
+        const bool clear = intensity == 0.0F;
+        if (clear && applied_intensity_ == 0.0F) return;
         if (pose_.mood && Has(data.expressionKeyFrame, Keyframe::MoodNeutral + pose_.mood->index)) {
             const auto index = Keyframe::MoodNeutral + pose_.mood->index;
-            const auto value = clear ? 0.0F : pose_.mood->strength;
+            const auto value = ScaleWeight(pose_.mood->strength, intensity);
             if (clear) {
                 data.ClearExpressionOverride();
-            } else if (!data.exprOverride) {
+            } else if (intensity != applied_intensity_ || !data.exprOverride) {
+                data.ClearExpressionOverride();
                 data.SetExpressionOverride(index, value);
                 data.exprOverride = true;
             }
@@ -88,15 +97,18 @@ namespace SkyEmote
             SetWeight(data.expressionKeyFrame, index, value);
             SetWeight(data.expression3, index, value);
         }
-        ApplyWeights(pose_.modifiers, data.modifierKeyFrame, data.modifier3, firstModifier, clear);
-        ApplyWeights(pose_.phonemes, data.phenomeKeyFrame, data.phoneme3, firstPhoneme, clear);
+        ApplyWeights(pose_.modifiers, data.modifierKeyFrame, data.modifier3, firstModifier, intensity);
+        ApplyWeights(pose_.phonemes, data.phenomeKeyFrame, data.phoneme3, firstPhoneme, intensity);
+        applied_intensity_ = intensity;
     }
 
-    void FacePlayback::Update(RE::PlayerCharacter& player)
+    void FacePlayback::Update(RE::PlayerCharacter& player, float intensity)
     {
+        // Keep the session at zero so the slider can bring back the current face.
+        if (intensity == 0.0F && applied_intensity_ == 0.0F) return;
         if (auto* data = GetLiveFace(&player)) {
             RE::BSSpinLockGuard lock(data->lock);
-            Apply(*data, false);
+            Apply(*data, intensity);
         } else {
             *this = {};
         }
@@ -104,10 +116,12 @@ namespace SkyEmote
 
     void FacePlayback::Release(RE::PlayerCharacter* player)
     {
-        if (auto* data = GetLiveFace(player)) {
-            RE::BSSpinLockGuard lock(data->lock);
-            Apply(*data, true);
-            SKSE::log::debug("FaceGen released: authored channels cleared");
+        if (applied_intensity_ > 0.0F) {
+            if (auto* data = GetLiveFace(player)) {
+                RE::BSSpinLockGuard lock(data->lock);
+                Apply(*data, 0.0F);
+                SKSE::log::debug("FaceGen released: authored channels cleared");
+            }
         }
         *this = {};
     }

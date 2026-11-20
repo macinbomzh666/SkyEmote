@@ -9,6 +9,9 @@ StopKey=0
 QuickEmoteKey=0
 QuickEmoteTimeoutSeconds=5
 MouseSensitivity=1.0
+
+[Playback]
+FacialExpressionIntensity=85
 ```
 
 `MenuKey` is a decimal DirectInput keyboard scan code. The default `26` is the
@@ -43,8 +46,15 @@ the upper endpoint to three times that native maximum. Limits refresh whenever
 the menu opens. An INI sensitivity outside those limits resets to `1.0` and
 saves that default. If limits are unavailable, the slider is disabled. Edit the INI only before starting Skyrim.
 
-The **Settings** tab changes input controls while Skyrim is running. Drag the
-sensitivity slider to apply it immediately. Click the menu key button, then
+The **Settings** tab changes playback and input controls while Skyrim is running.
+**Facial expression intensity** runs from 0% to 150% and defaults to 85%. The
+slider scales the mood and facial weights of the current emote and future emotes.
+At 0%, the active face clears while the body animation continues. At 100%, the
+expression plays at its authored strength. Higher settings boost the expression
+up to each facial channel's maximum. The setting saves to
+`[Playback] FacialExpressionIntensity` when a slider edit ends.
+
+Drag the sensitivity slider to apply it immediately. Click the menu key button, then
 press a replacement keyboard key. During rebinding, Escape restores `[` and
 keeps the menu open. Switching tabs or closing the menu cancels rebinding.
 The Stop animation and Quick Emote key buttons display `...` until bound.

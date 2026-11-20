@@ -26,6 +26,7 @@ namespace SkyEmote
     InputSettings GetInputSettings();
     std::string MenuKeyLabel(unsigned scan_code);
     void SetMenuMouseSensitivity(float value);
+    void SetMenuFacePlaybackIntensity(unsigned percent);
     void CaptureMenuKey(bool active);
     void CaptureStopKey(bool active);
     void ClearStopKey();
