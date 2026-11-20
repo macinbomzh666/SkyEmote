@@ -2,6 +2,7 @@
 #include "Input.h"
 #include "InputPolicy.h"
 
+#include "FacePresets.h"
 #include "Menu.h"
 #include "MenuCamera.h"
 #include "Playback.h"
@@ -662,6 +663,13 @@ namespace SkyEmote
         settings_dirty.store(true);
     }
 
+    void SetMenuFaceOverrideSettings(FaceOverrideSettings settings)
+    {
+        SetFaceOverrideSettings(std::move(settings));
+        settings_dirty.store(true);
+        SaveInputSettings();
+    }
+
     void CaptureMenuKey(bool active)
     {
         CaptureKey(KeyCapture::Menu, active);
@@ -747,11 +755,19 @@ namespace SkyEmote
             const bool saved_face = WritePrivateProfileStringW(L"Playback", L"FacialExpressionIntensity",
                 intensity.c_str(), settings_file.c_str());
             const auto face_error = saved_face ? ERROR_SUCCESS : GetLastError();
+            const auto override = GetFaceOverrideSettings();
+            const bool saved_override = WritePrivateProfileStringW(L"Playback", L"OverrideFacialExpression",
+                override->enabled ? L"1" : L"0", settings_file.c_str());
+            const auto override_error = saved_override ? ERROR_SUCCESS : GetLastError();
+            const bool saved_preset = WritePrivateProfileStringW(L"Playback", L"FacialExpressionPreset",
+                override->preset.c_str(), settings_file.c_str());
+            const auto preset_error = saved_preset ? ERROR_SUCCESS : GetLastError();
             std::string error;
-            if (!saved_key || !saved_stop || !saved_quick || !saved_mouse || !saved_face) {
+            if (!saved_key || !saved_stop || !saved_quick || !saved_mouse || !saved_face || !saved_override || !saved_preset) {
                 error = "Cannot save settings. Changes apply until Skyrim closes.";
-                SKSE::log::error("{} File: {}. MenuKey error={}, StopKey error={}, QuickEmoteKey error={}, MouseSensitivity error={}, FacialExpressionIntensity error={}",
-                    error, settings_file.string(), key_error, stop_error, quick_error, mouse_error, face_error);
+                SKSE::log::error("{} File: {}. MenuKey error={}, StopKey error={}, QuickEmoteKey error={}, MouseSensitivity error={}, "
+                    "FacialExpressionIntensity error={}, OverrideFacialExpression error={}, FacialExpressionPreset error={}",
+                    error, settings_file.string(), key_error, stop_error, quick_error, mouse_error, face_error, override_error, preset_error);
                 settings_dirty.store(true);
             }
             std::lock_guard lock(input_mutex);
@@ -765,6 +781,9 @@ namespace SkyEmote
             return true;
         }
         settings_file = ini;
+        LoadBuiltInExpressionPresets(ini.parent_path());
+        if (BuiltInExpressionPresets().empty()) SKSE::log::warn("No bundled face presets could be loaded.");
+        SKSE::log::info("Bundled face presets loaded: {}", BuiltInExpressionPresets().size());
         SKSE::log::info("Input configuration: path={} exists={}", ini.string(), GetFileAttributesW(ini.c_str()) != INVALID_FILE_ATTRIBUTES);
         wchar_t face[32]{};
         const auto length = GetPrivateProfileStringW(L"Playback", L"FacialExpressionIntensity", L"", face, 32, ini.c_str());
@@ -780,6 +799,21 @@ namespace SkyEmote
                 SKSE::log::warn("Invalid FacialExpressionIntensity in SkyEmote.ini. Using {}.", DefaultFacePlaybackIntensity);
             }
         }
+        FaceOverrideSettings expression;
+        expression.enabled = GetPrivateProfileIntW(L"Playback", L"OverrideFacialExpression", 0, ini.c_str()) == 1;
+        constexpr std::wstring_view previous_prefix = L"gmodpose:";
+        wchar_t preset[ExpressionPresetKeyCapacity + previous_prefix.size() - CustomPresetPrefix.size()]{};
+        GetPrivateProfileStringW(L"Playback", L"FacialExpressionPreset", expression.preset.c_str(), preset,
+            static_cast<DWORD>(std::size(preset)), ini.c_str());
+        // Keep the saved custom key even if the preset library is currently unavailable.
+        std::wstring key(preset);
+        if (key.starts_with(previous_prefix)) key.replace(0, previous_prefix.size(), CustomPresetPrefix);
+        if (key.starts_with(CustomPresetPrefix) || FindExpressionPreset({}, key)) {
+            expression.preset = std::move(key);
+        } else {
+            SKSE::log::warn("Invalid FacialExpressionPreset in SkyEmote.ini. Using Smile.");
+        }
+        SetFaceOverrideSettings(std::move(expression));
         const auto menu = ReadInputKey(L"MenuKey", L"26");
         if (menu && ValidInputBinding(*menu, KeyCapture::Menu, {})) menu_key.store(*menu);
         else SKSE::log::warn("Invalid MenuKey in SkyEmote.ini. Using scan code 26 ([).");

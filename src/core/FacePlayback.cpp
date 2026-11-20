@@ -14,6 +14,7 @@ namespace SkyEmote
         using Keyframe = RE::BSFaceGenKeyframeMultiple;
         constexpr auto firstModifier = Keyframe::BrowDownLeft;
         constexpr auto firstPhoneme = Keyframe::Aah;
+        static_assert(Keyframe::BlinkLeft == 0 && Keyframe::BlinkRight + 1 == firstModifier);
         static_assert(Keyframe::SquintRight - firstModifier + 1 == FaceModifierNames.size());
         static_assert(Keyframe::W - firstPhoneme + 1 == FacePhonemeNames.size());
         static_assert(Keyframe::MoodDisgusted - Keyframe::MoodNeutral + 1 == FaceMoodNames.size());
@@ -97,6 +98,19 @@ namespace SkyEmote
             SetWeight(data.expressionKeyFrame, index, value);
             SetWeight(data.expression3, index, value);
         }
+        // Hold imported winks against Skyrim's blink cycle, then restore that cycle on release.
+        using BlinkStage = RE::BSFaceGenAnimationData::EyesBlinkingStage;
+        if (clear && blink_) {
+            data.eyesBlinkingStage = static_cast<BlinkStage>(blink_->stage);
+            data.eyesBlinkingTimer = blink_->timer;
+            blink_.reset();
+        } else if (!clear && (pose_.eyelids[0] || pose_.eyelids[1]) &&
+            (Has(data.modifierKeyFrame, Keyframe::BlinkLeft) || Has(data.modifier3, Keyframe::BlinkLeft))) {
+            if (!blink_) blink_ = BlinkState{static_cast<std::uint32_t>(data.eyesBlinkingStage), data.eyesBlinkingTimer};
+            data.eyesBlinkingStage = BlinkStage::BlinkDelay;
+            data.eyesBlinkingTimer = 0.4F;
+        }
+        ApplyWeights(pose_.eyelids, data.modifierKeyFrame, data.modifier3, Keyframe::BlinkLeft, intensity);
         ApplyWeights(pose_.modifiers, data.modifierKeyFrame, data.modifier3, firstModifier, intensity);
         ApplyWeights(pose_.phonemes, data.phenomeKeyFrame, data.phoneme3, firstPhoneme, intensity);
         applied_intensity_ = intensity;

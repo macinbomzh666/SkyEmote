@@ -75,12 +75,14 @@ namespace
             saved.pose.modifiers.front() == 0.5F && !saved.pose.modifiers.back() && saved.pose.phonemes.back() == 0.25F,
             "Named channels lost their weights or omission");
 
+        SetFaceOverrideSettings({true, saved.key});
         plugins.Write(face / "long.json", "{\"schema\":1,\"type\":\"face\",\"name\":\"" +
             std::string(PresetNameLimit, 'a') + "\",\"pose\":{\"weights\":{\"eee\":0}}}");
         LoadCustomExpressionPresets(plugins.path);
         const auto updated = CustomExpressionPresets();
         Check(updated->size() == 3 && updated->front().key.size() + 1 == ExpressionPresetKeyCapacity,
             "Saved key buffer does not fit the longest preset name");
+        Check(GetFaceOverrideSettings()->preset == saved.key, "Reload changed the saved override selection");
 
         for (const auto* file : {"a-wink.json", "b-duplicate.json", "sparse.json", "long.json"}) {
             std::filesystem::remove(plugins.path / face / file);

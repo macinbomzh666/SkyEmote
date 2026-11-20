@@ -17,6 +17,12 @@ namespace SkyEmote
         std::string source;
     };
 
+    struct FaceOverrideSettings
+    {
+        bool enabled = false;
+        std::wstring preset = L"smile";
+    };
+
     inline constexpr std::wstring_view CustomPresetPrefix = L"face:";
     inline constexpr std::size_t PresetNameLimit = 63;
     // The INI key stores two hex digits for each byte of the UTF-8 preset name.
@@ -27,4 +33,6 @@ namespace SkyEmote
     std::shared_ptr<const std::vector<ExpressionPreset>> CustomExpressionPresets();
     std::span<const ExpressionPreset> BuiltInExpressionPresets();
     const ExpressionPreset* FindExpressionPreset(std::span<const ExpressionPreset> custom, std::wstring_view key);
+    std::shared_ptr<const FaceOverrideSettings> GetFaceOverrideSettings();
+    void SetFaceOverrideSettings(FaceOverrideSettings settings);
 }

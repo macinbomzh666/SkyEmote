@@ -2,6 +2,7 @@
 #include "Menu.h"
 #include "MenuSelection.h"
 
+#include "FacePresets.h"
 #include "Playback.h"
 #include "Favorites.h"
 #include "PackWarnings.h"
@@ -140,9 +141,13 @@ namespace SkyEmote
             ImGui::TextUnformatted(label.c_str());
             ImGui::TextDisabled("%s", emote.action == EmoteAction::Stop ? "Stop animation" :
                 emote.playback.mode == PlaybackMode::Loop ? "Looping" : "One shot");
-            if (!emote.description.empty()) {
+            const auto settings = GetFaceOverrideSettings();
+            const auto* preset = settings->enabled && emote.action == EmoteAction::Play ?
+                FindExpressionPreset({}, settings->preset) : nullptr;
+            const auto* description = preset ? preset->label.c_str() : emote.description.c_str();
+            if (*description) {
                 ImGui::Spacing();
-                ImGui::TextUnformatted(emote.description.c_str());
+                ImGui::TextUnformatted(description);
             }
             ImGui::PopTextWrapPos();
             ImGui::EndTooltip();
@@ -311,6 +316,43 @@ namespace SkyEmote
                 SetMenuFacePlaybackIntensity(static_cast<unsigned>(intensity));
             }
             if (ImGui::IsItemDeactivatedAfterEdit()) SaveInputSettings();
+            auto expression = *GetFaceOverrideSettings();
+            if (ImGui::Checkbox("Use one expression for all emotes", &expression.enabled)) {
+                SetMenuFaceOverrideSettings(expression);
+            }
+            const auto* preset = FindExpressionPreset({}, expression.preset);
+            constexpr auto test_label = "Test expression (5 seconds)###test-expression";
+            constexpr auto restart_label = "Restart test (5 seconds)###test-expression";
+            const auto& style = ImGui::GetStyle();
+            const auto test_width = std::max(ImGui::CalcTextSize(test_label, nullptr, true).x,
+                ImGui::CalcTextSize(restart_label, nullptr, true).x) + style.FramePadding.x * 2.0F;
+            const auto preset_width = ImGui::GetContentRegionAvail().x - test_width - style.ItemSpacing.x;
+            ImGui::SetNextItemWidth(std::clamp(preset_width, 1.0F, 400.0F * style.FontScaleMain));
+            const auto preset_label = preset ? DisplayLabel(preset->label) : "Preset unavailable";
+            if (ImGui::BeginCombo("##expression-preset", preset_label.c_str())) {
+                const auto draw_presets = [&](std::span<const ExpressionPreset> choices) {
+                    for (const auto& choice : choices) {
+                        const bool selected = &choice == preset;
+                        ImGui::PushID(&choice);
+                        if (ImGui::Selectable(DisplayLabel(choice.label).c_str(), selected)) {
+                            preset = &choice;
+                            expression.preset = choice.key;
+                            SetMenuFaceOverrideSettings(expression);
+                        }
+                        if (selected) ImGui::SetItemDefaultFocus();
+                        ImGui::PopID();
+                    }
+                };
+                ImGui::SeparatorText("Premade");
+                draw_presets(BuiltInExpressionPresets());
+                ImGui::EndCombo();
+            }
+            ImGui::SameLine();
+            ImGui::BeginDisabled(!preset);
+            if (ImGui::Button(FacePreviewActive() ? restart_label : test_label, ImVec2(test_width, 0.0F))) {
+                QueueFacePreview(preset->pose);
+            }
+            ImGui::EndDisabled();
             ImGui::Spacing();
             auto sensitivity = settings.mouse_sensitivity;
             ImGui::SeparatorText("Input");

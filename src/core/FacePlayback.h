@@ -21,6 +21,12 @@ namespace SkyEmote
         bool Active() const { return face_ != nullptr; }
 
     private:
+        struct BlinkState
+        {
+            std::uint32_t stage;
+            float timer;
+        };
+
         RE::BSFaceGenAnimationData* GetLiveFace(RE::PlayerCharacter* player) const;
         void Apply(RE::BSFaceGenAnimationData& data, float intensity);
 
@@ -28,5 +34,6 @@ namespace SkyEmote
         const RE::BSFaceGenAnimationData* face_{};
         FacePose pose_{};
         float applied_intensity_ = 0.0F;
+        std::optional<BlinkState> blink_;
     };
 }

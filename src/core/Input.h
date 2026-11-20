@@ -6,6 +6,8 @@
 
 namespace SkyEmote
 {
+    struct FaceOverrideSettings;
+
     struct InputSettings
     {
         unsigned menu_key;
@@ -27,6 +29,7 @@ namespace SkyEmote
     std::string MenuKeyLabel(unsigned scan_code);
     void SetMenuMouseSensitivity(float value);
     void SetMenuFacePlaybackIntensity(unsigned percent);
+    void SetMenuFaceOverrideSettings(FaceOverrideSettings settings);
     void CaptureMenuKey(bool active);
     void CaptureStopKey(bool active);
     void ClearStopKey();

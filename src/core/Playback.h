@@ -28,6 +28,8 @@ namespace SkyEmote
     inline constexpr unsigned MaxFacePlaybackIntensity = 150;
     unsigned FacePlaybackIntensity();
     void SetFacePlaybackIntensity(unsigned percent);
+    void QueueFacePreview(FacePose pose);
+    bool FacePreviewActive();
     // Input calls this on the main thread before Skyrim processes movement/jump/attack.
     void InterruptPlayback();
     void QueuePlaybackUpdate();

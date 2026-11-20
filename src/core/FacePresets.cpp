@@ -20,6 +20,7 @@ namespace SkyEmote
         // The game thread reloads the shared files while the render thread can still hold a previous list.
         std::mutex presets_mutex;
         auto custom_presets = std::make_shared<const std::vector<ExpressionPreset>>();
+        auto face_override = std::make_shared<const FaceOverrideSettings>();
 
         std::wstring PresetKey(std::string_view name)
         {
@@ -98,5 +99,18 @@ namespace SkyEmote
         const auto choices = key.starts_with(CustomPresetPrefix) ? custom : BuiltInExpressionPresets();
         const auto found = std::ranges::find_if(choices, [key](const ExpressionPreset& preset) { return preset.key == key; });
         return found == choices.end() ? nullptr : &*found;
+    }
+
+    std::shared_ptr<const FaceOverrideSettings> GetFaceOverrideSettings()
+    {
+        const std::scoped_lock lock(presets_mutex);
+        return face_override;
+    }
+
+    void SetFaceOverrideSettings(FaceOverrideSettings settings)
+    {
+        auto updated = std::make_shared<const FaceOverrideSettings>(std::move(settings));
+        const std::scoped_lock lock(presets_mutex);
+        face_override = std::move(updated);
     }
 }

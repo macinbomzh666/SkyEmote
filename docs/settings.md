@@ -12,6 +12,8 @@ MouseSensitivity=1.0
 
 [Playback]
 FacialExpressionIntensity=85
+OverrideFacialExpression=0
+FacialExpressionPreset=smile
 ```
 
 `MenuKey` is a decimal DirectInput keyboard scan code. The default `26` is the
@@ -53,6 +55,18 @@ At 0%, the active face clears while the body animation continues. At 100%, the
 expression plays at its authored strength. Higher settings boost the expression
 up to each facial channel's maximum. The setting saves to
 `[Playback] FacialExpressionIntensity` when a slider edit ends.
+
+**Use one expression for all emotes** is off by default. When enabled, the next
+emote uses the selected preset, including emotes from packs without expressions.
+**Test expression (5 seconds)** sits beside the preset dropdown and previews
+the selected face at the current intensity. You can test with the override
+unchecked. An emote's face resumes if the emote is still playing when the test
+ends. At 0%, the button remains clickable and leaves the face unchanged.
+The checkbox and preset save when changed.
+
+Bundled presets live in `SKSE/Plugins/SkyEmote/Presets/Face` and load at startup.
+Use the [face pose schema](face-pose.schema.json) to edit a preset. Omit a
+channel to leave it alone. Use a weight of `0` to explicitly clear it.
 
 Drag the sensitivity slider to apply it immediately. Click the menu key button, then
 press a replacement keyboard key. During rebinding, Escape restores `[` and

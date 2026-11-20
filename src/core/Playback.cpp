@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 #include "Playback.h"
 #include "FacePlayback.h"
+#include "FacePresets.h"
 #include "StateSequence.h"
 
 #include <algorithm>
@@ -44,6 +45,7 @@ namespace SkyEmote
         // False before/during loading, true only after a successful load or new game.
         std::atomic<bool> ready{false};
         std::atomic<unsigned> face_playback_intensity{DefaultFacePlaybackIntensity};
+        std::atomic<bool> face_preview_active{false};
         // Latest immutable message/error snapshot. The render thread can read it while tasks replace it.
         std::atomic<std::shared_ptr<const CommandResult>> billboard{
             std::make_shared<const CommandResult>()};
@@ -100,6 +102,14 @@ namespace SkyEmote
 
         // Only main-thread tasks and the input callback may change playback state.
         std::optional<Playback> playback;
+        struct FacePreview
+        {
+            FacePlayback face;
+            Clock::time_point ends;
+            std::uint64_t session;
+        };
+        std::optional<FacePreview> face_preview;
+
         struct Completion
         {
             std::uint64_t request;
@@ -323,12 +333,40 @@ namespace SkyEmote
             return ui && ui->IsMenuOpen("Dialogue Menu");
         }
 
+        float FaceIntensity()
+        {
+            return static_cast<float>(FacePlaybackIntensity()) / 100.0F;
+        }
+
         void StartPlaybackFace(RE::PlayerCharacter* player)
         {
             if (playback->face.Active() || !OwnsGraph(player) || DialogueOpen()) return;
-            if (playback->options.face) {
-                playback->face.Start(*player, *playback->options.face, static_cast<float>(FacePlaybackIntensity()) / 100.0F);
+            const auto settings = GetFaceOverrideSettings();
+            const auto* preset = settings->enabled ? FindExpressionPreset({}, settings->preset) : nullptr;
+            const auto* face = preset ? &preset->pose : playback->options.face ? &*playback->options.face : nullptr;
+            if (face) playback->face.Start(*player, *face, FaceIntensity());
+        }
+
+        void StopFacePreview(RE::PlayerCharacter* player)
+        {
+            if (!face_preview) return;
+            if (face_preview->session == session_id.load()) face_preview->face.Release(player);
+            face_preview.reset();
+            face_preview_active.store(false);
+        }
+
+        void TickFacePreview()
+        {
+            if (!face_preview) return;
+            auto* player = RE::PlayerCharacter::GetSingleton();
+            const auto intensity = FaceIntensity();
+            if (face_preview->session != session_id.load() || !ready.load() || !player || !player->Is3DLoaded() ||
+                player->IsDead() || DialogueOpen() || intensity == 0.0F || Clock::now() >= face_preview->ends) {
+                StopFacePreview(player);
+                return;
             }
+            face_preview->face.Update(*player, intensity);
+            if (!face_preview->face.Active()) StopFacePreview(player);
         }
 
         void TryStep(RE::PlayerCharacter* player)
@@ -359,6 +397,7 @@ namespace SkyEmote
             playback->previous_tick = Clock::now();
             // A loop's face starts with its first accepted setup or entry step.
             if (main || (playback->options.mode == PlaybackMode::Loop && playback->step_index == 0)) {
+                StopFacePreview(player);
                 StartPlaybackFace(player);
             }
             if (main) {
@@ -404,7 +443,7 @@ namespace SkyEmote
             }
             if (playback->face.Active()) {
                 if (DialogueOpen()) playback->face.Release(player);
-                else playback->face.Update(*player, static_cast<float>(FacePlaybackIntensity()) / 100.0F);
+                else if (!face_preview) playback->face.Update(*player, FaceIntensity());
             }
             const auto now = Clock::now();
             // Bound timer advancement after a stalled frame instead of skipping whole animation phases.
@@ -551,6 +590,37 @@ namespace SkyEmote
         if (face_playback_intensity.exchange(percent) != percent) QueuePlaybackUpdate();
     }
 
+    bool FacePreviewActive()
+    {
+        return face_preview_active.load();
+    }
+
+    void QueueFacePreview(FacePose pose)
+    {
+        QueueTask([pose = std::move(pose)] {
+            const auto intensity = FaceIntensity();
+            if (intensity == 0.0F) return;
+            auto* player = RE::PlayerCharacter::GetSingleton();
+            if (!player || !player->Is3DLoaded() || player->IsDead() || DialogueOpen()) {
+                PublishCommandResult("Load a living player outside dialogue to test an expression.", true);
+                return;
+            }
+            StopFacePreview(player);
+            // Suspend the emote face without discarding it. If the emote is still
+            // playing after the preview, the next playback tick can resume it.
+            if (OwnsGraph(player) && playback->face.Active()) playback->face.Update(*player, 0.0F);
+            auto& preview = face_preview.emplace(FacePreview{{}, Clock::now() + std::chrono::seconds(5), session_id.load()});
+            preview.face.Start(*player, pose, intensity);
+            if (!preview.face.Active()) {
+                StopFacePreview(player);
+                PublishCommandResult("Player face controls are unavailable.", true);
+                return;
+            }
+            face_preview_active.store(true);
+            QueuePlaybackUpdate();
+        });
+    }
+
     void QueuePlay(std::string event, std::string name, PlaybackOptions options)
     {
         const auto request = ++request_id;
@@ -588,6 +658,7 @@ namespace SkyEmote
                 PublishCommandResult(options.state.empty() ? "That state is not active." : "Keeping the current animation.");
                 return;
             }
+            StopFacePreview(player);
             const bool native_idle = plan.reuse && OwnsGraph(player) && playback->native_idle_started;
             // Native idle forms need their special-idle exit before an unrelated replacement.
             // Release them while Drawn too. ResetGraph preserves weapon transitions.
@@ -636,6 +707,7 @@ namespace SkyEmote
                 return;
             }
             auto* player = RE::PlayerCharacter::GetSingleton();
+            StopFacePreview(player);
             // Stop may only reset playback owned by this save and player model.
             if (!OwnsGraph(player)) {
                 ForgetPlayback();
@@ -663,6 +735,7 @@ namespace SkyEmote
     {
         ++request_id;
         auto* player = RE::PlayerCharacter::GetSingleton();
+        StopFacePreview(player);
         const auto* state = player ? player->AsActorState() : nullptr;
         const bool reset = OwnsGraph(player) && playback->phase != Phase::WaitingForWeapon && !player->IsDead() && !player->IsInKillMove() &&
             !player->IsInRagdollState() && state && !state->IsStaggered();
@@ -679,7 +752,7 @@ namespace SkyEmote
 
     void QueuePlaybackUpdate()
     {
-        if (!active_id.load() || update_pending.exchange(true)) {
+        if ((!active_id.load() && !FacePreviewActive()) || update_pending.exchange(true)) {
             return;
         }
         const auto* tasks = SKSE::GetTaskInterface();
@@ -688,6 +761,7 @@ namespace SkyEmote
             return;
         }
         tasks->AddTask([] {
+            TickFacePreview();
             TickPlayback();
             update_pending.store(false);
         });
@@ -706,8 +780,10 @@ namespace SkyEmote
 
     void ReleasePlaybackFaceBeforeLoad()
     {
+        auto* player = RE::PlayerCharacter::GetSingleton();
+        StopFacePreview(player);
         if (playback && playback->face.Active() && playback->session == session_id.load()) {
-            playback->face.Release(RE::PlayerCharacter::GetSingleton());
+            playback->face.Release(player);
         }
     }
 
