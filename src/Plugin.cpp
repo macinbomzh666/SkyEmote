@@ -110,6 +110,7 @@ SKSE_PLUGIN_LOAD(const SKSE::LoadInterface* skse)
                 SKSE::log::info("Initial gameplay fallback armed={}", initial_gameplay.Waiting());
             } else if (message->type == SKSE::MessagingInterface::kPreLoadGame) {
                 initial_gameplay.UseLoadLifecycle();
+                SkyEmote::ReleasePlaybackFaceBeforeLoad();
                 SetGameplayReady(false, "PreLoadGame");
             } else if (message->type == SKSE::MessagingInterface::kPostLoadGame ||
                        message->type == SKSE::MessagingInterface::kNewGame) {

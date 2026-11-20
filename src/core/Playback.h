@@ -27,6 +27,8 @@ namespace SkyEmote
     // Input calls this on the main thread before Skyrim processes movement/jump/attack.
     void InterruptPlayback();
     void QueuePlaybackUpdate();
+    // Called from SKSE's game-thread pre-load message while the old face may still be live.
+    void ReleasePlaybackFaceBeforeLoad();
     void SetPlaybackReady(bool ready);
     std::shared_ptr<const CommandResult> GetCommandResult();
     std::shared_ptr<const PlaybackStatus> GetPlaybackStatus();

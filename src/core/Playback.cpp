@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 #include "Playback.h"
+#include "FacePlayback.h"
 #include "StateSequence.h"
 
 #include <algorithm>
@@ -93,6 +94,7 @@ namespace SkyEmote
             Clock::time_point previous_tick = Clock::now();
             // Start acknowledgement time filters out late completion notices from the previous idle.
             Clock::time_point started{};
+            FacePlayback face;
         };
 
         // Only main-thread tasks and the input callback may change playback state.
@@ -132,6 +134,9 @@ namespace SkyEmote
 
         void ForgetPlayback(bool publish_status = true)
         {
+            if (playback && playback->face.Active() && playback->session == session_id.load()) {
+                playback->face.Release(RE::PlayerCharacter::GetSingleton());
+            }
             active_id.store(0);
             playback.reset();
             if (publish_status) {
@@ -270,6 +275,7 @@ namespace SkyEmote
             // A failed page-turn/rise must not throw away a reading/hovering state already reached.
             // Keep the parent pose, but stop retrying the rejected action or repeating its event.
             if (!playback->state.empty()) {
+                playback->face.Release(player);
                 playback->phase = Phase::Playing;
                 playback->options.mode = PlaybackMode::Loop;
                 playback->options.state = playback->state;
@@ -310,6 +316,20 @@ namespace SkyEmote
             return accepted;
         }
 
+        bool DialogueOpen()
+        {
+            auto* ui = RE::UI::GetSingleton();
+            return ui && ui->IsMenuOpen("Dialogue Menu");
+        }
+
+        void StartPlaybackFace(RE::PlayerCharacter* player)
+        {
+            if (playback->face.Active() || !OwnsGraph(player) || DialogueOpen()) return;
+            if (playback->options.face) {
+                playback->face.Start(*player, *playback->options.face);
+            }
+        }
+
         void TryStep(RE::PlayerCharacter* player)
         {
             const auto& step = playback->steps[playback->step_index];
@@ -336,7 +356,11 @@ namespace SkyEmote
             playback->step_started = true;
             playback->elapsed = playback->retry_wait = 0.0;
             playback->previous_tick = Clock::now();
-            if (playback->step_index + 1 == playback->steps.size()) {
+            // A loop's face starts with its first accepted setup or entry step.
+            if (main || (playback->options.mode == PlaybackMode::Loop && playback->step_index == 0)) {
+                StartPlaybackFace(player);
+            }
+            if (main) {
                 playback->started = playback->previous_tick;
                 if (step.seconds == 0.0) {
                     playback->state = playback->options.state;
@@ -376,6 +400,10 @@ namespace SkyEmote
                 // Never send old cleanup events into a newly loaded save or rebuilt model.
                 ForgetPlayback();
                 return;
+            }
+            if (playback->face.Active()) {
+                if (DialogueOpen()) playback->face.Release(player);
+                else playback->face.Update(*player);
             }
             const auto now = Clock::now();
             // Bound timer advancement after a stalled frame instead of skipping whole animation phases.
@@ -439,6 +467,10 @@ namespace SkyEmote
                         completion.when >= playback->started + std::chrono::milliseconds(100);
                 }
                 completions.clear();
+            }
+            if (finished && playback->options.repeat_interval_seconds == 0.0) {
+                // A stateful gesture can finish while its underlying body idle continues.
+                playback->face.Release(player);
             }
             if (playback->phase == Phase::WaitingForWeapon) {
                 if (playback->elapsed >= 4.0) {
@@ -567,6 +599,8 @@ namespace SkyEmote
                 if (!plan.preserve_first) {
                     TryStep(player);
                 } else {
+                    // Apply the replacement's face while reusing the accepted body entry.
+                    if (playback->options.mode == PlaybackMode::Loop) StartPlaybackFace(player);
                     PublishStatus();
                     PublishCommandResult("Continuing entry for " + playback->name + "...");
                 }
@@ -656,6 +690,13 @@ namespace SkyEmote
         PublishCommandResult({});
         ready.store(value);
         QueuePlaybackUpdate();
+    }
+
+    void ReleasePlaybackFaceBeforeLoad()
+    {
+        if (playback && playback->face.Active() && playback->session == session_id.load()) {
+            playback->face.Release(RE::PlayerCharacter::GetSingleton());
+        }
     }
 
     std::shared_ptr<const PlaybackStatus> GetPlaybackStatus()

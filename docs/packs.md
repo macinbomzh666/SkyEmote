@@ -56,8 +56,12 @@ available when a file cannot be read or fails validation.
 ## Facial expressions
 
 A playable version 2 entry can include a `face` object for the local player's
-face. The reader validates and stores the pose. Emote playback still uses
-only the body animation at this stage.
+face. A looping emote uses this expression from the start of its first accepted
+setup or entry through the loop itself. A one-shot starts its expression with
+the main event. The face is released when the emote completes, is stopped, or
+is interrupted. Release clears the channels authored by the emote and gives
+mood control back to Skyrim. If the player model
+has no supported FaceGen data, the body emote still plays.
 
 ```json
 {
