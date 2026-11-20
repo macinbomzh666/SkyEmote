@@ -4,7 +4,8 @@ Place each UTF-8 JSON manifest in `SKSE/Plugins/SkyEmote/Packs/`.
 The format is defined by [pack.schema.json](pack.schema.json). The bundled
 [vanilla manifest](../assets/SKSE/Plugins/SkyEmote/Packs/vanilla.json) is an example.
 
-`schema` selects the format version. `id` is a stable, lowercase identifier;
+`schema` selects format version 1 or 2. Existing version 1 packs load as written.
+Use version 2 to add facial expressions. `id` is a stable, lowercase identifier;
 `name` is the displayed label. Category IDs are unique within a pack, section
 IDs within their category, and emote IDs across the entire pack. Pack IDs are
 unique across installed manifests. Preserve IDs when renaming or moving emotes:
@@ -39,9 +40,9 @@ use Skyrim's standalone idle-form exit during Stop or unrelated replacement.
 Unknown fields and unsupported schema versions are invalid. A valid event name
 does not establish that the animation graph contains it.
 
-Nesting follows the schema: pack object → categories array → category object →
-sections array → section object → emotes array → emote object → setup array →
-step object. Step fields are scalar values. Deeper nesting is invalid.
+Nesting follows the schema. An emote can contain a setup array with step objects
+or a face object with channel maps. A step's fields and channel weights are scalar
+values. Deeper nesting is invalid.
 Duplicate JSON keys are invalid, as are duplicate IDs in their respective
 scopes. Invalid manifests produce diagnostics identifying their filename,
 location where available, and reason.
@@ -51,6 +52,33 @@ recursive and the extension is case-insensitive. Packs are loaded in filename or
 packs. If multiple valid manifests use the
 same pack ID, all conflicting manifests are excluded. Other valid packs remain
 available when a file cannot be read or fails validation.
+
+## Facial expressions
+
+A playable version 2 entry can include a `face` object for the local player's
+face. The reader validates and stores the pose. Emote playback still uses
+only the body animation at this stage.
+
+```json
+{
+  "id": "chuckle",
+  "name": "Chuckle",
+  "event": "IdleLaugh",
+  "mode": "once",
+  "face": {
+    "mood": "happy",
+    "strength": 0.65,
+    "modifiers": { "squint_left": 0.15, "squint_right": 0.15 },
+    "phonemes": { "big_aah": 0.25 }
+  }
+}
+```
+
+Pair `mood` with `strength`, and use at least one mood, modifier, or phoneme.
+All strengths and weights range from 0 to 1. Omitted channels stay under
+Skyrim's control. A weight of 0 explicitly sets that channel to zero.
+The schema lists the supported names. Each variant can author its own `face`.
+Stop actions accept only their command fields.
 
 ## Held states and setup
 

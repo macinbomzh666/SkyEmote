@@ -127,12 +127,61 @@ namespace SkyEmote
             return seconds;
         }
 
+        float FaceWeight(const Json& value, const std::string& path)
+        {
+            Require(value.is_number(), path, "Expected a number from 0 to 1");
+            const auto weight = value.get<double>();
+            Require(std::isfinite(weight) && weight >= 0.0 && weight <= 1.0,
+                path, "Expected a finite weight from 0 to 1");
+            return static_cast<float>(weight);
+        }
+
+        template <std::size_t N>
+        void ReadFaceWeights(const Json& object, const std::string& path,
+            const std::array<std::string_view, N>& names, std::array<std::optional<float>, N>& weights)
+        {
+            Require(object.is_object() && !object.empty(), path, "Expected a nonempty object of face weights");
+            for (const auto& [key, value] : object.items()) {
+                const auto channel = std::find(names.begin(), names.end(), key);
+                const auto channelPath = (Json::json_pointer(path) / key).to_string();
+                Require(channel != names.end(), channelPath, "Unknown face channel: " + key);
+                weights[static_cast<std::size_t>(channel - names.begin())] = FaceWeight(value, channelPath);
+            }
+        }
+
+        FacePose ParseFace(const Json& value, const std::string& path)
+        {
+            Fields(value, path, {}, {"mood", "strength", "modifiers", "phonemes"});
+            Require(!value.empty(), path, "Expected at least one face channel");
+            FacePose face{};
+            if (value.contains("mood")) {
+                const auto name = Text(value["mood"], path + "/mood");
+                const auto mood = std::find(FaceMoodNames.begin(), FaceMoodNames.end(), name);
+                Require(mood != FaceMoodNames.end(), path + "/mood", "Unknown face mood");
+                Require(value.contains("strength"), path + "/strength", "A face mood requires strength");
+                face.mood = FaceMood{static_cast<unsigned>(mood - FaceMoodNames.begin()),
+                    FaceWeight(value["strength"], path + "/strength")};
+            } else {
+                Require(!value.contains("strength"), path + "/mood", "Face strength requires a mood");
+            }
+            if (value.contains("modifiers")) {
+                ReadFaceWeights(value["modifiers"], path + "/modifiers", FaceModifierNames, face.modifiers);
+            }
+            if (value.contains("phonemes")) {
+                ReadFaceWeights(value["phonemes"], path + "/phonemes", FacePhonemeNames, face.phonemes);
+            }
+            return face;
+        }
+
         PlaybackOptions ParsePlayback(const Json& emote, const std::string& path, const std::string& scope)
         {
             const auto mode = Text(emote["mode"], path + "/mode");
             Require(mode == "once" || mode == "loop", path + "/mode",
                 "Expected playback mode once or loop");
             PlaybackOptions options{mode == "once" ? PlaybackMode::Once : PlaybackMode::Loop};
+            if (emote.contains("face")) {
+                options.face = ParseFace(emote["face"], path + "/face");
+            }
             if (emote.contains("idle_form")) {
                 const auto field = path + "/idle_form";
                 const auto reference = Text(emote["idle_form"], field);
@@ -207,8 +256,12 @@ namespace SkyEmote
             return options;
         }
 
-        Emote ParseEmote(const Json& emote, const std::string& path, const std::string& scope, Ids& ids)
+        Emote ParseEmote(const Json& emote, const std::string& path, const std::string& scope, Ids& ids, bool supportsFace)
         {
+            if (emote.contains("face")) {
+                Require(!emote.contains("action"), path + "/face", "Only playable emotes can have a face");
+                Require(supportsFace, path + "/face", "Face expressions require pack schema 2");
+            }
             if (emote.contains("action")) {
                 // Stop uses global cleanup without an animation event.
                 Fields(emote, path, {"id", "name", "action"});
@@ -219,7 +272,7 @@ namespace SkyEmote
             }
             Fields(emote, path, {"id", "name", "event", "mode"},
                 {"duration_seconds", "repeat_interval_seconds", "state", "requires_state",
-                    "entry_seconds", "state_only", "setup", "variant_of", "allow_movement", "hidden", "idle_form"});
+                    "entry_seconds", "state_only", "setup", "variant_of", "allow_movement", "hidden", "idle_form", "face"});
             auto event = Text(emote["event"], path + "/event");
             Require(!event.empty() &&
                 std::all_of(event.begin(), event.end(), EventChar), path + "/event",
@@ -291,7 +344,7 @@ namespace SkyEmote
             // before the JSON library replaces an earlier value with a later one.
             std::vector<Ids> keys;
             const auto json = Json::parse(text, [&](int depth, Json::parse_event_t event, Json& value) {
-                // Setup adds a step array/object below the emote, giving nine container levels.
+                // Setup and face channels add at most two containers below an emote.
                 Require(depth <= 9, "", "JSON nesting exceeds the pack schema");
                 if (event == Json::parse_event_t::object_start || event == Json::parse_event_t::array_start) {
                     Require(depth < 9, "", "JSON nesting exceeds the pack schema");
@@ -308,8 +361,9 @@ namespace SkyEmote
             });
 
             Fields(json, "", {"schema", "id", "name", "categories"}, {"aliases", "required_files", "graph"});
-            Require(json["schema"].is_number() && json["schema"] == 1, "/schema",
-                "Unsupported schema version; expected integer 1");
+            const bool supportsFace = json["schema"] == 2;
+            Require(json["schema"].is_number() && (json["schema"] == 1 || supportsFace), "/schema",
+                "Unsupported schema version. Expected 1 or 2");
             // Category and emote IDs must be unique throughout this pack.
             // Duplicate pack IDs across different files are checked by LoadPacks.
             Ids packIds, categoryIds, emoteIds;
@@ -339,7 +393,7 @@ namespace SkyEmote
                     for (std::size_t e = 0; e < emotes.size(); ++e) {
                         const auto emotePath = sectionPath + "/emotes/" + std::to_string(e);
                         const auto& emote = emotes[e];
-                        group.emotes.push_back(ParseEmote(emote, emotePath, pack.id, emoteIds));
+                        group.emotes.push_back(ParseEmote(emote, emotePath, pack.id, emoteIds, supportsFace));
                     }
                     ValidateVariants(group, sectionPath);
                     output.sections.push_back(std::move(group));

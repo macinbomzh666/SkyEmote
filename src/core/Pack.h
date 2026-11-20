@@ -76,6 +76,7 @@ namespace SkyEmote
         std::vector<PlaybackStep> setup;
         // Native IDLE forms establish engine action context that a bare graph event can lack.
         std::optional<IdleForm> idle_form;
+        std::optional<FacePose> face;
     };
 
     enum class EmoteAction { Play, Stop };

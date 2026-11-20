@@ -53,6 +53,14 @@ int main(int argc, char** argv)
         const std::string text{std::istreambuf_iterator<char>(input), {}};
         const auto pack = Accept(text);
         Check(pack.id == "vanilla" && pack.name == "Vanilla", "Wrong pack identity");
+        for (const auto& category : pack.categories) {
+            for (const auto& section : category.sections) {
+                for (const auto& emote : section.emotes) {
+                    Check(emote.action != SkyEmote::EmoteAction::Play || emote.playback.face.has_value(),
+                        "Missing bundled facial expression for " + emote.id);
+                }
+            }
+        }
         const auto find = [&](const std::string& id) -> const SkyEmote::Emote& {
             for (const auto& category : pack.categories) {
                 for (const auto& section : category.sections) {
@@ -132,11 +140,13 @@ int main(int argc, char** argv)
         Reject(variants.dump(), "/categories/0/sections/0/emotes");
 
         auto base = Json::parse(text);
+        base["schema"] = 1;
         base["categories"] = Json::array({base["categories"][0]});
         base["categories"][0]["sections"] = Json::array({base["categories"][0]["sections"][0]});
         auto& fixtureEmotes = base["categories"][0]["sections"][0]["emotes"];
         fixtureEmotes = Json::array({fixtureEmotes[0]});
         fixtureEmotes[0].erase("duration_seconds");
+        fixtureEmotes[0].erase("face");
         const std::string ep = "/categories/0/sections/0/emotes/0";
         const auto field = [&](const std::string& path, const Json& value, bool valid) {
             auto document = base;
@@ -157,10 +167,46 @@ int main(int argc, char** argv)
         command[Json::json_pointer(ep)].erase("event");
         command[Json::json_pointer(ep)]["action"] = "script";
         Reject(command.dump(), ep + "/action");
-        // Accept version 1, including its numeric equivalent, but reject other versions and Booleans.
-        field("/schema", 2, false);
+        // Both versions accept body-only entries. Expressions require schema 2.
+        field("/schema", 2, true);
+        field("/schema", 3, false);
         field("/schema", true, false);
         field("/schema", 1.0, true);
+        const auto facePath = ep + "/face";
+        auto facial = base;
+        facial[Json::json_pointer(facePath)] = {
+            {"mood", "happy"}, {"strength", 0.625},
+            {"modifiers", {{"squint_left", 0}}},
+            {"phonemes", {{"big_aah", 0.25}}}
+        };
+        Reject(facial.dump(), facePath, "schema 2");
+        facial["schema"] = 2;
+        const auto facialPack = Accept(facial.dump());
+        const auto& pose = facialPack.categories[0].sections[0].emotes[0].playback.face;
+        Check(pose && pose->mood && SkyEmote::FaceMoodNames[pose->mood->index] == "happy" &&
+            pose->mood->strength == 0.625F, "Face mood was not preserved");
+        Check(pose->modifiers[10] == 0.0F && !pose->modifiers[11] && pose->phonemes[1] == 0.25F,
+            "Authored zero and omitted channels must be distinct");
+        const auto checkFace = [&](Json face, const std::string& suffix) {
+            auto invalid = facial;
+            invalid[Json::json_pointer(facePath)] = std::move(face);
+            Reject(invalid.dump(), facePath + suffix);
+        };
+        checkFace(Json::object(), "");
+        checkFace({{"mood", "happy"}}, "/strength");
+        checkFace({{"mood", "smile"}, {"strength", 1}}, "/mood");
+        checkFace({{"strength", 0.5}}, "/mood");
+        checkFace({{"modifiers", {{"blink_left", 0.5}}}}, "/modifiers/blink_left");
+        checkFace({{"phonemes", {{"bad/key~", 0}}}}, "/phonemes/bad~1key~0");
+        checkFace({{"phonemes", {{"aah", 1.1}}}}, "/phonemes/aah");
+        checkFace({{"phonemes", {{"aah", true}}}}, "/phonemes/aah");
+        checkFace({{"modifiers", Json::object()}}, "/modifiers");
+        command["schema"] = 2;
+        command[Json::json_pointer(ep)] = {
+            {"id", "stop-pose"}, {"name", "Stop pose"}, {"action", "stop"},
+            {"face", facial[Json::json_pointer(facePath)]}
+        };
+        Reject(command.dump(), facePath);
         // Reject unsafe IDs while accepting long identifiers.
         field("/id", "../oops", false);
         field("/id", "vanilla\n", false);

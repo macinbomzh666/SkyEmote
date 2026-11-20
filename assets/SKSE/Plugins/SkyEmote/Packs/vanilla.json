@@ -1,5 +1,5 @@
 {
-  "schema": 1,
+  "schema": 2,
   "id": "vanilla",
   "name": "Vanilla",
   "categories": [
@@ -16,42 +16,108 @@
               "name": "Wave",
               "event": "IdleWave",
               "mode": "once",
-              "duration_seconds": 12
+              "duration_seconds": 12,
+              "face": {
+                "mood": "happy",
+                "strength": 0.69,
+                "modifiers": {
+                  "squint_left": 0.17,
+                  "squint_right": 0.17
+                },
+                "phonemes": {
+                  "eee": 0.22
+                }
+              }
             },
             {
               "id": "idleco2ceremony1welcome",
               "name": "Welcome",
               "event": "IdleCO2Ceremony1Welcome",
               "mode": "once",
-              "duration_seconds": 12
+              "duration_seconds": 12,
+              "face": {
+                "mood": "happy",
+                "strength": 0.69,
+                "modifiers": {
+                  "squint_left": 0.17,
+                  "squint_right": 0.17
+                },
+                "phonemes": {
+                  "eee": 0.22
+                }
+              }
             },
             {
               "id": "idledialoguewelcomehandgesture",
               "name": "Welcoming gesture",
               "event": "IdleDialogueWelcomeHandGesture",
               "mode": "once",
-              "duration_seconds": 5.966667
+              "duration_seconds": 5.966667,
+              "face": {
+                "mood": "happy",
+                "strength": 0.69,
+                "modifiers": {
+                  "squint_left": 0.17,
+                  "squint_right": 0.17
+                },
+                "phonemes": {
+                  "eee": 0.22
+                }
+              }
             },
             {
               "id": "idlesilentbow",
               "name": "Bow",
               "event": "IdleSilentBow",
               "mode": "once",
-              "duration_seconds": 12
+              "duration_seconds": 12,
+              "face": {
+                "mood": "happy",
+                "strength": 0.69,
+                "modifiers": {
+                  "squint_left": 0.17,
+                  "squint_right": 0.17
+                },
+                "phonemes": {
+                  "eee": 0.22
+                }
+              }
             },
             {
               "id": "idlesalute",
               "name": "Salute",
               "event": "IdleSalute",
               "mode": "once",
-              "duration_seconds": 1.433333
+              "duration_seconds": 1.433333,
+              "face": {
+                "mood": "happy",
+                "strength": 0.69,
+                "modifiers": {
+                  "squint_left": 0.17,
+                  "squint_right": 0.17
+                },
+                "phonemes": {
+                  "eee": 0.22
+                }
+              }
             },
             {
               "id": "idleco2ceremony3chest",
               "name": "Chest salute",
               "event": "IdleCO2Ceremony3Chest",
               "mode": "once",
-              "duration_seconds": 5.3
+              "duration_seconds": 5.3,
+              "face": {
+                "mood": "happy",
+                "strength": 0.67,
+                "modifiers": {
+                  "brow_up_left": 0.27,
+                  "brow_up_right": 0.27
+                },
+                "phonemes": {
+                  "eee": 0.22
+                }
+              }
             }
           ]
         },
@@ -64,35 +130,80 @@
               "name": "Over here",
               "event": "IdleGetAttention",
               "mode": "once",
-              "duration_seconds": 12
+              "duration_seconds": 12,
+              "face": {
+                "modifiers": {
+                  "brow_up_left": 0.26,
+                  "brow_up_right": 0.26
+                },
+                "phonemes": {
+                  "bmp": 0.13
+                }
+              }
             },
             {
               "id": "idlecomethisway",
               "name": "Beckon",
               "event": "IdleComeThisWay",
               "mode": "once",
-              "duration_seconds": 12
+              "duration_seconds": 12,
+              "face": {
+                "modifiers": {
+                  "brow_up_left": 0.26,
+                  "brow_up_right": 0.26
+                },
+                "phonemes": {
+                  "bmp": 0.13
+                }
+              }
             },
             {
               "id": "idlepointclose",
               "name": "Point nearby",
               "event": "IdlePointClose",
               "mode": "once",
-              "duration_seconds": 2.466667
+              "duration_seconds": 2.466667,
+              "face": {
+                "modifiers": {
+                  "brow_up_left": 0.26,
+                  "brow_up_right": 0.26
+                },
+                "phonemes": {
+                  "bmp": 0.13
+                }
+              }
             },
             {
               "id": "idlepointfar_01",
               "name": "Point - I",
               "event": "IdlePointFar_01",
               "mode": "once",
-              "duration_seconds": 12
+              "duration_seconds": 12,
+              "face": {
+                "modifiers": {
+                  "brow_up_left": 0.26,
+                  "brow_up_right": 0.26
+                },
+                "phonemes": {
+                  "bmp": 0.13
+                }
+              }
             },
             {
               "id": "idlepointfar_02",
               "name": "Point - II",
               "event": "IdlePointFar_02",
               "mode": "once",
-              "duration_seconds": 12
+              "duration_seconds": 12,
+              "face": {
+                "modifiers": {
+                  "brow_up_left": 0.26,
+                  "brow_up_right": 0.26
+                },
+                "phonemes": {
+                  "bmp": 0.13
+                }
+              }
             }
           ]
         },
@@ -105,42 +216,109 @@
               "name": "Applaud - I",
               "event": "IdleApplaud2",
               "mode": "once",
-              "duration_seconds": 12
+              "duration_seconds": 12,
+              "face": {
+                "mood": "happy",
+                "strength": 0.8,
+                "modifiers": {
+                  "squint_left": 0.19,
+                  "squint_right": 0.19
+                },
+                "phonemes": {
+                  "eee": 0.33
+                }
+              }
             },
             {
               "id": "idleapplaud3",
               "name": "Applaud - II",
               "event": "IdleApplaud3",
               "mode": "once",
-              "duration_seconds": 12
+              "duration_seconds": 12,
+              "face": {
+                "mood": "happy",
+                "strength": 0.45,
+                "modifiers": {
+                  "squint_left": 0.1,
+                  "squint_right": 0.1
+                },
+                "phonemes": {
+                  "eee": 0.14
+                }
+              }
             },
             {
               "id": "idleapplaud4",
               "name": "Applaud - III",
               "event": "IdleApplaud4",
               "mode": "once",
-              "duration_seconds": 12
+              "duration_seconds": 12,
+              "face": {
+                "mood": "happy",
+                "strength": 0.76,
+                "modifiers": {
+                  "squint_left": 0.37,
+                  "squint_right": 0.37
+                },
+                "phonemes": {
+                  "eee": 0.3,
+                  "aah": 0.19
+                }
+              }
             },
             {
               "id": "idleapplaud5",
               "name": "Applaud - IV",
               "event": "IdleApplaud5",
               "mode": "once",
-              "duration_seconds": 12
+              "duration_seconds": 12,
+              "face": {
+                "mood": "happy",
+                "strength": 0.96,
+                "modifiers": {
+                  "brow_up_left": 0.42,
+                  "brow_up_right": 0.42
+                },
+                "phonemes": {
+                  "big_aah": 0.48
+                }
+              }
             },
             {
               "id": "idleapplaudsarcastic",
               "name": "Slow clap",
               "event": "IdleApplaudSarcastic",
               "mode": "once",
-              "duration_seconds": 12
+              "duration_seconds": 12,
+              "face": {
+                "mood": "happy",
+                "strength": 0.86,
+                "modifiers": {
+                  "squint_left": 0.31,
+                  "squint_right": 0.31
+                },
+                "phonemes": {
+                  "eee": 0.41
+                }
+              }
             },
             {
               "id": "idlecivilwarcheer",
               "name": "Cheer",
               "event": "IdleCivilWarCheer",
               "mode": "once",
-              "duration_seconds": 12
+              "duration_seconds": 12,
+              "face": {
+                "mood": "happy",
+                "strength": 0.96,
+                "modifiers": {
+                  "brow_up_left": 0.42,
+                  "brow_up_right": 0.42
+                },
+                "phonemes": {
+                  "big_aah": 0.48
+                }
+              }
             }
           ]
         },
@@ -153,56 +331,149 @@
               "name": "Laugh",
               "event": "IdleLaugh",
               "mode": "once",
-              "duration_seconds": 12
+              "duration_seconds": 12,
+              "face": {
+                "mood": "happy",
+                "strength": 1.0,
+                "modifiers": {
+                  "brow_up_left": 0.27,
+                  "brow_up_right": 0.27,
+                  "squint_left": 0.27,
+                  "squint_right": 0.27
+                },
+                "phonemes": {
+                  "eee": 0.25,
+                  "big_aah": 0.62
+                }
+              }
             },
             {
               "id": "idlecicerohappy",
               "name": "Happy gesture",
               "event": "IdleCiceroHappy",
               "mode": "once",
-              "duration_seconds": 2.58
+              "duration_seconds": 2.58,
+              "face": {
+                "mood": "happy",
+                "strength": 0.8,
+                "modifiers": {
+                  "squint_left": 0.19,
+                  "squint_right": 0.19
+                },
+                "phonemes": {
+                  "eee": 0.33
+                }
+              }
             },
             {
               "id": "idleciceroagitated",
               "name": "Frustrated",
               "event": "IdleCiceroAgitated",
               "mode": "once",
-              "duration_seconds": 12
+              "duration_seconds": 12,
+              "face": {
+                "mood": "anger",
+                "strength": 1.0,
+                "modifiers": {
+                  "brow_down_left": 0.64,
+                  "brow_down_right": 0.64,
+                  "squint_left": 0.34,
+                  "squint_right": 0.34
+                },
+                "phonemes": {
+                  "bmp": 0.44
+                }
+              }
             },
             {
               "id": "idlenervous",
               "name": "Nervous",
               "event": "IdleNervous",
               "mode": "loop",
-              "state": "Nervous"
+              "state": "Nervous",
+              "face": {
+                "mood": "fear",
+                "strength": 0.98,
+                "modifiers": {
+                  "brow_up_left": 0.59,
+                  "brow_up_right": 0.59
+                },
+                "phonemes": {
+                  "eh": 0.46
+                }
+              }
             },
             {
               "id": "idledisbelief01start",
               "name": "Disbelief - I",
               "event": "idleDisbelief01Start",
               "mode": "loop",
-              "state": "Disbelief - I"
+              "state": "Disbelief - I",
+              "face": {
+                "mood": "surprise",
+                "strength": 1.0,
+                "modifiers": {
+                  "brow_up_left": 0.68,
+                  "brow_up_right": 0.68
+                },
+                "phonemes": {
+                  "big_aah": 0.66
+                }
+              }
             },
             {
               "id": "idledisbelief02start",
               "name": "Disbelief - II",
               "event": "idleDisbelief02Start",
               "mode": "loop",
-              "state": "Disbelief - II"
+              "state": "Disbelief - II",
+              "face": {
+                "mood": "surprise",
+                "strength": 1.0,
+                "modifiers": {
+                  "brow_up_left": 0.68,
+                  "brow_up_right": 0.68
+                },
+                "phonemes": {
+                  "big_aah": 0.66
+                }
+              }
             },
             {
               "id": "idlefreareactionstart",
               "name": "Disbelief - Frea I",
               "event": "idleFreaReactionStart",
               "mode": "loop",
-              "state": "Disbelief - Frea I"
+              "state": "Disbelief - Frea I",
+              "face": {
+                "mood": "surprise",
+                "strength": 1.0,
+                "modifiers": {
+                  "brow_up_left": 0.68,
+                  "brow_up_right": 0.68
+                },
+                "phonemes": {
+                  "big_aah": 0.66
+                }
+              }
             },
             {
               "id": "idlefreareaction2start",
               "name": "Disbelief - Frea II",
               "event": "IdleFreaReaction2Start",
               "mode": "loop",
-              "state": "Disbelief - Frea II"
+              "state": "Disbelief - Frea II",
+              "face": {
+                "mood": "surprise",
+                "strength": 1.0,
+                "modifiers": {
+                  "brow_up_left": 0.68,
+                  "brow_up_right": 0.68
+                },
+                "phonemes": {
+                  "big_aah": 0.66
+                }
+              }
             },
             {
               "id": "idlechildcryingstart",
@@ -210,7 +481,20 @@
               "event": "IdleChildCryingStart",
               "mode": "loop",
               "state": "Cry",
-              "entry_seconds": 1.05
+              "entry_seconds": 1.05,
+              "face": {
+                "mood": "sad",
+                "strength": 1.0,
+                "modifiers": {
+                  "brow_in_left": 0.57,
+                  "brow_in_right": 0.57,
+                  "squint_left": 0.27,
+                  "squint_right": 0.27
+                },
+                "phonemes": {
+                  "aah": 0.47
+                }
+              }
             },
             {
               "id": "idlefreasorrowloopenter",
@@ -218,7 +502,18 @@
               "event": "idleFreaSorrowLoopEnter",
               "mode": "loop",
               "state": "Sorrow",
-              "entry_seconds": 1.383333
+              "entry_seconds": 1.383333,
+              "face": {
+                "mood": "sad",
+                "strength": 0.89,
+                "modifiers": {
+                  "brow_in_left": 0.42,
+                  "brow_in_right": 0.42
+                },
+                "phonemes": {
+                  "bmp": 0.23
+                }
+              }
             }
           ]
         },
@@ -231,7 +526,18 @@
               "name": "Calm down",
               "event": "IdleDialogueDefensiveHandGesture",
               "mode": "once",
-              "duration_seconds": 4.08
+              "duration_seconds": 4.08,
+              "face": {
+                "mood": "fear",
+                "strength": 0.98,
+                "modifiers": {
+                  "brow_up_left": 0.59,
+                  "brow_up_right": 0.59
+                },
+                "phonemes": {
+                  "eh": 0.46
+                }
+              }
             },
             {
               "id": "idlecoweringloose",
@@ -239,14 +545,36 @@
               "event": "IdleCowering",
               "mode": "loop",
               "state": "Cower",
-              "entry_seconds": 2
+              "entry_seconds": 2,
+              "face": {
+                "mood": "fear",
+                "strength": 0.98,
+                "modifiers": {
+                  "brow_up_left": 0.59,
+                  "brow_up_right": 0.59
+                },
+                "phonemes": {
+                  "eh": 0.46
+                }
+              }
             },
             {
               "id": "idlesurrender",
               "name": "Surrender",
               "event": "IdleSurrender",
               "mode": "once",
-              "duration_seconds": 4.1
+              "duration_seconds": 4.1,
+              "face": {
+                "mood": "fear",
+                "strength": 0.98,
+                "modifiers": {
+                  "brow_up_left": 0.59,
+                  "brow_up_right": 0.59
+                },
+                "phonemes": {
+                  "eh": 0.46
+                }
+              }
             }
           ]
         },
@@ -259,21 +587,48 @@
               "name": "Give",
               "event": "IdleGive",
               "mode": "once",
-              "duration_seconds": 2.633333
+              "duration_seconds": 2.633333,
+              "face": {
+                "modifiers": {
+                  "brow_up_left": 0.26,
+                  "brow_up_right": 0.26
+                },
+                "phonemes": {
+                  "bmp": 0.13
+                }
+              }
             },
             {
               "id": "idletake",
               "name": "Take",
               "event": "IdleTake",
               "mode": "once",
-              "duration_seconds": 2.633333
+              "duration_seconds": 2.633333,
+              "face": {
+                "modifiers": {
+                  "brow_up_left": 0.26,
+                  "brow_up_right": 0.26
+                },
+                "phonemes": {
+                  "bmp": 0.13
+                }
+              }
             },
             {
               "id": "idledialoguehandonchingesture",
               "name": "Hand on chin",
               "event": "IdleDialogueHandOnChinGesture",
               "mode": "once",
-              "duration_seconds": 4.3
+              "duration_seconds": 4.3,
+              "face": {
+                "modifiers": {
+                  "brow_up_left": 0.26,
+                  "brow_up_right": 0.26
+                },
+                "phonemes": {
+                  "bmp": 0.13
+                }
+              }
             }
           ]
         }
@@ -293,7 +648,18 @@
               "event": "IdleStudy",
               "mode": "loop",
               "state": "Browse wares",
-              "entry_seconds": 2
+              "entry_seconds": 2,
+              "face": {
+                "modifiers": {
+                  "brow_in_left": 0.27,
+                  "brow_in_right": 0.27,
+                  "squint_left": 0.15,
+                  "squint_right": 0.15
+                },
+                "phonemes": {
+                  "bmp": 0.2
+                }
+              }
             },
             {
               "id": "idlemt_doorbang",
@@ -301,7 +667,20 @@
               "event": "IdleMT_DoorBang",
               "mode": "loop",
               "state": "Bang on door",
-              "entry_seconds": 2
+              "entry_seconds": 2,
+              "face": {
+                "mood": "anger",
+                "strength": 1.0,
+                "modifiers": {
+                  "brow_down_left": 0.64,
+                  "brow_down_right": 0.64,
+                  "squint_left": 0.34,
+                  "squint_right": 0.34
+                },
+                "phonemes": {
+                  "bmp": 0.44
+                }
+              }
             },
             {
               "id": "idlesearchingchest",
@@ -309,7 +688,18 @@
               "event": "IdleSearchingChest",
               "mode": "loop",
               "state": "Search chest",
-              "entry_seconds": 2
+              "entry_seconds": 2,
+              "face": {
+                "modifiers": {
+                  "brow_in_left": 0.27,
+                  "brow_in_right": 0.27,
+                  "squint_left": 0.15,
+                  "squint_right": 0.15
+                },
+                "phonemes": {
+                  "bmp": 0.2
+                }
+              }
             },
             {
               "id": "idlesearchingtable",
@@ -317,14 +707,36 @@
               "event": "IdleSearchingTable",
               "mode": "loop",
               "state": "Search surface",
-              "entry_seconds": 2
+              "entry_seconds": 2,
+              "face": {
+                "modifiers": {
+                  "brow_in_left": 0.27,
+                  "brow_in_right": 0.27,
+                  "squint_left": 0.15,
+                  "squint_right": 0.15
+                },
+                "phonemes": {
+                  "bmp": 0.2
+                }
+              }
             },
             {
               "id": "idlepickup_ground",
               "name": "Pick up from ground",
               "event": "IdlePickup_Ground",
               "mode": "once",
-              "duration_seconds": 3.1
+              "duration_seconds": 3.1,
+              "face": {
+                "modifiers": {
+                  "brow_in_left": 0.27,
+                  "brow_in_right": 0.27,
+                  "squint_left": 0.15,
+                  "squint_right": 0.15
+                },
+                "phonemes": {
+                  "bmp": 0.2
+                }
+              }
             }
           ]
         },
@@ -337,14 +749,36 @@
               "name": "Look into the distance",
               "event": "IdleLookFar",
               "mode": "once",
-              "duration_seconds": 12
+              "duration_seconds": 12,
+              "face": {
+                "modifiers": {
+                  "brow_in_left": 0.27,
+                  "brow_in_right": 0.27,
+                  "squint_left": 0.15,
+                  "squint_right": 0.15
+                },
+                "phonemes": {
+                  "bmp": 0.2
+                }
+              }
             },
             {
               "id": "idleexamine",
               "name": "Examine",
               "event": "IdleExamine",
               "mode": "once",
-              "duration_seconds": 12
+              "duration_seconds": 12,
+              "face": {
+                "modifiers": {
+                  "brow_in_left": 0.27,
+                  "brow_in_right": 0.27,
+                  "squint_left": 0.15,
+                  "squint_right": 0.15
+                },
+                "phonemes": {
+                  "bmp": 0.2
+                }
+              }
             }
           ]
         },
@@ -358,13 +792,31 @@
               "event": "IdleWarmArms",
               "mode": "loop",
               "state": "Warm arms",
-              "repeat_interval_seconds": 3.2466667461395264
+              "repeat_interval_seconds": 3.2466667461395264,
+              "face": {
+                "modifiers": {
+                  "squint_left": 0.15,
+                  "squint_right": 0.15
+                },
+                "phonemes": {
+                  "bmp": 0.11
+                }
+              }
             },
             {
               "id": "idlewarmhands",
               "name": "Warm hands",
               "event": "IdleWarmHands",
-              "mode": "loop"
+              "mode": "loop",
+              "face": {
+                "modifiers": {
+                  "squint_left": 0.15,
+                  "squint_right": 0.15
+                },
+                "phonemes": {
+                  "bmp": 0.11
+                }
+              }
             },
             {
               "id": "idlewarmhandscrouched",
@@ -372,7 +824,16 @@
               "event": "IdleWarmHandsCrouched",
               "mode": "loop",
               "state": "Warm hands - crouching",
-              "entry_seconds": 2.216667
+              "entry_seconds": 2.216667,
+              "face": {
+                "modifiers": {
+                  "squint_left": 0.15,
+                  "squint_right": 0.15
+                },
+                "phonemes": {
+                  "bmp": 0.11
+                }
+              }
             }
           ]
         },
@@ -386,14 +847,40 @@
               "event": "IdleUncontrollableCough",
               "mode": "loop",
               "state": "Coughing fit",
-              "entry_seconds": 2
+              "entry_seconds": 2,
+              "face": {
+                "mood": "disgusted",
+                "strength": 0.84,
+                "modifiers": {
+                  "brow_in_left": 0.49,
+                  "brow_in_right": 0.49,
+                  "squint_left": 0.34,
+                  "squint_right": 0.34
+                },
+                "phonemes": {
+                  "eh": 0.42
+                }
+              }
             },
             {
               "id": "idlebracedpain",
               "name": "Bend forward",
               "event": "IdleBracedPain",
               "mode": "loop",
-              "state": "Bend forward"
+              "state": "Bend forward",
+              "face": {
+                "mood": "disgusted",
+                "strength": 0.84,
+                "modifiers": {
+                  "brow_in_left": 0.49,
+                  "brow_in_right": 0.49,
+                  "squint_left": 0.34,
+                  "squint_right": 0.34
+                },
+                "phonemes": {
+                  "eh": 0.42
+                }
+              }
             },
             {
               "id": "idleinjured",
@@ -401,21 +888,60 @@
               "event": "IdleWounded_01",
               "mode": "loop",
               "state": "Injured stance",
-              "entry_seconds": 2
+              "entry_seconds": 2,
+              "face": {
+                "mood": "disgusted",
+                "strength": 0.84,
+                "modifiers": {
+                  "brow_in_left": 0.49,
+                  "brow_in_right": 0.49,
+                  "squint_left": 0.34,
+                  "squint_right": 0.34
+                },
+                "phonemes": {
+                  "eh": 0.42
+                }
+              }
             },
             {
               "id": "idlewounded_02",
               "name": "Wounded - II",
               "event": "IdleWounded_02",
               "mode": "loop",
-              "state": "Wounded - II"
+              "state": "Wounded - II",
+              "face": {
+                "mood": "disgusted",
+                "strength": 0.84,
+                "modifiers": {
+                  "brow_in_left": 0.49,
+                  "brow_in_right": 0.49,
+                  "squint_left": 0.34,
+                  "squint_right": 0.34
+                },
+                "phonemes": {
+                  "eh": 0.42
+                }
+              }
             },
             {
               "id": "idlewounded_03",
               "name": "Wounded - III",
               "event": "IdleWounded_03",
               "mode": "loop",
-              "state": "Wounded - III"
+              "state": "Wounded - III",
+              "face": {
+                "mood": "disgusted",
+                "strength": 0.84,
+                "modifiers": {
+                  "brow_in_left": 0.49,
+                  "brow_in_right": 0.49,
+                  "squint_left": 0.34,
+                  "squint_right": 0.34
+                },
+                "phonemes": {
+                  "eh": 0.42
+                }
+              }
             }
           ]
         },
@@ -428,14 +954,34 @@
               "name": "Wipe brow",
               "event": "IdleWipeBrow",
               "mode": "once",
-              "duration_seconds": 12
+              "duration_seconds": 12,
+              "face": {
+                "mood": "sad",
+                "strength": 0.6,
+                "modifiers": {
+                  "squint_left": 0.38,
+                  "squint_right": 0.38
+                },
+                "phonemes": {
+                  "aah": 0.3
+                }
+              }
             },
             {
               "id": "idlesleepnod",
               "name": "Nod off",
               "event": "IdleSleepNod",
               "mode": "once",
-              "duration_seconds": 4.3
+              "duration_seconds": 4.3,
+              "face": {
+                "modifiers": {
+                  "squint_left": 0.53,
+                  "squint_right": 0.53
+                },
+                "phonemes": {
+                  "aah": 0.1
+                }
+              }
             }
           ]
         },
@@ -449,7 +995,18 @@
               "event": "IdleDialogueMovingTalkA",
               "mode": "once",
               "duration_seconds": 8.1,
-              "allow_movement": true
+              "allow_movement": true,
+              "face": {
+                "modifiers": {
+                  "brow_down_left": 0.32,
+                  "brow_down_right": 0.32,
+                  "squint_left": 0.18,
+                  "squint_right": 0.18
+                },
+                "phonemes": {
+                  "bmp": 0.27
+                }
+              }
             },
             {
               "id": "idledialoguemovingtalkb",
@@ -457,7 +1014,18 @@
               "event": "IdleDialogueMovingTalkB",
               "mode": "once",
               "duration_seconds": 5.43333,
-              "allow_movement": true
+              "allow_movement": true,
+              "face": {
+                "modifiers": {
+                  "brow_down_left": 0.32,
+                  "brow_down_right": 0.32,
+                  "squint_left": 0.18,
+                  "squint_right": 0.18
+                },
+                "phonemes": {
+                  "bmp": 0.27
+                }
+              }
             },
             {
               "id": "idledialoguemovingtalkc",
@@ -465,7 +1033,18 @@
               "event": "IdleDialogueMovingTalkC",
               "mode": "once",
               "duration_seconds": 12.1,
-              "allow_movement": true
+              "allow_movement": true,
+              "face": {
+                "modifiers": {
+                  "brow_down_left": 0.32,
+                  "brow_down_right": 0.32,
+                  "squint_left": 0.18,
+                  "squint_right": 0.18
+                },
+                "phonemes": {
+                  "bmp": 0.27
+                }
+              }
             },
             {
               "id": "idledialoguemovingtalkd",
@@ -473,7 +1052,18 @@
               "event": "IdleDialogueMovingTalkD",
               "mode": "once",
               "duration_seconds": 10.76667,
-              "allow_movement": true
+              "allow_movement": true,
+              "face": {
+                "modifiers": {
+                  "brow_down_left": 0.32,
+                  "brow_down_right": 0.32,
+                  "squint_left": 0.18,
+                  "squint_right": 0.18
+                },
+                "phonemes": {
+                  "bmp": 0.27
+                }
+              }
             }
           ]
         }
@@ -492,7 +1082,18 @@
               "name": "Dance - Cicero I",
               "event": "IdleCiceroDance1",
               "mode": "loop",
-              "repeat_interval_seconds": 6.746666507720947
+              "repeat_interval_seconds": 6.746666507720947,
+              "face": {
+                "mood": "happy",
+                "strength": 0.86,
+                "modifiers": {
+                  "squint_left": 0.31,
+                  "squint_right": 0.31
+                },
+                "phonemes": {
+                  "eee": 0.41
+                }
+              }
             },
             {
               "id": "idlecicerodance2",
@@ -500,7 +1101,18 @@
               "event": "IdleCiceroDance2",
               "mode": "loop",
               "state": "Dance 2",
-              "repeat_interval_seconds": 6.08
+              "repeat_interval_seconds": 6.08,
+              "face": {
+                "mood": "happy",
+                "strength": 0.86,
+                "modifiers": {
+                  "squint_left": 0.31,
+                  "squint_right": 0.31
+                },
+                "phonemes": {
+                  "eee": 0.41
+                }
+              }
             },
             {
               "id": "idlecicerodance3",
@@ -508,7 +1120,18 @@
               "event": "IdleCiceroDance3",
               "mode": "loop",
               "state": "Dance 3",
-              "repeat_interval_seconds": 2.4133332538604737
+              "repeat_interval_seconds": 2.4133332538604737,
+              "face": {
+                "mood": "happy",
+                "strength": 0.86,
+                "modifiers": {
+                  "squint_left": 0.31,
+                  "squint_right": 0.31
+                },
+                "phonemes": {
+                  "eee": 0.41
+                }
+              }
             }
           ]
         },
@@ -522,7 +1145,18 @@
               "event": "IdleDrumStart",
               "mode": "loop",
               "state": "Play drum",
-              "entry_seconds": 2
+              "entry_seconds": 2,
+              "face": {
+                "modifiers": {
+                  "brow_in_left": 0.27,
+                  "brow_in_right": 0.27,
+                  "squint_left": 0.15,
+                  "squint_right": 0.15
+                },
+                "phonemes": {
+                  "bmp": 0.2
+                }
+              }
             },
             {
               "id": "idleflutestart",
@@ -530,7 +1164,18 @@
               "event": "IdleFluteStart",
               "mode": "loop",
               "state": "Play flute",
-              "entry_seconds": 2
+              "entry_seconds": 2,
+              "face": {
+                "modifiers": {
+                  "brow_in_left": 0.27,
+                  "brow_in_right": 0.27,
+                  "squint_left": 0.15,
+                  "squint_right": 0.15
+                },
+                "phonemes": {
+                  "bmp": 0.2
+                }
+              }
             },
             {
               "id": "idlelutestart",
@@ -538,21 +1183,54 @@
               "event": "IdleLuteStart",
               "mode": "loop",
               "state": "Play lute",
-              "entry_seconds": 2
+              "entry_seconds": 2,
+              "face": {
+                "modifiers": {
+                  "brow_in_left": 0.27,
+                  "brow_in_right": 0.27,
+                  "squint_left": 0.15,
+                  "squint_right": 0.15
+                },
+                "phonemes": {
+                  "bmp": 0.2
+                }
+              }
             },
             {
               "id": "idleblowhornimperial",
               "name": "Blow war horn - Imperial",
               "event": "IdleBlowHornImperial",
               "mode": "once",
-              "duration_seconds": 5.3
+              "duration_seconds": 5.3,
+              "face": {
+                "modifiers": {
+                  "brow_down_left": 0.44,
+                  "brow_down_right": 0.44,
+                  "squint_left": 0.25,
+                  "squint_right": 0.25
+                },
+                "phonemes": {
+                  "aah": 0.37
+                }
+              }
             },
             {
               "id": "idleblowhornstormcloak",
               "name": "Blow war horn - Stormcloak",
               "event": "IdleBlowHornStormcloak",
               "mode": "once",
-              "duration_seconds": 5.3
+              "duration_seconds": 5.3,
+              "face": {
+                "modifiers": {
+                  "brow_down_left": 0.44,
+                  "brow_down_right": 0.44,
+                  "squint_left": 0.25,
+                  "squint_right": 0.25
+                },
+                "phonemes": {
+                  "aah": 0.37
+                }
+              }
             }
           ]
         },
@@ -565,42 +1243,110 @@
               "name": "Blessing",
               "event": "IdleCO2Ceremony2Blessing",
               "mode": "once",
-              "duration_seconds": 4.3
+              "duration_seconds": 4.3,
+              "face": {
+                "modifiers": {
+                  "brow_in_left": 0.27,
+                  "brow_in_right": 0.27,
+                  "squint_left": 0.15,
+                  "squint_right": 0.15
+                },
+                "phonemes": {
+                  "bmp": 0.2
+                }
+              }
             },
             {
               "id": "idlegreybeardwordteach",
               "name": "Teach a word",
               "event": "IdleGreybeardWordTeach",
               "mode": "once",
-              "duration_seconds": 2.833333
+              "duration_seconds": 2.833333,
+              "face": {
+                "modifiers": {
+                  "brow_in_left": 0.27,
+                  "brow_in_right": 0.27,
+                  "squint_left": 0.15,
+                  "squint_right": 0.15
+                },
+                "phonemes": {
+                  "bmp": 0.2
+                }
+              }
             },
             {
               "id": "idleritualskull1",
               "name": "Praise (ritual)",
               "event": "IdleRitualSkull1",
               "mode": "once",
-              "duration_seconds": 3.3
+              "duration_seconds": 3.3,
+              "face": {
+                "modifiers": {
+                  "brow_in_left": 0.27,
+                  "brow_in_right": 0.27,
+                  "squint_left": 0.15,
+                  "squint_right": 0.15
+                },
+                "phonemes": {
+                  "bmp": 0.2
+                }
+              }
             },
             {
               "id": "idleritualskull2",
               "name": "Ritual gesture - II",
               "event": "IdleRitualSkull2",
               "mode": "once",
-              "duration_seconds": 5.3
+              "duration_seconds": 5.3,
+              "face": {
+                "modifiers": {
+                  "brow_in_left": 0.27,
+                  "brow_in_right": 0.27,
+                  "squint_left": 0.15,
+                  "squint_right": 0.15
+                },
+                "phonemes": {
+                  "bmp": 0.2
+                }
+              }
             },
             {
               "id": "idleritualskull3",
               "name": "Yell at the sky (ritual)",
               "event": "IdleRitualSkull3",
               "mode": "once",
-              "duration_seconds": 6.3
+              "duration_seconds": 6.3,
+              "face": {
+                "mood": "happy",
+                "strength": 0.96,
+                "modifiers": {
+                  "brow_up_left": 0.42,
+                  "brow_up_right": 0.42
+                },
+                "phonemes": {
+                  "big_aah": 0.48
+                }
+              }
             },
             {
               "id": "idlehandcut",
               "name": "Cut palm",
               "event": "IdleHandCut",
               "mode": "once",
-              "duration_seconds": 7.633333
+              "duration_seconds": 7.633333,
+              "face": {
+                "mood": "disgusted",
+                "strength": 0.84,
+                "modifiers": {
+                  "brow_in_left": 0.49,
+                  "brow_in_right": 0.49,
+                  "squint_left": 0.34,
+                  "squint_right": 0.34
+                },
+                "phonemes": {
+                  "eh": 0.42
+                }
+              }
             }
           ]
         },
@@ -615,7 +1361,17 @@
               "mode": "loop",
               "state": "Floating",
               "entry_seconds": 5.2,
-              "state_only": true
+              "state_only": true,
+              "face": {
+                "mood": "puzzled",
+                "strength": 0.77,
+                "modifiers": {
+                  "brow_down_left": 0.29,
+                  "brow_down_right": 0.29,
+                  "squint_left": 0.28,
+                  "squint_right": 0.28
+                }
+              }
             },
             {
               "id": "idlenocturnal_rise",
@@ -632,7 +1388,17 @@
                   "state_after": "Floating"
                 }
               ],
-              "state_only": true
+              "state_only": true,
+              "face": {
+                "mood": "puzzled",
+                "strength": 0.77,
+                "modifiers": {
+                  "brow_down_left": 0.29,
+                  "brow_down_right": 0.29,
+                  "squint_left": 0.28,
+                  "squint_right": 0.28
+                }
+              }
             },
             {
               "id": "idlenocturnal_idlea",
@@ -653,7 +1419,17 @@
                   "seconds": 5.2,
                   "state_after": "Floating (raised)"
                 }
-              ]
+              ],
+              "face": {
+                "mood": "puzzled",
+                "strength": 0.77,
+                "modifiers": {
+                  "brow_down_left": 0.29,
+                  "brow_down_right": 0.29,
+                  "squint_left": 0.28,
+                  "squint_right": 0.28
+                }
+              }
             },
             {
               "id": "idlenocturnal_idleb",
@@ -674,7 +1450,17 @@
                   "seconds": 5.2,
                   "state_after": "Floating (raised)"
                 }
-              ]
+              ],
+              "face": {
+                "mood": "puzzled",
+                "strength": 0.77,
+                "modifiers": {
+                  "brow_down_left": 0.29,
+                  "brow_down_right": 0.29,
+                  "squint_left": 0.28,
+                  "squint_right": 0.28
+                }
+              }
             },
             {
               "id": "idlenocturnal_lookleft",
@@ -695,7 +1481,17 @@
                   "seconds": 5.2,
                   "state_after": "Floating (raised)"
                 }
-              ]
+              ],
+              "face": {
+                "mood": "puzzled",
+                "strength": 0.77,
+                "modifiers": {
+                  "brow_down_left": 0.29,
+                  "brow_down_right": 0.29,
+                  "squint_left": 0.28,
+                  "squint_right": 0.28
+                }
+              }
             },
             {
               "id": "idlenocturnal_lookright",
@@ -716,7 +1512,17 @@
                   "seconds": 5.2,
                   "state_after": "Floating (raised)"
                 }
-              ]
+              ],
+              "face": {
+                "mood": "puzzled",
+                "strength": 0.77,
+                "modifiers": {
+                  "brow_down_left": 0.29,
+                  "brow_down_right": 0.29,
+                  "squint_left": 0.28,
+                  "squint_right": 0.28
+                }
+              }
             },
             {
               "id": "idlenocturnal_exit",
@@ -726,7 +1532,17 @@
               "requires_state": "Floating (raised)",
               "state": "Floating (lowered)",
               "entry_seconds": 5.2,
-              "state_only": true
+              "state_only": true,
+              "face": {
+                "mood": "puzzled",
+                "strength": 0.77,
+                "modifiers": {
+                  "brow_down_left": 0.29,
+                  "brow_down_right": 0.29,
+                  "squint_left": 0.28,
+                  "squint_right": 0.28
+                }
+              }
             }
           ]
         },
@@ -739,21 +1555,60 @@
               "name": "Strike downward",
               "event": "IdlePrisonerBeat",
               "mode": "once",
-              "duration_seconds": 1.433333
+              "duration_seconds": 1.433333,
+              "face": {
+                "mood": "anger",
+                "strength": 1.0,
+                "modifiers": {
+                  "brow_down_left": 0.64,
+                  "brow_down_right": 0.64,
+                  "squint_left": 0.34,
+                  "squint_right": 0.34
+                },
+                "phonemes": {
+                  "bmp": 0.44
+                }
+              }
             },
             {
               "id": "idlecannibalfeedcrouching",
               "name": "Feast - crouching",
               "event": "IdleCannibalFeedCrouching",
               "mode": "once",
-              "duration_seconds": 4.8
+              "duration_seconds": 4.8,
+              "face": {
+                "mood": "anger",
+                "strength": 1.0,
+                "modifiers": {
+                  "brow_down_left": 0.64,
+                  "brow_down_right": 0.64,
+                  "squint_left": 0.34,
+                  "squint_right": 0.34
+                },
+                "phonemes": {
+                  "bmp": 0.44
+                }
+              }
             },
             {
               "id": "idlecannibalfeedstanding",
               "name": "Feast - standing",
               "event": "IdleCannibalFeedStanding",
               "mode": "once",
-              "duration_seconds": 4.633333
+              "duration_seconds": 4.633333,
+              "face": {
+                "mood": "anger",
+                "strength": 1.0,
+                "modifiers": {
+                  "brow_down_left": 0.64,
+                  "brow_down_right": 0.64,
+                  "squint_left": 0.34,
+                  "squint_right": 0.34
+                },
+                "phonemes": {
+                  "bmp": 0.44
+                }
+              }
             }
           ]
         }
@@ -773,14 +1628,35 @@
               "event": "idleEatingStandingStart",
               "mode": "loop",
               "state": "Eat bread",
-              "entry_seconds": 6.983333
+              "entry_seconds": 6.983333,
+              "face": {
+                "modifiers": {
+                  "squint_left": 0.2,
+                  "squint_right": 0.2
+                },
+                "phonemes": {
+                  "bmp": 0.36,
+                  "ooh_q": 0.15
+                }
+              }
             },
             {
               "id": "idleoffsetcarrypotserve",
               "name": "Serve from pot (partial)",
               "event": "IdleOffsetCarryPotServe",
               "mode": "once",
-              "duration_seconds": 11.3
+              "duration_seconds": 11.3,
+              "face": {
+                "modifiers": {
+                  "brow_in_left": 0.27,
+                  "brow_in_right": 0.27,
+                  "squint_left": 0.15,
+                  "squint_right": 0.15
+                },
+                "phonemes": {
+                  "bmp": 0.2
+                }
+              }
             }
           ]
         },
@@ -793,14 +1669,32 @@
               "name": "Drink",
               "event": "IdleDrink",
               "mode": "once",
-              "duration_seconds": 12
+              "duration_seconds": 12,
+              "face": {
+                "modifiers": {
+                  "squint_left": 0.14,
+                  "squint_right": 0.14
+                },
+                "phonemes": {
+                  "ooh_q": 0.29
+                }
+              }
             },
             {
               "id": "idledrinkpotion",
               "name": "Drink potion",
               "event": "IdleDrinkPotion",
               "mode": "once",
-              "duration_seconds": 5.966667
+              "duration_seconds": 5.966667,
+              "face": {
+                "modifiers": {
+                  "squint_left": 0.14,
+                  "squint_right": 0.14
+                },
+                "phonemes": {
+                  "ooh_q": 0.29
+                }
+              }
             },
             {
               "id": "idledrinkingstandingstart",
@@ -808,7 +1702,16 @@
               "event": "idleDrinkingStandingStart",
               "mode": "loop",
               "state": "Drink standing",
-              "entry_seconds": 2
+              "entry_seconds": 2,
+              "face": {
+                "modifiers": {
+                  "squint_left": 0.14,
+                  "squint_right": 0.14
+                },
+                "phonemes": {
+                  "ooh_q": 0.29
+                }
+              }
             },
             {
               "id": "idlebardrinkingstart",
@@ -816,7 +1719,18 @@
               "event": "idleBarDrinkingStart",
               "mode": "loop",
               "state": "Drink at bar",
-              "entry_seconds": 2
+              "entry_seconds": 2,
+              "face": {
+                "mood": "happy",
+                "strength": 0.8,
+                "modifiers": {
+                  "squint_left": 0.19,
+                  "squint_right": 0.19
+                },
+                "phonemes": {
+                  "eee": 0.33
+                }
+              }
             },
             {
               "id": "idlemq201drink",
@@ -825,7 +1739,16 @@
               "mode": "loop",
               "state": "Drinking",
               "entry_seconds": 5.0,
-              "state_only": true
+              "state_only": true,
+              "face": {
+                "modifiers": {
+                  "squint_left": 0.15,
+                  "squint_right": 0.15
+                },
+                "phonemes": {
+                  "bmp": 0.11
+                }
+              }
             },
             {
               "id": "idlemq201toaststart",
@@ -841,7 +1764,18 @@
                   "seconds": 5.0,
                   "state_after": "Drinking"
                 }
-              ]
+              ],
+              "face": {
+                "mood": "happy",
+                "strength": 0.55,
+                "modifiers": {
+                  "squint_left": 0.28,
+                  "squint_right": 0.28
+                },
+                "phonemes": {
+                  "aah": 0.25
+                }
+              }
             },
             {
               "id": "idlemq201holdingdrinktray",
@@ -849,7 +1783,18 @@
               "event": "IdleMQ201HoldingDrinkTray",
               "mode": "loop",
               "state": "Hold drinks tray",
-              "entry_seconds": 2
+              "entry_seconds": 2,
+              "face": {
+                "modifiers": {
+                  "brow_in_left": 0.27,
+                  "brow_in_right": 0.27,
+                  "squint_left": 0.15,
+                  "squint_right": 0.15
+                },
+                "phonemes": {
+                  "bmp": 0.2
+                }
+              }
             }
           ]
         },
@@ -863,7 +1808,18 @@
               "event": "IdleNoteRead",
               "mode": "loop",
               "state": "Read note",
-              "entry_seconds": 2
+              "entry_seconds": 2,
+              "face": {
+                "modifiers": {
+                  "brow_in_left": 0.27,
+                  "brow_in_right": 0.27,
+                  "squint_left": 0.15,
+                  "squint_right": 0.15
+                },
+                "phonemes": {
+                  "bmp": 0.2
+                }
+              }
             },
             {
               "id": "idlebook_reading",
@@ -872,7 +1828,18 @@
               "mode": "loop",
               "state": "Reading",
               "entry_seconds": 2,
-              "state_only": true
+              "state_only": true,
+              "face": {
+                "modifiers": {
+                  "brow_in_left": 0.27,
+                  "brow_in_right": 0.27,
+                  "squint_left": 0.15,
+                  "squint_right": 0.15
+                },
+                "phonemes": {
+                  "bmp": 0.2
+                }
+              }
             },
             {
               "id": "idlebook_turnonepage",
@@ -888,7 +1855,18 @@
                   "seconds": 2,
                   "state_after": "Reading"
                 }
-              ]
+              ],
+              "face": {
+                "modifiers": {
+                  "brow_in_left": 0.27,
+                  "brow_in_right": 0.27,
+                  "squint_left": 0.15,
+                  "squint_right": 0.15
+                },
+                "phonemes": {
+                  "bmp": 0.2
+                }
+              }
             },
             {
               "id": "idlebook_turnmanypages",
@@ -904,7 +1882,18 @@
                   "seconds": 2,
                   "state_after": "Reading"
                 }
-              ]
+              ],
+              "face": {
+                "modifiers": {
+                  "brow_in_left": 0.27,
+                  "brow_in_right": 0.27,
+                  "squint_left": 0.15,
+                  "squint_right": 0.15
+                },
+                "phonemes": {
+                  "bmp": 0.2
+                }
+              }
             },
             {
               "id": "idlewriteledgerenter",
@@ -918,7 +1907,18 @@
                   "event": "IdleWriteLedgerEnter",
                   "seconds": 2
                 }
-              ]
+              ],
+              "face": {
+                "modifiers": {
+                  "brow_in_left": 0.27,
+                  "brow_in_right": 0.27,
+                  "squint_left": 0.15,
+                  "squint_right": 0.15
+                },
+                "phonemes": {
+                  "bmp": 0.2
+                }
+              }
             }
           ]
         },
@@ -933,7 +1933,18 @@
               "mode": "loop",
               "state": "Hold Elder Scroll",
               "entry_seconds": 1.6,
-              "state_only": true
+              "state_only": true,
+              "face": {
+                "modifiers": {
+                  "brow_in_left": 0.27,
+                  "brow_in_right": 0.27,
+                  "squint_left": 0.15,
+                  "squint_right": 0.15
+                },
+                "phonemes": {
+                  "bmp": 0.2
+                }
+              }
             },
             {
               "id": "idlereadelderscroll",
@@ -943,7 +1954,18 @@
               "state": "Read Elder Scroll",
               "state_only": true,
               "entry_seconds": 3.383333,
-              "idle_form": "Dawnguard.esm|00014727"
+              "idle_form": "Dawnguard.esm|00014727",
+              "face": {
+                "modifiers": {
+                  "brow_in_left": 0.27,
+                  "brow_in_right": 0.27,
+                  "squint_left": 0.15,
+                  "squint_right": 0.15
+                },
+                "phonemes": {
+                  "bmp": 0.2
+                }
+              }
             },
             {
               "id": "idlereadelderscrollend",
@@ -951,7 +1973,18 @@
               "event": "IdleReadElderScrollEnd",
               "mode": "once",
               "requires_state": "Read Elder Scroll",
-              "duration_seconds": 1.233333
+              "duration_seconds": 1.233333,
+              "face": {
+                "mood": "happy",
+                "strength": 0.55,
+                "modifiers": {
+                  "squint_left": 0.28,
+                  "squint_right": 0.28
+                },
+                "phonemes": {
+                  "aah": 0.25
+                }
+              }
             }
           ]
         },
@@ -965,7 +1998,18 @@
               "event": "idleLooseSweepingStart",
               "mode": "loop",
               "state": "Sweep",
-              "entry_seconds": 2
+              "entry_seconds": 2,
+              "face": {
+                "modifiers": {
+                  "brow_down_left": 0.44,
+                  "brow_down_right": 0.44,
+                  "squint_left": 0.25,
+                  "squint_right": 0.25
+                },
+                "phonemes": {
+                  "aah": 0.37
+                }
+              }
             },
             {
               "id": "idlehoe",
@@ -973,7 +2017,18 @@
               "event": "IdleHoe",
               "mode": "loop",
               "state": "Hoe",
-              "entry_seconds": 2
+              "entry_seconds": 2,
+              "face": {
+                "modifiers": {
+                  "brow_down_left": 0.44,
+                  "brow_down_right": 0.44,
+                  "squint_left": 0.25,
+                  "squint_right": 0.25
+                },
+                "phonemes": {
+                  "aah": 0.37
+                }
+              }
             },
             {
               "id": "idlehammerwallenter",
@@ -981,7 +2036,18 @@
               "event": "IdleHammerWallEnter",
               "mode": "loop",
               "state": "Hammer wall",
-              "entry_seconds": 2
+              "entry_seconds": 2,
+              "face": {
+                "modifiers": {
+                  "brow_down_left": 0.44,
+                  "brow_down_right": 0.44,
+                  "squint_left": 0.25,
+                  "squint_right": 0.25
+                },
+                "phonemes": {
+                  "aah": 0.37
+                }
+              }
             },
             {
               "id": "idledwemerextractor",
@@ -989,7 +2055,18 @@
               "event": "IdleDwemerExtractorEnter",
               "mode": "loop",
               "state": "Use extractor",
-              "entry_seconds": 2
+              "entry_seconds": 2,
+              "face": {
+                "modifiers": {
+                  "brow_down_left": 0.44,
+                  "brow_down_right": 0.44,
+                  "squint_left": 0.25,
+                  "squint_right": 0.25
+                },
+                "phonemes": {
+                  "aah": 0.37
+                }
+              }
             },
             {
               "id": "idlesell",
@@ -997,21 +2074,52 @@
               "event": "IdleSell",
               "mode": "loop",
               "state": "Sell potions",
-              "entry_seconds": 2
+              "entry_seconds": 2,
+              "face": {
+                "modifiers": {
+                  "brow_up_left": 0.26,
+                  "brow_up_right": 0.26
+                },
+                "phonemes": {
+                  "bmp": 0.13
+                }
+              }
             },
             {
               "id": "idlefeedchicken",
               "name": "Scatter feed (partial)",
               "event": "IdleFeedChicken",
               "mode": "once",
-              "duration_seconds": 6.266667
+              "duration_seconds": 6.266667,
+              "face": {
+                "modifiers": {
+                  "brow_down_left": 0.44,
+                  "brow_down_right": 0.44,
+                  "squint_left": 0.25,
+                  "squint_right": 0.25
+                },
+                "phonemes": {
+                  "aah": 0.37
+                }
+              }
             },
             {
               "id": "idlecarrybucketpourenter",
               "name": "Pour bucket (partial)",
               "event": "IdleCarryBucketPourEnter",
               "mode": "once",
-              "duration_seconds": 5.3
+              "duration_seconds": 5.3,
+              "face": {
+                "modifiers": {
+                  "brow_down_left": 0.44,
+                  "brow_down_right": 0.44,
+                  "squint_left": 0.25,
+                  "squint_right": 0.25
+                },
+                "phonemes": {
+                  "aah": 0.37
+                }
+              }
             }
           ]
         }
@@ -1031,7 +2139,16 @@
               "event": "IdleSitCrossLeggedEnter",
               "mode": "loop",
               "state": "Sit cross-legged",
-              "entry_seconds": 2
+              "entry_seconds": 2,
+              "face": {
+                "modifiers": {
+                  "squint_left": 0.15,
+                  "squint_right": 0.15
+                },
+                "phonemes": {
+                  "bmp": 0.11
+                }
+              }
             },
             {
               "id": "idlesitledgeenter",
@@ -1039,7 +2156,16 @@
               "event": "IdleSitLedgeEnter",
               "mode": "loop",
               "state": "Sit on ledge",
-              "entry_seconds": 2
+              "entry_seconds": 2,
+              "face": {
+                "modifiers": {
+                  "squint_left": 0.15,
+                  "squint_right": 0.15
+                },
+                "phonemes": {
+                  "bmp": 0.11
+                }
+              }
             }
           ]
         },
@@ -1053,14 +2179,32 @@
               "event": "IdleLayDownEnter",
               "mode": "loop",
               "state": "Lie down",
-              "entry_seconds": 2
+              "entry_seconds": 2,
+              "face": {
+                "modifiers": {
+                  "squint_left": 0.53,
+                  "squint_right": 0.53
+                },
+                "phonemes": {
+                  "aah": 0.1
+                }
+              }
             },
             {
               "id": "idleastridenter",
               "name": "Lie splayed (Astrid)",
               "event": "IdleAstridEnter",
               "mode": "loop",
-              "state": "Lie splayed (Astrid)"
+              "state": "Lie splayed (Astrid)",
+              "face": {
+                "modifiers": {
+                  "squint_left": 0.53,
+                  "squint_right": 0.53
+                },
+                "phonemes": {
+                  "aah": 0.1
+                }
+              }
             }
           ]
         },
@@ -1074,7 +2218,16 @@
               "event": "IdleKneelingEnter",
               "mode": "loop",
               "state": "Kneel",
-              "entry_seconds": 2
+              "entry_seconds": 2,
+              "face": {
+                "modifiers": {
+                  "squint_left": 0.15,
+                  "squint_right": 0.15
+                },
+                "phonemes": {
+                  "bmp": 0.11
+                }
+              }
             },
             {
               "id": "idleboundkneesstart",
@@ -1082,7 +2235,18 @@
               "event": "IdleBoundKneesStart",
               "mode": "loop",
               "state": "Kneel with hands bound",
-              "entry_seconds": 2.216667
+              "entry_seconds": 2.216667,
+              "face": {
+                "mood": "fear",
+                "strength": 0.98,
+                "modifiers": {
+                  "brow_up_left": 0.59,
+                  "brow_up_right": 0.59
+                },
+                "phonemes": {
+                  "eh": 0.46
+                }
+              }
             }
           ]
         },
@@ -1096,14 +2260,36 @@
               "event": "IdleWallSoldierEnterInstant",
               "mode": "loop",
               "state": "Stand proud",
-              "state_only": true
+              "state_only": true,
+              "face": {
+                "mood": "happy",
+                "strength": 0.67,
+                "modifiers": {
+                  "brow_up_left": 0.27,
+                  "brow_up_right": 0.27
+                },
+                "phonemes": {
+                  "eee": 0.22
+                }
+              }
             },
             {
               "id": "idlesnaptoattention",
               "name": "Attention",
               "event": "IdleSnapToAttention",
               "mode": "once",
-              "duration_seconds": 12
+              "duration_seconds": 12,
+              "face": {
+                "modifiers": {
+                  "brow_down_left": 0.32,
+                  "brow_down_right": 0.32,
+                  "squint_left": 0.18,
+                  "squint_right": 0.18
+                },
+                "phonemes": {
+                  "bmp": 0.27
+                }
+              }
             },
             {
               "id": "idlehandsbehindback",
@@ -1111,21 +2297,54 @@
               "event": "IdleHandsBehindBack",
               "mode": "loop",
               "state": "Hands behind back",
-              "entry_seconds": 0.766667
+              "entry_seconds": 0.766667,
+              "face": {
+                "modifiers": {
+                  "brow_down_left": 0.32,
+                  "brow_down_right": 0.32,
+                  "squint_left": 0.18,
+                  "squint_right": 0.18
+                },
+                "phonemes": {
+                  "bmp": 0.27
+                }
+              }
             },
             {
               "id": "idlegrave_01",
               "name": "Grave - hands in front",
               "event": "IdleGrave_01",
               "mode": "loop",
-              "state": "Grave - hands in front"
+              "state": "Grave - hands in front",
+              "face": {
+                "mood": "sad",
+                "strength": 0.89,
+                "modifiers": {
+                  "brow_in_left": 0.42,
+                  "brow_in_right": 0.42
+                },
+                "phonemes": {
+                  "bmp": 0.23
+                }
+              }
             },
             {
               "id": "idlegrave_02",
               "name": "Grave - hands behind",
               "event": "IdleGrave_02",
               "mode": "loop",
-              "state": "Grave - hands behind"
+              "state": "Grave - hands behind",
+              "face": {
+                "mood": "sad",
+                "strength": 0.89,
+                "modifiers": {
+                  "brow_in_left": 0.42,
+                  "brow_in_right": 0.42
+                },
+                "phonemes": {
+                  "bmp": 0.23
+                }
+              }
             }
           ]
         },
@@ -1139,7 +2358,16 @@
               "event": "IdleLeanTableEnter",
               "mode": "loop",
               "state": "Lean on surface",
-              "entry_seconds": 2
+              "entry_seconds": 2,
+              "face": {
+                "modifiers": {
+                  "squint_left": 0.15,
+                  "squint_right": 0.15
+                },
+                "phonemes": {
+                  "bmp": 0.11
+                }
+              }
             },
             {
               "id": "idlebarcounterenter",
@@ -1147,21 +2375,48 @@
               "event": "IdleBarCounterEnter",
               "mode": "loop",
               "state": "Lean on bar counter",
-              "entry_seconds": 1.383333
+              "entry_seconds": 1.383333,
+              "face": {
+                "modifiers": {
+                  "squint_left": 0.15,
+                  "squint_right": 0.15
+                },
+                "phonemes": {
+                  "bmp": 0.11
+                }
+              }
             },
             {
               "id": "idlerailleanenter",
               "name": "Lean on railing",
               "event": "IdleRailLeanEnterInstant",
               "mode": "loop",
-              "state": "Lean on railing"
+              "state": "Lean on railing",
+              "face": {
+                "modifiers": {
+                  "squint_left": 0.15,
+                  "squint_right": 0.15
+                },
+                "phonemes": {
+                  "bmp": 0.11
+                }
+              }
             },
             {
               "id": "idlelounge",
               "name": "Lounge",
               "event": "IdleLounge",
               "mode": "loop",
-              "state": "Lounge"
+              "state": "Lounge",
+              "face": {
+                "modifiers": {
+                  "squint_left": 0.15,
+                  "squint_right": 0.15
+                },
+                "phonemes": {
+                  "bmp": 0.11
+                }
+              }
             }
           ]
         },
@@ -1175,7 +2430,18 @@
               "event": "IdlePray",
               "mode": "loop",
               "state": "Pray standing",
-              "entry_seconds": 0.2
+              "entry_seconds": 0.2,
+              "face": {
+                "modifiers": {
+                  "brow_in_left": 0.27,
+                  "brow_in_right": 0.27,
+                  "squint_left": 0.15,
+                  "squint_right": 0.15
+                },
+                "phonemes": {
+                  "bmp": 0.2
+                }
+              }
             },
             {
               "id": "idlecrouchedprayenter",
@@ -1183,7 +2449,18 @@
               "event": "IdlePrayCrouchedEnter",
               "mode": "loop",
               "state": "Pray",
-              "entry_seconds": 2
+              "entry_seconds": 2,
+              "face": {
+                "modifiers": {
+                  "brow_in_left": 0.27,
+                  "brow_in_right": 0.27,
+                  "squint_left": 0.15,
+                  "squint_right": 0.15
+                },
+                "phonemes": {
+                  "bmp": 0.2
+                }
+              }
             },
             {
               "id": "idlegreybeardmeditateenter",
@@ -1191,7 +2468,18 @@
               "event": "IdleGreybeardMeditateEnter",
               "mode": "loop",
               "state": "Meditate",
-              "entry_seconds": 1.516667
+              "entry_seconds": 1.516667,
+              "face": {
+                "modifiers": {
+                  "brow_in_left": 0.27,
+                  "brow_in_right": 0.27,
+                  "squint_left": 0.15,
+                  "squint_right": 0.15
+                },
+                "phonemes": {
+                  "bmp": 0.2
+                }
+              }
             }
           ]
         }

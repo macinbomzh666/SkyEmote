@@ -5,7 +5,7 @@
   "additionalProperties": false,
   "required": ["schema", "id", "name", "categories"],
   "properties": {
-    "schema": { "const": 1 },
+    "schema": { "enum": [1, 2] },
     "id": { "$ref": "#/$defs/id" },
     "name": { "$ref": "#/$defs/name" },
     "aliases": {
@@ -26,6 +26,16 @@
       "type": "array",
       "minItems": 1,
       "items": { "$ref": "#/$defs/category" }
+    }
+  },
+  "if": { "properties": { "schema": { "const": 1 } } },
+  "then": {
+    "properties": {
+      "categories": { "items": { "properties": {
+        "sections": { "items": { "properties": {
+          "emotes": { "items": { "not": { "required": ["face"] } } }
+        } } }
+      } } }
     }
   },
   "$defs": {
@@ -79,6 +89,36 @@
         "state_after": { "$ref": "#/$defs/name" }
       }
     },
+    "weight": { "type": "number", "minimum": 0, "maximum": 1 },
+    "face": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "dependentRequired": { "mood": ["strength"], "strength": ["mood"] },
+      "properties": {
+        "mood": { "enum": ["neutral", "anger", "fear", "happy", "sad", "surprise", "puzzled", "disgusted"] },
+        "strength": { "$ref": "#/$defs/weight" },
+        "modifiers": {
+          "type": "object",
+          "minProperties": 1,
+          "propertyNames": { "enum": [
+            "brow_down_left", "brow_down_right", "brow_in_left", "brow_in_right",
+            "brow_up_left", "brow_up_right", "look_down", "look_left", "look_right", "look_up",
+            "squint_left", "squint_right"
+          ] },
+          "additionalProperties": { "$ref": "#/$defs/weight" }
+        },
+        "phonemes": {
+          "type": "object",
+          "minProperties": 1,
+          "propertyNames": { "enum": [
+            "aah", "big_aah", "bmp", "ch_j_sh", "dst", "eee", "eh", "fv",
+            "i", "k", "n", "oh", "ooh_q", "r", "th", "w"
+          ] },
+          "additionalProperties": { "$ref": "#/$defs/weight" }
+        }
+      }
+    },
     "emote": {
       "type": "object",
       "additionalProperties": false,
@@ -114,7 +154,8 @@
         "requires_state": { "$ref": "#/$defs/name" },
         "entry_seconds": { "type": "number", "exclusiveMinimum": 0 },
         "state_only": { "type": "boolean" },
-        "setup": { "type": "array", "items": { "$ref": "#/$defs/step" } }
+        "setup": { "type": "array", "items": { "$ref": "#/$defs/step" } },
+        "face": { "$ref": "#/$defs/face" }
       },
       "allOf": [
         {
