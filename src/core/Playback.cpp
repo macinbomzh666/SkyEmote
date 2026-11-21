@@ -342,7 +342,8 @@ namespace SkyEmote
         {
             if (playback->face.Active() || !OwnsGraph(player) || DialogueOpen()) return;
             const auto settings = GetFaceOverrideSettings();
-            const auto* preset = settings->enabled ? FindExpressionPreset({}, settings->preset) : nullptr;
+            const auto custom = CustomExpressionPresets();
+            const auto* preset = settings->enabled ? FindExpressionPreset(*custom, settings->preset) : nullptr;
             const auto* face = preset ? &preset->pose : playback->options.face ? &*playback->options.face : nullptr;
             if (face) playback->face.Start(*player, *face, FaceIntensity());
         }

@@ -336,6 +336,7 @@ namespace SkyEmote
             // Do not acquire another reference until that cleanup finishes.
             if (next != InputMode::None && context_cleanup_pending.load()) return false;
             if (next == InputMode::Menu) {
+                LoadCustomExpressionPresets(settings_file.parent_path());
                 RefreshSensitivityLimits();
                 mouse_remainder_x = mouse_remainder_y = 0.0;
                 if (auto* cursor = RE::MenuCursor::GetSingleton()) {
@@ -782,8 +783,9 @@ namespace SkyEmote
         }
         settings_file = ini;
         LoadBuiltInExpressionPresets(ini.parent_path());
+        LoadCustomExpressionPresets(settings_file.parent_path());
         if (BuiltInExpressionPresets().empty()) SKSE::log::warn("No bundled face presets could be loaded.");
-        SKSE::log::info("Bundled face presets loaded: {}", BuiltInExpressionPresets().size());
+        SKSE::log::info("Face presets loaded: bundled={} shared={}", BuiltInExpressionPresets().size(), CustomExpressionPresets()->size());
         SKSE::log::info("Input configuration: path={} exists={}", ini.string(), GetFileAttributesW(ini.c_str()) != INVALID_FILE_ATTRIBUTES);
         wchar_t face[32]{};
         const auto length = GetPrivateProfileStringW(L"Playback", L"FacialExpressionIntensity", L"", face, 32, ini.c_str());

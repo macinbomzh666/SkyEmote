@@ -142,8 +142,9 @@ namespace SkyEmote
             ImGui::TextDisabled("%s", emote.action == EmoteAction::Stop ? "Stop animation" :
                 emote.playback.mode == PlaybackMode::Loop ? "Looping" : "One shot");
             const auto settings = GetFaceOverrideSettings();
+            const auto custom = CustomExpressionPresets();
             const auto* preset = settings->enabled && emote.action == EmoteAction::Play ?
-                FindExpressionPreset({}, settings->preset) : nullptr;
+                FindExpressionPreset(*custom, settings->preset) : nullptr;
             const auto* description = preset ? preset->label.c_str() : emote.description.c_str();
             if (*description) {
                 ImGui::Spacing();
@@ -320,7 +321,8 @@ namespace SkyEmote
             if (ImGui::Checkbox("Use one expression for all emotes", &expression.enabled)) {
                 SetMenuFaceOverrideSettings(expression);
             }
-            const auto* preset = FindExpressionPreset({}, expression.preset);
+            const auto custom = CustomExpressionPresets();
+            const auto* preset = FindExpressionPreset(*custom, expression.preset);
             constexpr auto test_label = "Test expression (5 seconds)###test-expression";
             constexpr auto restart_label = "Restart test (5 seconds)###test-expression";
             const auto& style = ImGui::GetStyle();
@@ -330,21 +332,32 @@ namespace SkyEmote
             ImGui::SetNextItemWidth(std::clamp(preset_width, 1.0F, 400.0F * style.FontScaleMain));
             const auto preset_label = preset ? DisplayLabel(preset->label) : "Preset unavailable";
             if (ImGui::BeginCombo("##expression-preset", preset_label.c_str())) {
-                const auto draw_presets = [&](std::span<const ExpressionPreset> choices) {
+                std::map<std::pair<bool, std::string>, std::vector<const ExpressionPreset*>> groups;
+                const auto collect = [&](std::span<const ExpressionPreset> choices) {
                     for (const auto& choice : choices) {
-                        const bool selected = &choice == preset;
-                        ImGui::PushID(&choice);
-                        if (ImGui::Selectable(DisplayLabel(choice.label).c_str(), selected)) {
-                            preset = &choice;
-                            expression.preset = choice.key;
-                            SetMenuFaceOverrideSettings(expression);
-                        }
-                        if (selected) ImGui::SetItemDefaultFocus();
-                        ImGui::PopID();
+                        const auto group = choice.premade ? "Premade" :
+                            choice.source.empty() ? "Custom" : choice.source + " - Custom";
+                        groups[{choice.premade, group}].push_back(&choice);
                     }
                 };
-                ImGui::SeparatorText("Premade");
-                draw_presets(BuiltInExpressionPresets());
+                collect(*custom);
+                collect(BuiltInExpressionPresets());
+                const bool has_custom = !groups.empty() && !groups.begin()->first.first;
+                if (has_custom && ImGui::IsWindowAppearing()) ImGui::SetScrollY(0.0F);
+                for (const auto& [group, choices] : groups) {
+                    ImGui::SeparatorText(DisplayLabel(group.second).c_str());
+                    for (const auto* choice : choices) {
+                        const bool selected = choice == preset;
+                        ImGui::PushID(choice);
+                        if (ImGui::Selectable(DisplayLabel(choice->label).c_str(), selected)) {
+                            preset = choice;
+                            expression.preset = choice->key;
+                            SetMenuFaceOverrideSettings(expression);
+                        }
+                        if (selected && !has_custom) ImGui::SetItemDefaultFocus();
+                        ImGui::PopID();
+                    }
+                }
                 ImGui::EndCombo();
             }
             ImGui::SameLine();

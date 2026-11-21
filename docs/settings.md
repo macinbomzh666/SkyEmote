@@ -64,8 +64,14 @@ unchecked. An emote's face resumes if the emote is still playing when the test
 ends. At 0%, the button remains clickable and leaves the face unchanged.
 The checkbox and preset save when changed.
 
+SkyEmote reads JSON face presets from `SKSE/Plugins/PosePresets/Face`.
+Reopen the menu after saving or editing a shared preset. The picker groups
+presets by category, with **Custom** above **Premade**. A custom preset with a
+source label appears under a heading such as **GModPose - Custom**. A missing
+saved override falls back to the emote's own expression.
+
 Bundled presets live in `SKSE/Plugins/SkyEmote/Presets/Face` and load at startup.
-Use the [face pose schema](face-pose.schema.json) to edit a preset. Omit a
+Use the [face pose schema](face-pose.schema.json) for either folder. Omit a
 channel to leave it alone. Use a weight of `0` to explicitly clear it.
 
 Drag the sensitivity slider to apply it immediately. Click the menu key button, then
