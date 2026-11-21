@@ -60,7 +60,8 @@
         "SkyEmotePackDiagnosticsTests",
         "SkyEmoteStartupTests",
         "SkyEmoteMenuSelectionTests",
-        "SkyEmoteInputPolicyTests"
+        "SkyEmoteInputPolicyTests",
+        "SkyEmoteFacePresetsTests"
       ],
       "jobs": 4
     }

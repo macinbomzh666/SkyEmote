@@ -60,7 +60,7 @@ set_property(DIRECTORY "${commonlibsse_SOURCE_DIR}" PROPERTY EXCLUDE_FROM_ALL YE
 target_link_libraries(CommonLibSSE PUBLIC Microsoft::DirectXMath)
 
 add_library(SkyEmoteCore STATIC src/core/Pack.cpp src/core/StateSequence.cpp src/core/Favorites.cpp
-    src/core/MenuSelection.cpp src/core/InputPolicy.cpp)
+    src/core/MenuSelection.cpp src/core/InputPolicy.cpp src/core/FacePresets.cpp)
 target_include_directories(SkyEmoteCore PUBLIC src/core)
 target_include_directories(SkyEmoteCore SYSTEM PRIVATE "${json_SOURCE_DIR}")
 target_compile_definitions(SkyEmoteCore PRIVATE WIN32_LEAN_AND_MEAN NOMINMAX)
@@ -81,7 +81,7 @@ target_compile_definitions(SkyEmote PRIVATE WIN32_LEAN_AND_MEAN NOMINMAX)
 option(SKYEMOTE_BUILD_TESTS "Build functional tests" OFF)
 if(SKYEMOTE_BUILD_TESTS)
     enable_testing()
-    foreach(name IN ITEMS Pack PackFiles StateSequence Favorites PackDiagnostics Startup MenuSelection InputPolicy)
+    foreach(name IN ITEMS Pack PackFiles StateSequence Favorites PackDiagnostics Startup MenuSelection InputPolicy FacePresets)
         set(target SkyEmote${name}Tests)
         add_executable(${target} tests/${name}Tests.cpp)
         target_link_libraries(${target} PRIVATE SkyEmoteCore)

@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Face pose schema",
+  "type": "object",
+  "required": [
+    "schema",
+    "type",
+    "name",
+    "pose"
+  ],
+  "properties": {
+    "schema": {
+      "const": 1
+    },
+    "type": {
+      "const": "face"
+    },
+    "name": {
+      "$ref": "#/$defs/label"
+    },
+    "source": {
+      "$ref": "#/$defs/label"
+    },
+    "category": {
+      "enum": [
+        "custom",
+        "premade"
+      ],
+      "default": "custom"
+    },
+    "pose": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "mood": {
+          "type": "object",
+          "required": [
+            "name",
+            "strength"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "name": {
+              "enum": [
+                "neutral",
+                "anger",
+                "fear",
+                "happy",
+                "sad",
+                "surprise",
+                "puzzled",
+                "disgusted"
+              ]
+            },
+            "strength": {
+              "$ref": "#/$defs/weight"
+            }
+          }
+        },
+        "weights": {
+          "type": "object",
+          "minProperties": 1,
+          "propertyNames": {
+            "enum": [
+              "blink_left",
+              "blink_right",
+              "brow_down_left",
+              "brow_down_right",
+              "brow_in_left",
+              "brow_in_right",
+              "brow_up_left",
+              "brow_up_right",
+              "look_down",
+              "look_left",
+              "look_right",
+              "look_up",
+              "squint_left",
+              "squint_right",
+              "aah",
+              "big_aah",
+              "bmp",
+              "ch_j_sh",
+              "dst",
+              "eee",
+              "eh",
+              "fv",
+              "i",
+              "k",
+              "n",
+              "oh",
+              "ooh_q",
+              "r",
+              "th",
+              "w"
+            ]
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/weight"
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "label": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 63,
+      "pattern": "^[^\\u0000-\\u001F\\u007F]+$"
+    },
+    "weight": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    }
+  }
+}
