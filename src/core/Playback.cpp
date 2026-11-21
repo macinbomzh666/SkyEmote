@@ -28,6 +28,7 @@
 #include <RE/T/TESForm.h>
 #include <RE/T/TESIdleForm.h>
 #include <RE/U/UI.h>
+#include <REX/W32/KERNEL32.h>
 #include <SKSE/SKSE.h>
 
 namespace SkyEmote
@@ -46,6 +47,7 @@ namespace SkyEmote
         std::atomic<bool> ready{false};
         std::atomic<unsigned> face_playback_intensity{DefaultFacePlaybackIntensity};
         std::atomic<bool> face_preview_active{false};
+        std::atomic<bool> deferred_face_active{false};
         // Latest immutable message/error snapshot. The render thread can read it while tasks replace it.
         std::atomic<std::shared_ptr<const CommandResult>> billboard{
             std::make_shared<const CommandResult>()};
@@ -109,6 +111,42 @@ namespace SkyEmote
             std::uint64_t session;
         };
         std::optional<FacePreview> face_preview;
+        FacePlayback deferred_face;
+        std::uint64_t deferred_face_session{};
+
+        enum class PoseEditorState { Closed, Holding, EditingFace };
+
+        PoseEditorState GetPoseEditorState()
+        {
+            using Query = std::uint32_t (*)() noexcept;
+            static const auto query = []() -> Query {
+                // SKSE has loaded its plugins before the first gameplay query.
+                const auto module = REX::W32::GetModuleHandleW(L"GModPose.dll");
+                return module ? reinterpret_cast<Query>(REX::W32::GetProcAddress(module, "GModPose_GetEditorStateV1")) : nullptr;
+            }();
+            const auto flags = query ? query() : 0U;
+            if (!(flags & 1U)) return PoseEditorState::Closed;
+            return flags & 2U ? PoseEditorState::EditingFace : PoseEditorState::Holding;
+        }
+
+        void ReleaseFace(FacePlayback& face, RE::PlayerCharacter* player)
+        {
+            if (face.AppliedIntensity() > 0.0F && GetPoseEditorState() != PoseEditorState::Closed) {
+                // Body playback can end while the editor is still displaying its captured pose.
+                deferred_face = std::exchange(face, {});
+                deferred_face_session = session_id.load();
+                deferred_face_active.store(true);
+            } else {
+                face.Release(player);
+            }
+        }
+
+        void ReleaseDeferredFace(RE::PlayerCharacter* player)
+        {
+            if (deferred_face_session == session_id.load()) deferred_face.Release(player);
+            deferred_face = {};
+            deferred_face_active.store(false);
+        }
 
         struct Completion
         {
@@ -146,7 +184,7 @@ namespace SkyEmote
         void ForgetPlayback(bool publish_status = true)
         {
             if (playback && playback->face.Active() && playback->session == session_id.load()) {
-                playback->face.Release(RE::PlayerCharacter::GetSingleton());
+                ReleaseFace(playback->face, RE::PlayerCharacter::GetSingleton());
             }
             active_id.store(0);
             playback.reset();
@@ -286,7 +324,7 @@ namespace SkyEmote
             // A failed page-turn/rise must not throw away a reading/hovering state already reached.
             // Keep the parent pose, but stop retrying the rejected action or repeating its event.
             if (!playback->state.empty()) {
-                playback->face.Release(player);
+                ReleaseFace(playback->face, player);
                 playback->phase = Phase::Playing;
                 playback->options.mode = PlaybackMode::Loop;
                 playback->options.state = playback->state;
@@ -340,7 +378,9 @@ namespace SkyEmote
 
         void StartPlaybackFace(RE::PlayerCharacter* player)
         {
-            if (playback->face.Active() || !OwnsGraph(player) || DialogueOpen()) return;
+            if (playback->face.Active() || !OwnsGraph(player) || DialogueOpen() ||
+                GetPoseEditorState() != PoseEditorState::Closed) return;
+            if (deferred_face.Active()) ReleaseDeferredFace(player);
             const auto settings = GetFaceOverrideSettings();
             const auto custom = CustomExpressionPresets();
             const auto* preset = settings->enabled ? FindExpressionPreset(*custom, settings->preset) : nullptr;
@@ -348,10 +388,31 @@ namespace SkyEmote
             if (face) playback->face.Start(*player, *face, FaceIntensity());
         }
 
+        void UpdateOwnedFace(FacePlayback& face, RE::PlayerCharacter& player)
+        {
+            const auto editor = GetPoseEditorState();
+            if (editor == PoseEditorState::EditingFace) return;
+            face.Update(player, editor == PoseEditorState::Holding ? face.AppliedIntensity() : FaceIntensity());
+        }
+
+        void TickDeferredFace()
+        {
+            if (!deferred_face.Active()) return;
+            auto* player = RE::PlayerCharacter::GetSingleton();
+            const auto editor = GetPoseEditorState();
+            if (editor == PoseEditorState::Closed || deferred_face_session != session_id.load() ||
+                !ready.load() || !player || !player->Is3DLoaded() || player->IsDead() || DialogueOpen()) {
+                ReleaseDeferredFace(player);
+            } else if (editor == PoseEditorState::Holding) {
+                deferred_face.Update(*player, deferred_face.AppliedIntensity());
+                if (!deferred_face.Active()) ReleaseDeferredFace(player);
+            }
+        }
+
         void StopFacePreview(RE::PlayerCharacter* player)
         {
             if (!face_preview) return;
-            if (face_preview->session == session_id.load()) face_preview->face.Release(player);
+            if (face_preview->session == session_id.load()) ReleaseFace(face_preview->face, player);
             face_preview.reset();
             face_preview_active.store(false);
         }
@@ -366,7 +427,7 @@ namespace SkyEmote
                 StopFacePreview(player);
                 return;
             }
-            face_preview->face.Update(*player, intensity);
+            UpdateOwnedFace(face_preview->face, *player);
             if (!face_preview->face.Active()) StopFacePreview(player);
         }
 
@@ -444,7 +505,7 @@ namespace SkyEmote
             }
             if (playback->face.Active()) {
                 if (DialogueOpen()) playback->face.Release(player);
-                else if (!face_preview) playback->face.Update(*player, FaceIntensity());
+                else if (!face_preview) UpdateOwnedFace(playback->face, *player);
             }
             const auto now = Clock::now();
             // Bound timer advancement after a stalled frame instead of skipping whole animation phases.
@@ -511,7 +572,7 @@ namespace SkyEmote
             }
             if (finished && playback->options.repeat_interval_seconds == 0.0) {
                 // A stateful gesture can finish while its underlying body idle continues.
-                playback->face.Release(player);
+                ReleaseFace(playback->face, player);
             }
             if (playback->phase == Phase::WaitingForWeapon) {
                 if (playback->elapsed >= 4.0) {
@@ -606,6 +667,11 @@ namespace SkyEmote
                 PublishCommandResult("Load a living player outside dialogue to test an expression.", true);
                 return;
             }
+            if (GetPoseEditorState() != PoseEditorState::Closed) {
+                PublishCommandResult("Close the pose editor before testing an expression.", true);
+                return;
+            }
+            if (deferred_face.Active()) ReleaseDeferredFace(player);
             StopFacePreview(player);
             // Suspend the emote face without discarding it. If the emote is still
             // playing after the preview, the next playback tick can resume it.
@@ -753,7 +819,7 @@ namespace SkyEmote
 
     void QueuePlaybackUpdate()
     {
-        if ((!active_id.load() && !FacePreviewActive()) || update_pending.exchange(true)) {
+        if ((!active_id.load() && !FacePreviewActive() && !deferred_face_active.load()) || update_pending.exchange(true)) {
             return;
         }
         const auto* tasks = SKSE::GetTaskInterface();
@@ -762,6 +828,7 @@ namespace SkyEmote
             return;
         }
         tasks->AddTask([] {
+            TickDeferredFace();
             TickFacePreview();
             TickPlayback();
             update_pending.store(false);
@@ -782,6 +849,8 @@ namespace SkyEmote
     void ReleasePlaybackFaceBeforeLoad()
     {
         auto* player = RE::PlayerCharacter::GetSingleton();
+        ReleaseDeferredFace(player);
+        if (face_preview && face_preview->session == session_id.load()) face_preview->face.Release(player);
         StopFacePreview(player);
         if (playback && playback->face.Active() && playback->session == session_id.load()) {
             playback->face.Release(player);

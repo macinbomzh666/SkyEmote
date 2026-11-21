@@ -19,6 +19,7 @@ namespace SkyEmote
         void Update(RE::PlayerCharacter& player, float intensity);
         void Release(RE::PlayerCharacter* player);
         bool Active() const { return face_ != nullptr; }
+        float AppliedIntensity() const { return applied_intensity_; }
 
     private:
         struct BlinkState

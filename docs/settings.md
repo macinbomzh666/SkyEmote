@@ -82,6 +82,11 @@ Bundled presets live in `SKSE/Plugins/SkyEmote/Presets/Face` and load at startup
 Use the [face pose schema](face-pose.schema.json) for either folder. Omit a
 channel to leave it alone. Use a weight of `0` to explicitly clear it.
 
+When a compatible pose editor is active, the current expression can hold even
+after an emote or test ends. Face edits in the pose editor take precedence.
+On leaving the editor, an expired expression clears and a playing emote uses
+its current face.
+
 Drag the sensitivity slider to apply it immediately. Click the menu key button, then
 press a replacement keyboard key. During rebinding, Escape restores `[` and
 keeps the menu open. Switching tabs or closing the menu cancels rebinding.
