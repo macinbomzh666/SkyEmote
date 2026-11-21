@@ -1,0 +1,44 @@
+{
+  "schema": 1,
+  "type": "face",
+  "name": "Wink right",
+  "category": "premade",
+  "pose": {
+    "mood": {
+      "name": "happy",
+      "strength": 0.45
+    },
+    "weights": {
+      "blink_left": 0.0,
+      "blink_right": 1.0,
+      "brow_down_left": 0.0,
+      "brow_down_right": 0.0,
+      "brow_in_left": 0.0,
+      "brow_in_right": 0.0,
+      "brow_up_left": 0.0,
+      "brow_up_right": 0.0,
+      "look_down": 0.0,
+      "look_left": 0.0,
+      "look_right": 0.0,
+      "look_up": 0.0,
+      "squint_left": 0.0,
+      "squint_right": 0.0,
+      "aah": 0.0,
+      "big_aah": 0.0,
+      "bmp": 0.0,
+      "ch_j_sh": 0.0,
+      "dst": 0.0,
+      "eee": 0.18,
+      "eh": 0.0,
+      "fv": 0.0,
+      "i": 0.0,
+      "k": 0.0,
+      "n": 0.0,
+      "oh": 0.0,
+      "ooh_q": 0.0,
+      "r": 0.0,
+      "th": 0.0,
+      "w": 0.0
+    }
+  }
+}

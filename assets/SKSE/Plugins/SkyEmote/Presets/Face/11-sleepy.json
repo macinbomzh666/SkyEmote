@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "type": "face",
+  "name": "Sleepy",
+  "category": "premade",
+  "pose": {
+    "weights": {
+      "blink_left": 0.25,
+      "blink_right": 0.25,
+      "squint_left": 0.53,
+      "squint_right": 0.53,
+      "aah": 0.1
+    }
+  }
+}

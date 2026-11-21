@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "type": "face",
+  "name": "Afraid",
+  "category": "premade",
+  "pose": {
+    "mood": {
+      "name": "fear",
+      "strength": 0.98
+    },
+    "weights": {
+      "brow_up_left": 0.59,
+      "brow_up_right": 0.59,
+      "eh": 0.46
+    }
+  }
+}

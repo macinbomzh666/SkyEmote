@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "type": "face",
+  "name": "Open smile",
+  "category": "premade",
+  "pose": {
+    "mood": {
+      "name": "happy",
+      "strength": 0.96
+    },
+    "weights": {
+      "brow_up_left": 0.34,
+      "brow_up_right": 0.34,
+      "squint_left": 0.12,
+      "squint_right": 0.12,
+      "big_aah": 0.47,
+      "eee": 0.18
+    }
+  }
+}

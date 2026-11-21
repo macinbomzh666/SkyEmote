@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "type": "face",
+  "name": "Sad",
+  "category": "premade",
+  "pose": {
+    "mood": {
+      "name": "sad",
+      "strength": 0.89
+    },
+    "weights": {
+      "brow_in_left": 0.42,
+      "brow_in_right": 0.42,
+      "bmp": 0.23
+    }
+  }
+}

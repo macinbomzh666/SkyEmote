@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "type": "face",
+  "name": "Calm",
+  "category": "premade",
+  "pose": {
+    "weights": {
+      "squint_left": 0.19,
+      "squint_right": 0.19,
+      "aah": 0.1
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "type": "face",
+  "name": "Smile",
+  "category": "premade",
+  "pose": {
+    "mood": {
+      "name": "happy",
+      "strength": 0.8
+    },
+    "weights": {
+      "squint_left": 0.19,
+      "squint_right": 0.19,
+      "eee": 0.33
+    }
+  }
+}

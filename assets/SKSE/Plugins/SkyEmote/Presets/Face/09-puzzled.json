@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "type": "face",
+  "name": "Puzzled",
+  "category": "premade",
+  "pose": {
+    "mood": {
+      "name": "puzzled",
+      "strength": 0.84
+    },
+    "weights": {
+      "brow_in_left": 0.36,
+      "brow_in_right": 0.36,
+      "ooh_q": 0.22
+    }
+  }
+}

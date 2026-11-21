@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "type": "face",
+  "name": "Disgusted",
+  "category": "premade",
+  "pose": {
+    "mood": {
+      "name": "disgusted",
+      "strength": 0.84
+    },
+    "weights": {
+      "brow_in_left": 0.49,
+      "brow_in_right": 0.49,
+      "squint_left": 0.34,
+      "squint_right": 0.34,
+      "eh": 0.42
+    }
+  }
+}
