@@ -24,6 +24,8 @@ namespace SkyEmote
         // The engine owns the framebuffer and its lifetime. Borrow its current RTV
         // on each renderer-end callback so resize cannot leave us holding an old buffer.
         ImGuiContext* gui{};
+        ImGuiStyle base_menu_style;
+        unsigned applied_menu_scale{};
         Microsoft::WRL::ComPtr<ID3D11Device> device;
         Microsoft::WRL::ComPtr<ID3D11DeviceContext> context;
         auto previous_frame = std::chrono::steady_clock::now();
@@ -137,6 +139,8 @@ namespace SkyEmote
             io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
             const auto game = std::filesystem::path(REL::Module::get().filePath().data()).parent_path();
             ApplyMenuStyle(game / L"Data/SKSE/Plugins/SkyEmote/fonts/Sovngarde Light.ttf");
+            base_menu_style = ImGui::GetStyle();
+            applied_menu_scale = 0;
             // Check shader/resource creation explicitly instead of letting NewFrame assert.
             if (!ImGui_ImplDX11_Init(new_device, new_context) ||
                 !ImGui_ImplDX11_CreateDeviceObjects()) {
@@ -166,6 +170,12 @@ namespace SkyEmote
                     description.Width, description.Height, static_cast<unsigned>(description.Format));
             }
             io.DisplaySize = extent;
+            const auto scale = MenuScalePercent();
+            // Keep the slider track stationary during a mouse drag.
+            if (scale != applied_menu_scale && (!applied_menu_scale || !io.MouseDown[ImGuiMouseButton_Left])) {
+                ApplyMenuScale(base_menu_style, static_cast<float>(scale) / 100.0F);
+                applied_menu_scale = scale;
+            }
             const auto now = std::chrono::steady_clock::now();
             io.DeltaTime = std::clamp(std::chrono::duration<float>(now - previous_frame).count(), 0.001F, 0.25F);
             previous_frame = now;

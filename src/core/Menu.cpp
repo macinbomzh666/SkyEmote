@@ -197,10 +197,14 @@ namespace SkyEmote
             if (family.size() > 1) {
                 if (ImGui::ArrowButton("variants", ImGuiDir_Down)) ImGui::OpenPopup("Variants");
                 if (ImGui::BeginPopup("Variants")) {
+                    const auto& style = ImGui::GetStyle();
+                    const auto max_width = std::max(1.0F, ImGui::GetMainViewport()->WorkSize.x - style.WindowPadding.x * 2.0F);
                     for (const auto* item : family) {
                         ImGui::PushID(item->id.c_str());
                         const auto variant_name = variant_label(*item);
-                        if (PlayButton(variant_name, std::max(250.0F, ImGui::CalcTextSize(variant_name.c_str()).x + 24.0F))) {
+                        const auto width = std::max(250.0F * style.FontScaleMain,
+                            ImGui::CalcTextSize(variant_name.c_str()).x + style.FramePadding.x * 2.0F);
+                        if (PlayButton(variant_name, std::min(width, max_width))) {
                             selected_variants[family_key] = item->id;
                             search_dirty = true;
                             ActivateEmote(*item);
@@ -309,9 +313,23 @@ namespace SkyEmote
         void DrawSettings()
         {
             const auto settings = GetInputSettings();
+            const auto size_field = [](const char* label) {
+                const auto& style = ImGui::GetStyle();
+                const auto available = ImGui::GetContentRegionAvail().x - ImGui::CalcTextSize(label).x - style.ItemInnerSpacing.x;
+                ImGui::SetNextItemWidth(std::clamp(available, 1.0F, 400.0F * style.FontScaleMain));
+            };
+            ImGui::SeparatorText("Display");
+            auto scale = static_cast<int>(MenuScalePercent());
+            size_field("UI scale");
+            if (ImGui::SliderInt("UI scale", &scale, MinMenuScalePercent, MaxMenuScalePercent,
+                    "%d%%", ImGuiSliderFlags_AlwaysClamp)) {
+                SetMenuScalePercent(static_cast<unsigned>(scale));
+            }
+            if (ImGui::IsItemDeactivatedAfterEdit()) SaveInputSettings();
+            ImGui::Spacing();
             ImGui::SeparatorText("Playback");
             auto intensity = static_cast<int>(FacePlaybackIntensity());
-            ImGui::SetNextItemWidth(std::min(400.0F, ImGui::GetContentRegionAvail().x));
+            size_field("Facial expression intensity");
             if (ImGui::SliderInt("Facial expression intensity", &intensity, 0, MaxFacePlaybackIntensity,
                     "%d%%", ImGuiSliderFlags_AlwaysClamp)) {
                 SetMenuFacePlaybackIntensity(static_cast<unsigned>(intensity));
@@ -369,7 +387,7 @@ namespace SkyEmote
             ImGui::Spacing();
             auto sensitivity = settings.mouse_sensitivity;
             ImGui::SeparatorText("Input");
-            ImGui::SetNextItemWidth(std::min(400.0F, ImGui::GetContentRegionAvail().x));
+            size_field("Mouse sensitivity");
             ImGui::BeginDisabled(!settings.sensitivity_limits_available);
             if (ImGui::SliderFloat("Mouse sensitivity", &sensitivity, settings.sensitivity_min, settings.sensitivity_max, "%.2fx",
                 ImGuiSliderFlags_AlwaysClamp)) {
@@ -601,17 +619,19 @@ namespace SkyEmote
     {
         const auto* viewport = ImGui::GetMainViewport();
         const auto maximum = ImVec2(viewport->WorkSize.x * 0.95F, viewport->WorkSize.y * 0.95F);
+        const auto scale = ImGui::GetStyle().FontScaleMain;
         ImGui::SetNextWindowSize(ImVec2(viewport->WorkSize.x * 0.85F, viewport->WorkSize.y * 0.8F), ImGuiCond_FirstUseEver);
-        ImGui::SetNextWindowSizeConstraints(ImVec2(std::min(440.0F, maximum.x), std::min(360.0F, maximum.y)), maximum);
+        ImGui::SetNextWindowSizeConstraints(ImVec2(std::min(440.0F * scale, maximum.x), std::min(360.0F * scale, maximum.y)), maximum);
         ImGui::SetNextWindowPos(viewport->GetWorkCenter(), ImGuiCond_FirstUseEver, ImVec2(0.5F, 0.5F));
         static const auto version = SKSE::GetPluginVersion();
         // A stable ImGui ID keeps window/tab state independent of the visible version.
         static const auto title = std::format("SkyEmote v{}.{}.{}###SkyEmote", version.major(), version.minor(), version.patch());
-        if (ImGui::Begin(title.c_str(), nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse)) {
+        bool open = true;
+        if (ImGui::Begin(title.c_str(), &open, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse)) {
             const auto status = GetPlaybackStatus();
             const auto label = "State: " + DisplayState(*status) +
                 (status->transitioning ? " (transitioning)" : "");
-            const auto stop_width = std::max(100.0F, ImGui::CalcTextSize("Stop animation").x + ImGui::GetStyle().FramePadding.x * 4.0F);
+            const auto stop_width = std::max(100.0F * scale, ImGui::CalcTextSize("Stop animation").x + ImGui::GetStyle().FramePadding.x * 4.0F);
             const auto stop_height = ImGui::GetFrameHeight() * 1.25F;
             const auto state_width = ImGui::GetContentRegionAvail().x - stop_width - ImGui::GetStyle().ItemSpacing.x;
             ImGui::InvisibleButton("##state", ImVec2(std::max(1.0F, state_width), stop_height));
@@ -636,5 +656,6 @@ namespace SkyEmote
             }
         }
         ImGui::End();
+        if (!open) CloseMenu();
     }
 }

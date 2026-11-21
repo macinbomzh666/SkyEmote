@@ -26,6 +26,11 @@ namespace SkyEmote
     };
 
     InputSettings GetInputSettings();
+    inline constexpr unsigned MinMenuScalePercent = 75;
+    inline constexpr unsigned DefaultMenuScalePercent = 100;
+    inline constexpr unsigned MaxMenuScalePercent = 200;
+    unsigned MenuScalePercent();
+    void SetMenuScalePercent(unsigned percent);
     std::string MenuKeyLabel(unsigned scan_code);
     void SetMenuMouseSensitivity(float value);
     void SetMenuFacePlaybackIntensity(unsigned percent);

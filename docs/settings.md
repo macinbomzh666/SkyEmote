@@ -10,6 +10,9 @@ QuickEmoteKey=0
 QuickEmoteTimeoutSeconds=5
 MouseSensitivity=1.0
 
+[Display]
+UIScalePercent=100
+
 [Playback]
 FacialExpressionIntensity=85
 OverrideFacialExpression=0
@@ -49,6 +52,11 @@ the menu opens. An INI sensitivity outside those limits resets to `1.0` and
 saves that default. If limits are unavailable, the slider is disabled. Edit the INI only before starting Skyrim.
 
 The **Settings** tab changes playback and input controls while Skyrim is running.
+**UI scale** adjusts menu text, buttons, spacing, and the cursor sprite from
+75% to 200%. It defaults to 100% and saves to `[Display] UIScalePercent` when
+you finish adjusting the slider. The window opens at a size based on the game
+viewport and can be resized by dragging its edge.
+
 **Facial expression intensity** runs from 0% to 150% and defaults to 85%. The
 slider scales the mood and facial weights of the current emote and future emotes.
 At 0%, the active face clears while the body animation continues. At 100%, the

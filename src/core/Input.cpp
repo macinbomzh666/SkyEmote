@@ -62,6 +62,7 @@ namespace SkyEmote
         std::chrono::steady_clock::time_point quick_started{};
         double quick_timeout_seconds = 5.0;
         std::atomic<bool> binding_conflict{false};
+        std::atomic<unsigned> menu_scale_percent{DefaultMenuScalePercent};
         // Raw mouse counts need a user multiplier because hardware DPI is not part of the event.
         std::atomic<float> mouse_sensitivity{1.0F};
         std::atomic<float> sensitivity_min{1.0F}, sensitivity_max{1.0F};
@@ -422,11 +423,11 @@ namespace SkyEmote
         }
 
         template<class T>
-        std::optional<T> ReadInputNumber(const wchar_t* name, const wchar_t* fallback,
+        std::optional<T> ReadSettingNumber(const wchar_t* section, const wchar_t* name, const wchar_t* fallback,
             T (*parse)(const wchar_t*, wchar_t**))
         {
             wchar_t value[32]{};
-            const auto length = GetPrivateProfileStringW(L"Input", name, fallback, value, 32, settings_file.c_str());
+            const auto length = GetPrivateProfileStringW(section, name, fallback, value, 32, settings_file.c_str());
             wchar_t* end{};
             errno = 0;
             const auto number = parse(value, &end);
@@ -436,7 +437,7 @@ namespace SkyEmote
 
         std::optional<unsigned> ReadInputKey(const wchar_t* name, const wchar_t* fallback)
         {
-            const auto number = ReadInputNumber<unsigned long>(name, fallback,
+            const auto number = ReadSettingNumber<unsigned long>(L"Input", name, fallback,
                 [](const wchar_t* value, wchar_t** end) { return std::wcstoul(value, end, 10); });
             if (!number || *number > 255) return {};
             return static_cast<unsigned>(*number);
@@ -658,6 +659,17 @@ namespace SkyEmote
         }
     }
 
+    unsigned MenuScalePercent()
+    {
+        return menu_scale_percent.load();
+    }
+
+    void SetMenuScalePercent(unsigned percent)
+    {
+        percent = std::clamp(percent, MinMenuScalePercent, MaxMenuScalePercent);
+        if (menu_scale_percent.exchange(percent) != percent) settings_dirty.store(true);
+    }
+
     void SetMenuFacePlaybackIntensity(unsigned percent)
     {
         SetFacePlaybackIntensity(percent);
@@ -752,6 +764,9 @@ namespace SkyEmote
             const auto quick_error = saved_quick ? ERROR_SUCCESS : GetLastError();
             const bool saved_mouse = WritePrivateProfileStringW(L"Input", L"MouseSensitivity", sensitivity.c_str(), settings_file.c_str());
             const auto mouse_error = saved_mouse ? ERROR_SUCCESS : GetLastError();
+            const auto scale = std::to_wstring(MenuScalePercent());
+            const bool saved_scale = WritePrivateProfileStringW(L"Display", L"UIScalePercent", scale.c_str(), settings_file.c_str());
+            const auto scale_error = saved_scale ? ERROR_SUCCESS : GetLastError();
             const auto intensity = std::to_wstring(FacePlaybackIntensity());
             const bool saved_face = WritePrivateProfileStringW(L"Playback", L"FacialExpressionIntensity",
                 intensity.c_str(), settings_file.c_str());
@@ -764,11 +779,11 @@ namespace SkyEmote
                 override->preset.c_str(), settings_file.c_str());
             const auto preset_error = saved_preset ? ERROR_SUCCESS : GetLastError();
             std::string error;
-            if (!saved_key || !saved_stop || !saved_quick || !saved_mouse || !saved_face || !saved_override || !saved_preset) {
+            if (!saved_key || !saved_stop || !saved_quick || !saved_mouse || !saved_scale || !saved_face || !saved_override || !saved_preset) {
                 error = "Cannot save settings. Changes apply until Skyrim closes.";
                 SKSE::log::error("{} File: {}. MenuKey error={}, StopKey error={}, QuickEmoteKey error={}, MouseSensitivity error={}, "
-                    "FacialExpressionIntensity error={}, OverrideFacialExpression error={}, FacialExpressionPreset error={}",
-                    error, settings_file.string(), key_error, stop_error, quick_error, mouse_error, face_error, override_error, preset_error);
+                    "UIScalePercent error={}, FacialExpressionIntensity error={}, OverrideFacialExpression error={}, FacialExpressionPreset error={}",
+                    error, settings_file.string(), key_error, stop_error, quick_error, mouse_error, scale_error, face_error, override_error, preset_error);
                 settings_dirty.store(true);
             }
             std::lock_guard lock(input_mutex);
@@ -825,12 +840,21 @@ namespace SkyEmote
         const auto quick = ReadInputKey(L"QuickEmoteKey", L"0");
         if (quick && ValidInputBinding(*quick, KeyCapture::Quick, CurrentBindings())) quick_key.store(*quick);
         else SKSE::log::warn("Invalid or conflicting QuickEmoteKey. Leaving Quick Emote unbound.");
-        const auto timeout = ReadInputNumber<double>(L"QuickEmoteTimeoutSeconds", L"5", std::wcstod);
+        const auto timeout = ReadSettingNumber<double>(L"Input", L"QuickEmoteTimeoutSeconds", L"5", std::wcstod);
         if (timeout && std::isfinite(*timeout) && *timeout > 0.0) quick_timeout_seconds = *timeout;
         else SKSE::log::warn("Invalid QuickEmoteTimeoutSeconds. Using 5 seconds.");
-        const auto sensitivity = ReadInputNumber<float>(L"MouseSensitivity", L"1.0", std::wcstof);
+        const auto sensitivity = ReadSettingNumber<float>(L"Input", L"MouseSensitivity", L"1.0", std::wcstof);
         if (sensitivity && std::isfinite(*sensitivity) && *sensitivity > 0.0F) mouse_sensitivity.store(*sensitivity);
         else SKSE::log::warn("Invalid MouseSensitivity in SkyEmote.ini. Using 1.0.");
+        const auto default_scale = std::to_wstring(DefaultMenuScalePercent);
+        const auto scale = ReadSettingNumber<unsigned long>(L"Display", L"UIScalePercent", default_scale.c_str(),
+            [](const wchar_t* value, wchar_t** end) { return std::wcstoul(value, end, 10); });
+        if (scale && *scale >= MinMenuScalePercent && *scale <= MaxMenuScalePercent) {
+            menu_scale_percent.store(static_cast<unsigned>(*scale));
+        } else {
+            menu_scale_percent.store(DefaultMenuScalePercent);
+            SKSE::log::warn("Invalid UIScalePercent in SkyEmote.ini. Using {}%.", DefaultMenuScalePercent);
+        }
         auto* input = RE::BSInputDeviceManager::GetSingleton();
         if (!input) {
             SKSE::log::error("Skyrim input manager is unavailable");

@@ -2,6 +2,7 @@
 #pragma once
 
 #include <imgui.h>
+#include <algorithm>
 #include <filesystem>
 #include <string>
 
@@ -76,5 +77,19 @@ namespace SkyEmote
             io.FontDefault = io.Fonts->AddFontDefaultVector(&fallback);
         }
         style.FontSizeBase = 20.0F;
+    }
+
+    inline void ApplyMenuScale(const ImGuiStyle& base, float scale)
+    {
+        auto& style = ImGui::GetStyle();
+        // Scale from the original metrics to avoid accumulating rounding during slider edits.
+        style = base;
+        if (scale == 1.0F) return;
+        style.ScaleAllSizes(scale);
+        style.FontScaleMain = scale;
+        style.MouseCursorScale = base.MouseCursorScale * scale;
+        style.WindowBorderSize = std::max(base.WindowBorderSize, style.WindowBorderSize);
+        style.PopupBorderSize = std::max(base.PopupBorderSize, style.PopupBorderSize);
+        style.SeparatorSize = std::max(base.SeparatorSize, style.SeparatorSize);
     }
 }
