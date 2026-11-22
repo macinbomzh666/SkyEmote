@@ -619,6 +619,11 @@ namespace SkyEmote
         return capture_mode.load() == InputMode::Menu;
     }
 
+    bool GameplayInputAvailable()
+    {
+        return capture_mode.load() == InputMode::None && !context_cleanup_pending.load() && CanUseGameplayBindings();
+    }
+
     InputSettings GetInputSettings()
     {
         std::lock_guard lock(input_mutex);

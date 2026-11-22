@@ -43,6 +43,7 @@ namespace SkyEmote
     void CaptureFavoriteKey(bool active);
     bool IsCapturingFavoriteKey();
     bool IsMenuOpen();
+    bool GameplayInputAvailable();
     void CloseMenu();
     void ResetInputSettings();
     void SaveInputSettings();

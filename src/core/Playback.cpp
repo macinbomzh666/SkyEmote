@@ -2,6 +2,7 @@
 #include "Playback.h"
 #include "FacePlayback.h"
 #include "FacePresets.h"
+#include "Input.h"
 #include "StateSequence.h"
 
 #include <algorithm>
@@ -9,6 +10,7 @@
 #include <chrono>
 #include <cmath>
 #include <cstdint>
+#include <memory>
 #include <mutex>
 #include <optional>
 #include <utility>
@@ -17,6 +19,8 @@
 #include <RE/A/AIProcess.h>
 #include <RE/B/BSAnimationGraphEvent.h>
 #include <RE/B/BSAnimationGraphManager.h>
+#include <RE/C/ConcreteFormFactory.h>
+#include <RE/C/ControlMap.h>
 // Typed TESForm lookups need FormTraits for the As<T> template definition.
 #include <RE/F/FormTraits.h>
 #include <RE/N/NiAVObject.h>
@@ -24,6 +28,7 @@
 #include <RE/P/PlayerCamera.h>
 #include <RE/M/Main.h>
 #include <RE/P/PlayerControls.h>
+#include <RE/S/Script.h>
 #include <RE/T/TESDataHandler.h>
 #include <RE/T/TESForm.h>
 #include <RE/T/TESIdleForm.h>
@@ -48,6 +53,7 @@ namespace SkyEmote
         std::atomic<unsigned> face_playback_intensity{DefaultFacePlaybackIntensity};
         std::atomic<bool> face_preview_active{false};
         std::atomic<bool> deferred_face_active{false};
+        std::atomic<bool> movement_recovery_pending{false};
         // Latest immutable message/error snapshot. The render thread can read it while tasks replace it.
         std::atomic<std::shared_ptr<const CommandResult>> billboard{
             std::make_shared<const CommandResult>()};
@@ -104,6 +110,14 @@ namespace SkyEmote
 
         // Only main-thread tasks and the input callback may change playback state.
         std::optional<Playback> playback;
+        struct MovementRecovery
+        {
+            std::uint64_t session;
+            RE::NiPointer<RE::NiAVObject> root;
+            Clock::time_point deadline;
+        };
+        std::optional<MovementRecovery> movement_recovery;
+
         struct FacePreview
         {
             FacePlayback face;
@@ -221,6 +235,58 @@ namespace SkyEmote
         {
             return playback && ready.load() && playback->session == session_id.load() && player &&
                 player->Is3DLoaded() && playback->root.get() == player->Get3D(false);
+        }
+
+        void QueueStandProudRecovery()
+        {
+            if (playback->started == Clock::time_point{} || playback->event != "IdleWallSoldierEnterInstant") return;
+            movement_recovery.emplace(MovementRecovery{playback->session, playback->root,
+                Clock::now() + std::chrono::seconds(4)});
+            movement_recovery_pending.store(true);
+        }
+
+        void ClearMovementRecovery()
+        {
+            movement_recovery.reset();
+            movement_recovery_pending.store(false);
+        }
+
+        void TickMovementRecovery()
+        {
+            if (!movement_recovery) return;
+            auto* player = RE::PlayerCharacter::GetSingleton();
+            if (!ready.load() || movement_recovery->session != session_id.load() || !player ||
+                !player->Is3DLoaded() || movement_recovery->root.get() != player->Get3D(false) ||
+                player->IsDead() || player->IsInKillMove() || player->IsInRagdollState()) {
+                ClearMovementRecovery();
+                return;
+            }
+            const auto* state = player->AsActorState();
+            const bool standing = state && state->GetSitSleepState() == RE::SIT_SLEEP_STATE::kNormal;
+            const auto* main = RE::Main::GetSingleton();
+            const bool gameplay = GameplayInputAvailable() && !(main && main->GetRuntimeData().freezeTime);
+            if (Clock::now() >= movement_recovery->deadline) {
+                SKSE::log::info("Stand proud recovery expired: normalSitSleep={} gameplayInput={}", standing, gameplay);
+                ClearMovementRecovery();
+                return;
+            }
+            if (!standing || !gameplay || state->IsStaggered()) return;
+
+            // The furniture state and menu input capture must end before enabling movement.
+            ClearMovementRecovery();
+            const auto* controls = RE::ControlMap::GetSingleton();
+            if (!controls) return;
+            auto* factory = RE::IFormFactory::GetConcreteFormFactoryByType<RE::Script>();
+            const std::unique_ptr<RE::Script> script(factory ? factory->Create() : nullptr);
+            if (!script) {
+                SKSE::log::warn("Stand proud recovery: could not create a console script");
+                return;
+            }
+            const bool before = controls->IsMovementControlsEnabled();
+            script->SetCommand("epc 1 0 0 0 0 0 0 0 0");
+            script->CompileAndRun(nullptr);
+            SKSE::log::info("Stand proud recovery ran movement-only epc: movementBefore={} movementAfter={}",
+                before, controls->IsMovementControlsEnabled());
         }
 
         std::string CannotStart(RE::PlayerCharacter* player)
@@ -725,6 +791,7 @@ namespace SkyEmote
                 PublishCommandResult(options.state.empty() ? "That state is not active." : "Keeping the current animation.");
                 return;
             }
+            ClearMovementRecovery();
             StopFacePreview(player);
             const bool native_idle = plan.reuse && OwnsGraph(player) && playback->native_idle_started;
             // Native idle forms need their special-idle exit before an unrelated replacement.
@@ -782,6 +849,7 @@ namespace SkyEmote
             }
             const bool waiting = playback->phase == Phase::WaitingForWeapon;
             const bool native_idle = playback->native_idle_started;
+            if (!player->IsDead()) QueueStandProudRecovery();
             ForgetPlayback();
             if (!player || !player->Is3DLoaded() || player->IsDead()) {
                 PublishCommandResult("Player animation graph is unavailable.", true);
@@ -808,6 +876,7 @@ namespace SkyEmote
             !player->IsInRagdollState() && state && !state->IsStaggered();
         const bool had_playback = playback.has_value();
         const bool native_idle = reset && playback->native_idle_started;
+        if (reset) QueueStandProudRecovery();
         ForgetPlayback();
         if (reset) {
             ResetGraph(player, native_idle);
@@ -819,7 +888,8 @@ namespace SkyEmote
 
     void QueuePlaybackUpdate()
     {
-        if ((!active_id.load() && !FacePreviewActive() && !deferred_face_active.load()) || update_pending.exchange(true)) {
+        if ((!active_id.load() && !FacePreviewActive() && !deferred_face_active.load() && !movement_recovery_pending.load()) ||
+            update_pending.exchange(true)) {
             return;
         }
         const auto* tasks = SKSE::GetTaskInterface();
@@ -830,6 +900,7 @@ namespace SkyEmote
         tasks->AddTask([] {
             TickDeferredFace();
             TickFacePreview();
+            TickMovementRecovery();
             TickPlayback();
             update_pending.store(false);
         });
